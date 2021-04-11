@@ -1,8 +1,5 @@
 <template>
-  <vueper-slides
-    class="mx-auto w-8/12 bg-white shadow-lg mt-12 overflow-hidden"
-    autoplay
-  >
+  <vueper-slides class="shadow-lg mt-12 overflow-hidden" autoplay>
     <vueper-slide
       v-for="(slide, index) in slides"
       :key="index"

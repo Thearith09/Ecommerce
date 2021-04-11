@@ -3,7 +3,10 @@
     <Navbar />
     <div class="grid grid-cols-3 h-auto mt-12 bg-white">
       <div class="col-span-2">
-        <img src="@/assets/images/loginBackground.png" />
+        <img
+          class="h-full object-center"
+          src="@/assets/images/loginBackground.png"
+        />
       </div>
       <div>
         <form @submit.prevent="handleSignup" class="space-y-5 space-x-5">
@@ -20,6 +23,27 @@
             class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-semibold rounded-md p-2 shadow-lg"
             type="email"
             placeholder="email"
+            required
+          />
+          <input
+            v-model="telephone"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-semibold rounded-md p-2 shadow-lg"
+            type="text"
+            placeholder="telephone"
+            required
+          />
+          <input
+            v-model="telegram"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-semibold rounded-md p-2 shadow-lg"
+            type="text"
+            placeholder="telegram name"
+            required
+          />
+          <input
+            v-model="facebook"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-semibold rounded-md p-2 shadow-lg"
+            type="text"
+            placeholder="facebook name"
             required
           />
           <input
@@ -64,6 +88,7 @@ import Navbar from "@/components/Navbar";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import useSignup from "@/composables/useSignup";
+import useCollection from "@/composables/useCollection";
 
 export default {
   components: {
@@ -72,10 +97,14 @@ export default {
   setup() {
     const username = ref("");
     const email = ref("");
+    const telephone = ref("");
+    const telegram = ref("");
+    const facebook = ref("");
     const password = ref("");
     const confirmPassword = ref("");
     const router = useRouter();
     const { error, signup } = useSignup();
+    const { addDoc } = useCollection("users");
 
     const handleNavigation = () => {
       router.push({ name: "Login" });
@@ -86,10 +115,18 @@ export default {
         return (error.value = "Password doesn't match!");
       }
 
-      await signup(email.value, password.value, username.value);
+      const res = await signup(email.value, password.value, username.value);
 
-      if (!error.value) {
-        router.push({ name: "Home" });
+      if (res.user.uid) {
+        await addDoc(res.user.uid, {
+          telephone: telephone.value,
+          facebook: facebook.value,
+          telegram: telegram.value,
+        });
+
+        if (!error.value) {
+          router.push({ name: "Home" });
+        }
       }
     };
 
@@ -101,6 +138,9 @@ export default {
       handleNavigation,
       error,
       handleSignup,
+      telephone,
+      telegram,
+      facebook,
     };
   },
 };

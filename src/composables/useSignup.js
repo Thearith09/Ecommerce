@@ -9,7 +9,8 @@ const signup = async (email, password, displayName) => {
     try {
         const response = await projectAuth.createUserWithEmailAndPassword(email, password);
         await response.user.updateProfile({ displayName });
-
+        return response;
+        
     } catch (err) {
         error.value = err.message;
     }
