@@ -1,9 +1,12 @@
 <template>
-  <vueper-slides class="mx-auto w-8/12 bg-white shadow-lg mt-12" autoplay>
+  <vueper-slides
+    class="mx-auto w-8/12 bg-white shadow-lg mt-12 overflow-hidden"
+    autoplay
+  >
     <vueper-slide
       v-for="(slide, index) in slides"
       :key="index"
-      :image="slide.image"
+      :image="slide.link"
     />
   </vueper-slides>
 </template>
@@ -19,15 +22,19 @@ export default {
     const slides = ref([
       {
         image: require("@/assets/images/logo.png"),
+        link: "https://source.unsplash.com/random/350*350",
       },
       {
         image: require("@/assets/images/logon.png"),
+        link: "https://source.unsplash.com/random/240*240",
       },
       {
         image: require("@/assets/images/shopping-logo.png"),
+        link: "https://source.unsplash.com/random/320*320",
       },
       {
         image: require("@/assets/images/logo.png"),
+        link: "https://source.unsplash.com/random",
       },
     ]);
 
@@ -46,5 +53,11 @@ export default {
 }
 .vueperslides__bullet--active .default {
   color: rgb(231, 7, 157);
+}
+.vueperslides__bullet--active:focus {
+  outline: none;
+}
+.vueperslides__bullet--active .default:focus {
+  outline: none;
 }
 </style>

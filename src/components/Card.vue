@@ -15,7 +15,7 @@
           class="bg-gradient-to-r from-indigo-600 to-indigo-900 text-gray-100 p-6 h-48 hover:h-auto"
         >
           <h4
-            class="mt-1 text-xl text-pink-500 font-semibold uppercase leading-tight"
+            class="mt-1 text-xl text-pink-400 font-semibold uppercase leading-tight"
           >
             A random Title
           </h4>
