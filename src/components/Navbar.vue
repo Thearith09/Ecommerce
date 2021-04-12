@@ -9,7 +9,9 @@
     </div>
     <div class="relative">
       <div
+        @mouseleave="dropdown = true"
         v-if="myProfile"
+        :class="{ dropdown: dropdown }"
         class="absolute top-20 right-0 h-auto w-1/2 z-10 shadow-lg"
       >
         <div class="flex items-center p-3 bg-white shadow-lg ">
@@ -28,9 +30,25 @@
         <div
           class="p-3 space-y-2 bg-gray-100 text-gray-800 text-md font-semibol"
         >
-          <h4>Tel: {{ myProfile.telephone }}</h4>
-          <h4>Telegram: {{ myProfile.telegram }}</h4>
-          <h4>Facebook: {{ myProfile.facebook }}</h4>
+          <h4>
+            <img
+              class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
+              src="@/assets/images/phone.png"
+            />{{ myProfile.telephone }}
+          </h4>
+          <h4>
+            <img
+              class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
+              src="@/assets/images/telegram.png"
+            />{{ myProfile.telegram }}
+          </h4>
+          <h4>
+            <img
+              class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
+              src="@/assets/images/fb.png"
+            />
+            {{ myProfile.facebook }}
+          </h4>
         </div>
         <div class="p-3 bg-white shadow-lg">
           <span
@@ -82,6 +100,7 @@
         Login
       </router-link>
       <svg
+        @mouseover="dropdown = !dropdown"
         v-if="user"
         xmlns="http://www.w3.org/2000/svg"
         class="-ml-8 text-pink-500 h-12 w-24 inline-block p-1 mr-2 cursor-pointer"
@@ -103,12 +122,14 @@ import { useRouter } from "vue-router";
 import getUser from "@/composables/getUser";
 import { projectAuth } from "@/firebase/config";
 import getUserDoc from "@/composables/getUserDoc";
+import { ref } from "@vue/reactivity";
 
 export default {
   setup() {
     const { user } = getUser();
     const router = useRouter();
     const { _user: myProfile } = getUserDoc("users");
+    const dropdown = ref(true);
 
     console.log(myProfile);
 
@@ -121,7 +142,13 @@ export default {
       router.push({ name: "Login" });
     };
 
-    return { handleNavigation, user, handleLogout, myProfile };
+    return {
+      handleNavigation,
+      user,
+      handleLogout,
+      myProfile,
+      dropdown,
+    };
   },
 };
 </script>

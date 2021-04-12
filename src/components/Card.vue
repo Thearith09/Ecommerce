@@ -35,8 +35,9 @@
               <span class="text-md  text-gray-300">/pcs</span>
             </div>
             <svg
+              @click="handleAddToCart"
               xmlns="http://www.w3.org/2000/svg"
-              class="absolute -right-14 -bottom-7 hover:text-pink-500 text-white h-12 w-24 inline-block p-1 mr-2 cursor-pointer"
+              class="absolute -right-14 -bottom-7 hover:text-pink-600 text-white h-12 w-24 inline-block p-1 mr-2 cursor-pointer"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -52,7 +53,23 @@
 </template>
 
 <script>
-export default {};
+import getUser from "@/composables/getUser";
+import { useRouter } from "vue-router";
+
+export default {
+  setup() {
+    const { user } = getUser();
+    const router = useRouter();
+
+    const handleAddToCart = () => {
+      if (!user.value) {
+        router.push({ name: "Login" });
+      }
+    };
+
+    return { handleAddToCart };
+  },
+};
 </script>
 
 <style></style>
