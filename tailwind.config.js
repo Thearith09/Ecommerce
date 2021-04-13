@@ -6,14 +6,23 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      backgroundImage: theme => ({
+        'footer': "url('/images/businessCard.png')",
+        'login': "url('/images/loginBackground.png')"
+       })
     },
   },
   variants: {
     extend: {
       backgroundColor: ['active'],
+      textColor: ['active'],
       lineClamp: ["hover"],
-      height: ["hover"]
+      height: ["hover"],
+      padding: ["hover"],
+      gridColumn: ["hover"],
+      gridTemplateColumns: ['hover'],
     },
+    display: ["group-hover"]
   },
   plugins: [require("@tailwindcss/line-clamp")],
 }

@@ -1,5 +1,5 @@
 <template>
-  <vueper-slides class="shadow-lg mt-12 overflow-hidden" autoplay>
+  <vueper-slides class="shadow-lg" autoplay>
     <vueper-slide
       v-for="(slide, index) in slides"
       :key="index"
@@ -42,14 +42,14 @@ export default {
 
 <style>
 .vueperslides__arrow {
-  color: rgb(231, 7, 157);
+  color: rgb(221, 42, 161);
   font-size: 12px;
 }
 .vueperslides__arrow:focus {
   outline: none;
 }
 .vueperslides__bullet--active .default {
-  color: rgb(231, 7, 157);
+  color: rgb(221, 42, 161);
 }
 .vueperslides__bullet--active:focus {
   outline: none;

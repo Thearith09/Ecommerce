@@ -1,8 +1,8 @@
 <template>
   <div
-    class="bg-white rounded-md p-5 shadow-lg hover:translate-y-2 transform transition"
+    class="bg-white h-96 p-5 shadow-lg hover:translate-y-2 transform transition"
   >
-    <div class="grid grid-cols-2">
+    <div>
       <div>
         <img
           src="https://source.unsplash.com/random"
@@ -12,7 +12,7 @@
       </div>
       <div class="relative">
         <div
-          class="bg-gradient-to-r from-indigo-600 to-indigo-900 text-gray-100 p-6 h-48 hover:h-auto"
+          class="absolute left-3 -top-10 bg-white shadow-lg text-gray-100 p-6 w-11/12"
         >
           <h4
             class="mt-1 text-xl text-pink-400 font-semibold uppercase leading-tight"
@@ -22,7 +22,7 @@
 
           <div class="mt-1">
             <span
-              class="text-gray-300 text-md line-clamp-3 hover:line-clamp-none"
+              class="text-gray-400 text-sm line-clamp-3 hover:line-clamp-none"
               >Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Laudantium, quae nemo impedit vel provident aut molestiae alias
               veritatis ducimus ipsam sint eius illo, dolor repudiandae?
@@ -31,13 +31,13 @@
           </div>
           <div class="mt-4 relative">
             <div class="flex">
-              <span class="text-red-600 text-md font-semibold">23$ </span>
-              <span class="text-md  text-gray-300">/pcs</span>
+              <span class="text-red-500 text-md font-semibold">23$ </span>
+              <span class="text-md  text-gray-400">/pcs</span>
             </div>
             <svg
               @click="handleAddToCart"
               xmlns="http://www.w3.org/2000/svg"
-              class="absolute -right-14 -bottom-7 hover:text-pink-600 text-white h-12 w-24 inline-block p-1 mr-2 cursor-pointer"
+              class="absolute -right-12 -bottom-7 hover:shadow-sm rounded-full shadow-lg text-pink-500 h-12 w-12 inline-block p-1 mr-2 cursor-pointer"
               viewBox="0 0 20 20"
               fill="currentColor"
             >

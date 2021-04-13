@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between bg-white items-center h-24 p-5 shadow-lg">
+  <div class="grid grid-cols-5 gap-4 bg-white items-center p-5">
     <div>
       <img
         @click="handleNavigation"
@@ -7,42 +7,69 @@
         src="@/assets/images/logo.png"
       />
     </div>
-    <div class="relative">
+
+    <div class="col-span-3 flex justify-between items-center relative">
+      <svg
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        class="absolute text-pink-500 h-5 top-3 ml-3"
+      >
+        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+
+      <input
+        class="focus:outline-none ring ring-offset-2 ring-pink-400 font-thin hover:shadow-sm w-full shadow-lg rounded-full p-2 mr-2 pl-10"
+        type="search"
+        placeholder="searching..."
+      />
+    </div>
+
+    <div class="relative items-center flex justify-end">
       <div
         @mouseleave="dropdown = true"
         v-if="myProfile"
         :class="{ dropdown: dropdown }"
-        class="absolute top-20 right-0 h-auto w-1/2 z-10 shadow-lg"
+        class="absolute top-20 -right-5 h-auto w-96 z-10 shadow-lg"
       >
         <div class="flex items-center p-3 bg-white shadow-lg ">
           <div>
             <h1
-              class="h-10 w-10 leading-10 bg-indigo-600 text-center text-semibold font-mono text-lg uppercase text-white rounded-full inline-block"
+              class="h-10 w-10 leading-10 bg-pink-500 text-center text-semibold font-mono text-lg uppercase text-white rounded-full inline-block"
             >
-              {{ user.displayName[0] }}{{ user.displayName[1] }}
+              {{ user.displayName[0] }}
             </h1>
           </div>
-          <div class="ml-2 leading-none text-gray-800">
-            {{ user.displayName }}
-            {{ user.email }}
+          <div class="ml-2 leading-none text-gray-700">
+            <p>{{ user.displayName }}</p>
+            <span class="text-sm text-gray-400">{{ user.email }}</span>
           </div>
         </div>
         <div
-          class="p-3 space-y-2 bg-gray-100 text-gray-800 text-md font-semibol"
+          class="p-3 space-y-2 bg-gray-100 text-gray-700 text-md font-semibol"
         >
-          <h4>
+          <h4
+            class="border-b-2 border-white p-2 transform transition hover:translate-y-1"
+          >
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/phone.png"
             />{{ myProfile.telephone }}
           </h4>
-          <h4>
+          <h4
+            class="border-b-2 border-white p-2 transform transition hover:translate-y-1"
+          >
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/telegram.png"
             />{{ myProfile.telegram }}
           </h4>
-          <h4>
+          <h4
+            class="border-b-2 border-white p-2 transform transition hover:translate-y-1"
+          >
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/fb.png"
@@ -53,66 +80,132 @@
         <div class="p-3 bg-white shadow-lg">
           <span
             @click="handleLogout"
-            class="text-gray-800 cursor-pointer hover:text-indigo-600 text-md font-semibol"
+            class="text-gray-700 cursor-pointer hover:text-pink-500 text-md font-semibol"
             >Log out</span
           >
         </div>
       </div>
-      <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-        <button
-          type="submit"
-          class="p-1 focus:outline-none focus:shadow-outline text-white"
-        >
-          <svg
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            class="w-5 h-5"
+
+      <div class="flex justify-end">
+        <div v-if="user" class="grid grid-cols-2 rounded-full w-full shadow-lg">
+          <div
+            class="bg-white group rounded-l-full grid grid-cols-1 hover:grid-cols-2 items-center active:bg-pink-500 active:text-white text-pink-500"
           >
-            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-        </button>
-      </span>
-      <input
-        class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 rounded-md font-semibold text-gray-800 bg-pink-500 p-2 mr-2 pl-10 shadow-lg"
-        type="search"
-      />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-full inline-block p-2 cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+              />
+            </svg>
+            <span
+              class="text-thin text-gray-500 hidden group-hover:inline-block"
+              >Cart</span
+            >
+          </div>
+          <div
+            @click="toggleDropdown"
+            class="bg-white group border-l-2 border-gray-100 rounded-r-full grid grid-cols-1 hover:grid-cols-2 items-center active:bg-pink-500 active:text-white text-pink-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-full inline-block p-2 cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="text-thin text-gray-500 hidden group-hover:inline-block"
+              >Profile</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="hover:text-pink-400 text-pink-500 h-12 w-24 inline-block p-1 cursor-pointer"
-        viewBox="0 0 20 20"
-        fill="currentColor"
+  <div
+    class="relative bg-white text-gray-400 shadow-lg border-t-2 border-gray-100 grid grid-cols-8"
+  >
+    <div
+      class="group border-r-2 border-gray-200 hover:text-pink-400 h-12 col-span-1 flex space-x-2 shadow-lg cursor-pointer hover:shadow-sm items-center"
+    >
+      <div
+        class="absolute w-1/5 text-thin text-gray-400 hidden group-hover:block bg-gray-100 border-t-2 border-gray-100 top-12 z-10 shadow-lg"
       >
-        <path
-          d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
-        />
-      </svg>
+        <h4
+          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
+        >
+          Lorem ipsum dolor sit,
+        </h4>
+        <h4
+          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
+        >
+          Lorem ipsum dolor sit,
+        </h4>
+        <h4
+          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
+        >
+          Lorem ipsum dolor sit,
+        </h4>
+        <h4
+          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
+        >
+          Lorem ipsum dolor sit,
+        </h4>
+        <h4
+          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
+        >
+          Lorem ipsum dolor sit,
+        </h4>
+        <h4
+          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
+        >
+          Lorem ipsum dolor sit,
+        </h4>
+      </div>
 
+      <span class="material-icons material-icons-outlined">
+        list
+      </span>
+      <span>Categories</span>
+      <span
+        class="hidden group-hover:block material-icons material-icons-outlined"
+      >
+        expand_less
+      </span>
+      <span class="group-hover:hidden material-icons material-icons-outlined">
+        expand_more
+      </span>
+    </div>
+
+    <div
+      class="hover:text-pink-400 border-r-2 focus:outline-none  active:bg-pink-500 active:text-white border-gray-200 h-12 flex justify-center shadow-lg cursor-pointer hover:shadow-sm items-center"
+    >
+      <span>Add Category</span>
+    </div>
+
+    <div
+      class="hover:text-pink-400 border-r-2 focus:outline-none  active:bg-pink-500 active:text-white border-gray-200 flex justify-center h-12 shadow-lg cursor-pointer hover:shadow-sm items-center"
+    >
+      <span>Add Admin</span>
+    </div>
+
+    <div v-if="!user" class="col-start-9">
       <router-link
-        v-if="!user"
-        class="hover:bg-pink-400 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 inline-block bg-pink-500 font-semibold font-mono cursor-pointer p-2 mr-2 rounded-md text-white shadow-lg"
+        class="hover:text-pink-500 border-l-2 border-gray-200 focus:outline-none  active:bg-pink-500 active:text-white bg-white cursor-pointer inline-block p-3 text-gray-400 hover:shadow-sm shadow-lg"
         :to="{ name: 'Login' }"
       >
-        Login
+        Log in
       </router-link>
-      <svg
-        @mouseover="dropdown = !dropdown"
-        v-if="user"
-        xmlns="http://www.w3.org/2000/svg"
-        class="-ml-8 text-pink-500 h-12 w-24 inline-block p-1 mr-2 cursor-pointer"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-          clip-rule="evenodd"
-        />
-      </svg>
     </div>
   </div>
 </template>
@@ -142,12 +235,17 @@ export default {
       router.push({ name: "Login" });
     };
 
+    const toggleDropdown = () => {
+      dropdown.value = !dropdown.value;
+    };
+
     return {
       handleNavigation,
       user,
       handleLogout,
       myProfile,
       dropdown,
+      toggleDropdown,
     };
   },
 };

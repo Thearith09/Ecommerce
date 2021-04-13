@@ -1,8 +1,16 @@
 <template>
   <div>
     <Navbar />
-    <Slideshow />
-    <div class="grid grid-cols-2 grid-rows-3 gap-4 w-full mt-12 px-5">
+    <div
+      class="grid grid-cols-4 grid-rows-2 grid-flow-row my-12 mx-5 bg-white shadow-lg"
+    >
+      <div class="col-span-1 bg-red-400"></div>
+      <div class="col-span-2 row-span-2 p-5">
+        <Slideshow />
+      </div>
+      <div class="col-span-1 bg-blue-500"></div>
+    </div>
+    <div class="grid grid-cols-4 gap-4 w-full my-12 px-5">
       <Card />
       <Card />
       <Card />
