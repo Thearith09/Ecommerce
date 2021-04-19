@@ -109,7 +109,7 @@ export default {
     const confirmPassword = ref("");
     const router = useRouter();
     const { error, signup, isPending } = useSignup();
-    const { addDoc } = useCollection("users");
+    const { addUser } = useCollection("users");
 
     const handleNavigation = () => {
       router.push({ name: "Login" });
@@ -123,7 +123,7 @@ export default {
       const res = await signup(email.value, password.value, username.value);
 
       if (res.user.uid) {
-        await addDoc(res.user.uid, {
+        await addUser(res.user.uid, {
           telephone: telephone.value,
           facebook: facebook.value,
           telegram: telegram.value,

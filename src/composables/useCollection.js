@@ -4,7 +4,7 @@ import { ref } from "@vue/reactivity";
 const useCollection = (collection) => {
     const error = ref(null);
 
-    const addDoc = async (id, userInfo) => {
+    const addUser = async (id, userInfo) => {
         error.value = null;
 
         try {
@@ -16,7 +16,19 @@ const useCollection = (collection) => {
         }
     };
 
-    return { error, addDoc };
+    const addCategory = async (category) => {
+        error.value = null;
+
+        try {
+            const response = await projectFirestore.collection(collection).add(category);
+            return response;
+
+        } catch (err) {
+            error.value = err.message;
+        }
+    };
+
+    return { error, addUser, addCategory };
 };
 
 export default useCollection;

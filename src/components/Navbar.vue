@@ -51,25 +51,19 @@
         <div
           class="p-3 space-y-2 bg-gray-100 text-gray-700 text-md font-semibol"
         >
-          <h4
-            class="border-b-2 border-white p-2 transform transition hover:translate-y-1"
-          >
+          <h4 class="border-white p-2 transform transition hover:translate-y-1">
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/phone.png"
             />{{ myProfile.telephone }}
           </h4>
-          <h4
-            class="border-b-2 border-white p-2 transform transition hover:translate-y-1"
-          >
+          <h4 class="border-white p-2 transform transition hover:translate-y-1">
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/telegram.png"
             />{{ myProfile.telegram }}
           </h4>
-          <h4
-            class="border-b-2 border-white p-2 transform transition hover:translate-y-1"
-          >
+          <h4 class="border-white p-2 transform transition hover:translate-y-1">
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/fb.png"
@@ -110,6 +104,10 @@
             @click="toggleDropdown"
             class="bg-white group border-l-2 border-gray-100 rounded-r-full grid grid-cols-1 hover:grid-cols-2 items-center active:bg-pink-500 active:text-white text-pink-500"
           >
+            <span
+              class="text-thin text-gray-500 hidden pl-3 group-hover:inline-block"
+              >Profile</span
+            >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-12 w-full inline-block p-2 cursor-pointer"
@@ -122,10 +120,6 @@
                 clip-rule="evenodd"
               />
             </svg>
-            <span
-              class="text-thin text-gray-500 hidden group-hover:inline-block"
-              >Profile</span
-            >
           </div>
         </div>
       </div>
@@ -133,43 +127,20 @@
   </div>
 
   <div
-    class="relative bg-white text-gray-400 shadow-lg border-t-2 border-gray-100 grid grid-cols-8"
+    class="bg-white text-gray-400 shadow-lg border-t-2 border-gray-100 grid grid-cols-8"
   >
     <div
-      class="group border-r-2 border-gray-200 hover:text-pink-400 h-12 col-span-1 flex space-x-2 shadow-lg cursor-pointer hover:shadow-sm items-center"
+      class="group relative border-r-2 border-white hover:text-pink-400 h-12 col-span-1 flex space-x-2 shadow-lg cursor-pointer hover:shadow-sm items-center"
     >
       <div
-        class="absolute w-1/5 text-thin text-gray-400 hidden group-hover:block bg-gray-100 border-t-2 border-gray-100 top-12 z-10 shadow-lg"
+        class="absolute w-96 left-0 text-thin text-gray-400 hidden group-hover:block bg-white border-t-2 border-gray-100 top-12 z-10 shadow-lg"
       >
         <h4
-          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
+          class="border-b-2 border-gray-100 hover:border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-5 py-3"
+          v-for="category in categories"
+          :key="category.id"
         >
-          Lorem ipsum dolor sit,
-        </h4>
-        <h4
-          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
-        >
-          Lorem ipsum dolor sit,
-        </h4>
-        <h4
-          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
-        >
-          Lorem ipsum dolor sit,
-        </h4>
-        <h4
-          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
-        >
-          Lorem ipsum dolor sit,
-        </h4>
-        <h4
-          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
-        >
-          Lorem ipsum dolor sit,
-        </h4>
-        <h4
-          class="border-b-2 border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-3 py-4"
-        >
-          Lorem ipsum dolor sit,
+          {{ category.categoryName }}
         </h4>
       </div>
 
@@ -188,15 +159,63 @@
     </div>
 
     <div
-      class="hover:text-pink-400 border-r-2 focus:outline-none  active:bg-pink-500 active:text-white border-gray-200 h-12 flex justify-center shadow-lg cursor-pointer hover:shadow-sm items-center"
+      class="group relative hover:text-pink-400 border-r-2 focus:outline-none  active:bg-pink-500 active:text-white border-gray-200 h-12 flex justify-center shadow-lg cursor-pointer hover:shadow-sm items-center"
     >
       <span>Add Category</span>
+
+      <div
+        class="absolute w-96 text-thin left-0 text-gray-400 hidden group-hover:block bg-white border-t-2 border-gray-100 top-12 z-10 shadow-lg"
+      >
+        <div>
+          <form @submit.prevent="handleAddCategory">
+            <div class="w-full h-full space-y-3 p-5">
+              <input
+                v-model="categoryName"
+                class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 w-full shadow-lg p-2"
+                type="text"
+                placeholder="category name"
+              />
+              <input
+                @change="handleChanges"
+                class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 text-gray-700 w-full shadow-lg p-2"
+                type="file"
+              />
+              <button
+                class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 font-semibold bg-white shadow-lg w-full p-2 text-gray-700"
+              >
+                Add
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <div
-      class="hover:text-pink-400 border-r-2 focus:outline-none  active:bg-pink-500 active:text-white border-gray-200 flex justify-center h-12 shadow-lg cursor-pointer hover:shadow-sm items-center"
+      class="group relative hover:text-pink-400 border-r-2 focus:outline-none active:bg-pink-500 active:text-white border-gray-200 flex justify-center h-12 shadow-lg cursor-pointer hover:shadow-sm items-center"
     >
       <span>Add Admin</span>
+      <div
+        class="absolute w-96 text-thin left-0 text-gray-400 hidden group-hover:block bg-white border-t-2 border-gray-100 top-12 z-10 shadow-lg"
+      >
+        <div>
+          <form @submit.prevent="handleAdd">
+            <div class="w-full h-full space-y-3 p-5">
+              <input
+                v-model="categoryName"
+                class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 w-full shadow-lg p-2"
+                type="email"
+                placeholder="email"
+              />
+              <button
+                class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 bg-white font-semibold shadow-lg w-full p-2 text-gray-700"
+              >
+                promote
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <div v-if="!user" class="col-start-9">
@@ -213,18 +232,28 @@
 <script>
 import { useRouter } from "vue-router";
 import getUser from "@/composables/getUser";
-import { projectAuth } from "@/firebase/config";
+import { projectAuth, timestamp } from "@/firebase/config";
 import getUserDoc from "@/composables/getUserDoc";
 import { ref } from "@vue/reactivity";
+import useStorage from "@/composables/useStorage";
+import useCollection from "@/composables/useCollection";
+import getCollection from "@/composables/getCollection";
 
 export default {
   setup() {
     const { user } = getUser();
     const router = useRouter();
-    const { _user: myProfile } = getUserDoc("users");
     const dropdown = ref(true);
+    const file = ref(null);
+    const fileError = ref(null);
+    const categoryName = ref("");
 
-    console.log(myProfile);
+    const { documents: categories } = getCollection("inventory");
+    const { _user: myProfile } = getUserDoc("users");
+    const { error, addCategory } = useCollection("inventory");
+    const { url, filePath, uploadImage } = useStorage();
+
+    const types = ["image/png", "image/jpg", "image/jpeg", "image/svg"];
 
     const handleNavigation = () => {
       router.push({ name: "Home" });
@@ -239,13 +268,47 @@ export default {
       dropdown.value = !dropdown.value;
     };
 
+    const handleChanges = (e) => {
+      const selected = e.target.files[0];
+
+      if (selected && types.includes(selected.type)) {
+        file.value = selected;
+        fileError.value = null;
+      } else {
+        file.value = null;
+        fileError.value = `Only file of type jpg, jpeg, png, svg are allowed!`;
+      }
+    };
+
+    const handleAddCategory = async () => {
+      if (file.value) {
+        await uploadImage(file.value);
+
+        await addCategory({
+          categoryName: categoryName.value,
+          url: url.value,
+          filePath: filePath.value,
+          products: [],
+          createdAt: timestamp(),
+        });
+
+        router.push({ name: "ListCategory" });
+
+        categoryName.value = "";
+      }
+    };
+
     return {
+      handleChanges,
+      handleAddCategory,
       handleNavigation,
       user,
       handleLogout,
       myProfile,
       dropdown,
       toggleDropdown,
+      categoryName,
+      categories,
     };
   },
 };

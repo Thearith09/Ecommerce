@@ -10,6 +10,7 @@
     "@tailwindcss/line-clamp": "0.2.0",
     "core-js": "^3.6.5",
     "firebase": "^8.3.3",
+    "uuid": "8.3.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vueperslides": "3.2.0"

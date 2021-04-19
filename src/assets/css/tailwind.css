@@ -6,4 +6,7 @@
   .dropdown {
     @apply hidden;
   }
+  .popup {
+    @apply hidden;
+  }
 }
