@@ -139,8 +139,14 @@
           class="border-b-2 border-gray-100 hover:border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-5 py-3"
           v-for="category in categories"
           :key="category.id"
+          @click="handleNavigation(undefined, category.id)"
         >
           {{ category.categoryName }}
+        </h4>
+        <h4
+          class="border-b-2 border-gray-100 hover:border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-5 py-3"
+        >
+          <router-link :to="{ name: 'Categories' }">All Categories</router-link>
         </h4>
       </div>
 
@@ -251,12 +257,18 @@ export default {
     const { documents: categories } = getCollection("inventory");
     const { _user: myProfile } = getUserDoc("users");
     const { error, addCategory } = useCollection("inventory");
-    const { url, filePath, uploadImage } = useStorage();
+    const { url, uploadImage } = useStorage();
 
     const types = ["image/png", "image/jpg", "image/jpeg", "image/svg"];
 
-    const handleNavigation = () => {
-      router.push({ name: "Home" });
+    const handleNavigation = (event, id) => {
+      if (id) {
+        router.push({
+          path: `/categories/${id}`,
+        });
+      } else {
+        router.push({ name: "Home" });
+      }
     };
 
     const handleLogout = async () => {
@@ -287,12 +299,11 @@ export default {
         await addCategory({
           categoryName: categoryName.value,
           url: url.value,
-          filePath: filePath.value,
           products: [],
           createdAt: timestamp(),
         });
 
-        router.push({ name: "ListCategory" });
+        router.push({ name: "Categories" });
 
         categoryName.value = "";
       }

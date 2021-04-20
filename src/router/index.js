@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue';
 import Login from '../views/auth/Login.vue';
 import Signup from '../views/auth/Signup.vue';
-import ListCategory from "../views/ListCategory.vue";
-import ListProduct from "../views/ListProduct.vue";
+import Categories from "../views/Categories.vue";
+import CategoryDetails from "../views/CategoryDetails.vue";
 
 const routes = [
   {
@@ -22,14 +22,14 @@ const routes = [
     component: Signup
   },
   {
-    path: '/category',
-    name: 'ListCategory',
-    component: ListCategory
+    path: '/categories',
+    name: 'Categories',
+    component: Categories
   },
   {
-    path: '/category/products',
-    name: 'ListProduct',
-    component: ListProduct,
+    path: '/categories/:id',
+    name: 'CategoryDetails',
+    component: CategoryDetails,
     props: true
   }
 ]

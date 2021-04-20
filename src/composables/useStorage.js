@@ -22,8 +22,8 @@ const useStorage = () => {
         }
     };
 
-    const deleteImage = async (path) => {
-        const storageRef = projectStorage.ref(path);
+    const deleteImage = async (imageUrl) => {
+        const storageRef = projectStorage.refFromURL(imageUrl)
 
         try {
             await storageRef.delete();

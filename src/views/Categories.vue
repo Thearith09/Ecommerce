@@ -3,12 +3,17 @@
     <Navbar />
     <div class="grid grid-cols-5 grid-flow-row gap-4 my-12 mx-5">
       <div
-        class="h-42 shadow-lg bg-white relative transform transition hover:translate-y-2 cursor-pointer"
+        class="h-64 hover:shadow-lg bg-white relative transform transition hover:translate-y-2 cursor-pointer"
         v-for="category in categories"
         :key="category.id"
       >
-        <router-link :to="{ name: 'ListProduct', params: { id: category.id } }">
-          <img class="h-full object-cover object-center" :src="category.url" />
+        <router-link
+          :to="{ name: 'CategoryDetails', params: { id: category.id } }"
+        >
+          <img
+            class="h-full w-full object-cover object-center"
+            :src="category.url"
+          />
         </router-link>
 
         <h4
@@ -26,7 +31,6 @@
 import getCollection from "@/composables/getCollection";
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
-import useStorage from "@/composables/useStorage";
 
 export default {
   components: {
@@ -34,9 +38,7 @@ export default {
     Footer,
   },
   setup() {
-    const { deleteImage } = useStorage();
     const { error, documents: categories } = getCollection("inventory");
-
     return { error, categories };
   },
 };
