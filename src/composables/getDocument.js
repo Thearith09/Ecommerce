@@ -6,7 +6,6 @@ const getDocument = (collection, id) => {
     const document = ref(null);
 
     let documentRef = projectFirestore.collection(collection).doc(id);
-
     const unsubscribe = documentRef.onSnapshot((doc) => {
         if (doc.data()) {
             document.value = { ...doc.data(), id: doc.id };

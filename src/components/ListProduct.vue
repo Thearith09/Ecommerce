@@ -48,58 +48,72 @@
       </button>
     </div>
   </div>
-  <div v-if="category" class="grid grid-cols-2 gap-4">
+  <div v-if="category" class="grid grid-cols-2 gap-1">
     <div
       v-for="product in category.products"
       :key="product.id"
-      class="flex justify-between items-center bg-white shadow-lg h-64 transition transform hover:translate-y-2"
+      class="grid grid-cols-2 items-center h-56 transition transform hover:translate-y-2"
     >
-      <div class="h-full w-5/12 relative">
-        <ul class="p-2 space-y-3 text-gray-400">
-          <li class="flex justify-between">
-            <span>Product:</span>
-            <span class="text-gray-500 font-semibold ml-2">{{
+      <div class="w-full h-full px-5 py-5">
+        <div class="text-gray-400 space-y-5">
+          <div class="flex justify-between">
+            <span class="text-gray-800 font-semibold inline-block">{{
               product.productName
             }}</span>
-          </li>
-          <li class="flex justify-between">
-            <span>Price:</span>
-            <span class="text-gray-500 font-semibold ml-2"
+            <span class="text-gray-500 font-semibold"
               >${{ product.price }}</span
             >
-          </li>
-          <li class="flex justify-between">
-            <span>Discount:</span>
-            <span class="text-gray-500 font-semibold ml-2"
-              >{{ product.discount }}%</span
+          </div>
+          <div>
+            <p>In Stock</p>
+          </div>
+          <div class="flex space-x-1">
+            <p v-for="size in product.sizes" :key="size">
+              <span
+                class="text-gray-500 font-semibold bg-gray-200 p-2 uppercase"
+                >{{ size }}</span
+              >
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 mt-5">
+          <div class="flex justify-between">
+            <button
+              @click="handleEditProduct(product)"
+              class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-full p-2 font-bold text-md bg-gray-100 text-gray-400 border-r-2 border-white"
             >
-          </li>
-          <li class="flex justify-between">
-            <span>Sizes:</span>
-            <span class="text-gray-500 font-semibold ml-2">{{
-              product.sizes
-            }}</span>
-          </li>
-        </ul>
-        <div class="grid grid-cols-2 w-full absolute bottom-0 left-0">
-          <button
-            @click="handleEditProduct(product)"
-            class="focus:outline-none active:bg-pink-600 hover:bg-pink-400 shadow-lg p-2 font-mono text-md bg-pink-500 text-white"
-          >
-            Edit
-          </button>
-          <button
-            @click="handleRemoveProduct(product.id, product.images)"
-            class="focus:outline-none active:bg-pink-600 hover:bg-pink-400 shadow-lg p-2 font-mono text-md bg-pink-500 text-white"
-          >
-            Remove
-          </button>
+              Edit
+            </button>
+            <button
+              @click="handleRemoveProduct(product.id, product.images)"
+              class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-full p-2 font-bold text-md bg-gray-100 text-gray-400"
+            >
+              Remove
+            </button>
+          </div>
+          <div class="flex justify-end">
+            <button
+              @click="handleAddToCart(product)"
+              class="flex items-center justify-center w-9 h-9 rounded-full focus:outline-none hover:text-pink-500 text-gray-400 border border-gray-200"
+              type="button"
+              aria-label="like"
+            >
+              <svg width="20" height="20" fill="currentColor">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="w-10/12 bg-blue-40">
+      <div class="h-56 w-full">
         <img
-          class="h-64 w-full object-cover object-center"
+          class="h-full w-full object-cover object-center overflow-hidden"
           :src="product.images[0].url"
         />
       </div>
@@ -119,7 +133,9 @@
 import useDocument from "@/composables/useDocument";
 import useStorage from "@/composables/useStorage";
 import getDocument from "@/composables/getDocument";
+import getUser from "@/composables/getUser";
 import AddProduct from "@/components/AddProduct";
+import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 
@@ -134,8 +150,11 @@ export default {
     const router = useRouter();
     const product = ref(null);
 
+    const { user } = getUser();
     const { updateDoc, deleteDoc } = useDocument("inventory", props.id);
     const { error, document: category } = getDocument("inventory", props.id);
+    const { document: cart } = getDocument("carts", user.value?.uid);
+    const { addDoc } = useDocument("carts", user.value?.uid);
 
     const mountComponent = () => {
       currentComponent.value = "AddProduct";
@@ -176,6 +195,28 @@ export default {
       router.push({ name: "Categories" });
     };
 
+    const handleAddToCart = async (product) => {
+      if (!user.value) {
+        router.push({ name: "Login" });
+      } else {
+        const items = cart.value.items.filter(
+          (item) => item.productId != product.id
+        );
+        const item = {
+          productId: product.id,
+          productName: product.productName,
+          price: product.price,
+          discount: product.discount,
+          sizes: product.sizes,
+          images: product.images,
+        };
+        await addDoc({
+          items: [...items, item],
+          createdAt: timestamp(),
+        });
+      }
+    };
+
     return {
       error,
       product,
@@ -186,6 +227,7 @@ export default {
       handleRemoveProduct,
       handleRemoveCategory,
       handleEditProduct,
+      handleAddToCart,
     };
   },
 };

@@ -101,7 +101,7 @@
             placeholder="image"
             @change="handleInsertImage"
           />
-          <lable class="text-indigo-600 text-sm">
+          <lable v-if="!fileError" class="text-indigo-600 text-sm">
             select image in order to insert into images[
             <ur class="p-1" v-for="(image, index) in images" :key="index">
               <li
@@ -131,7 +131,9 @@
             </ur>
             ]
           </lable>
-
+          <h4 v-if="fileError" class="text-red-500 text-sm">
+            {{ fileError }}
+          </h4>
           <button
             class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 bg-white font-semibold shadow-lg w-full p-2 text-gray-700"
           >
@@ -162,7 +164,7 @@ export default {
     let conveyIndex;
 
     const { error, updateDoc } = useDocument("inventory", props.categoryId);
-    const { url, filePath, uploadImage } = useStorage();
+    const { url, uploadImage } = useStorage();
 
     if (props.product) {
       const p = props.product;
@@ -279,6 +281,7 @@ export default {
       discount,
       productName,
       images,
+      fileError,
     };
   },
 };

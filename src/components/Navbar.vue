@@ -1,11 +1,9 @@
 <template>
   <div class="grid grid-cols-5 gap-4 bg-white items-center p-5">
     <div>
-      <img
-        @click="handleNavigation"
-        class="w-44 cursor-pointer"
-        src="@/assets/images/logo.png"
-      />
+      <router-link :to="{ name: 'Home' }">
+        <img class="w-44 cursor-pointer" src="@/assets/images/logo.png" />
+      </router-link>
     </div>
 
     <div class="col-span-3 flex justify-between items-center relative">
@@ -28,7 +26,7 @@
       />
     </div>
 
-    <div class="relative items-center flex justify-end">
+    <div class="relative items-center flex justify-end cursor-pointer">
       <div
         @mouseleave="dropdown = true"
         v-if="myProfile"
@@ -82,24 +80,36 @@
 
       <div class="flex justify-end">
         <div v-if="user" class="grid grid-cols-2 rounded-full w-full shadow-lg">
-          <div
-            class="bg-white group rounded-l-full grid grid-cols-1 hover:grid-cols-2 items-center active:bg-pink-500 active:text-white text-pink-500"
+          <router-link
+            class="relative bg-white group cursor-pointer rounded-l-full grid grid-cols-1 hover:grid-cols-2 items-center active:bg-pink-500 active:text-white text-pink-500"
+            :to="{ name: 'CartDetails' }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-12 w-full inline-block p-2 cursor-pointer"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              class="h-11 w-full inline-block p-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
-                d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
             <span
               class="text-thin text-gray-500 hidden group-hover:inline-block"
               >Cart</span
             >
-          </div>
+            <div
+              v-if="cart"
+              class="group-hover:left-8 absolute top-0 left-16 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
+            >
+              {{ cart.items.length }}
+            </div>
+          </router-link>
+
           <div
             @click="toggleDropdown"
             class="bg-white group border-l-2 border-gray-100 rounded-r-full grid grid-cols-1 hover:grid-cols-2 items-center active:bg-pink-500 active:text-white text-pink-500"
@@ -110,14 +120,16 @@
             >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-12 w-full inline-block p-2 cursor-pointer"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              class="h-11 w-full inline-block p-2 cursor-pointer"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
-                fill-rule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                clip-rule="evenodd"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
               />
             </svg>
           </div>
@@ -139,7 +151,7 @@
           class="border-b-2 border-gray-100 hover:border-white hover:shadow-md hover:bg-white hover:text-pink-400 px-5 py-3"
           v-for="category in categories"
           :key="category.id"
-          @click="handleNavigation(undefined, category.id)"
+          @click="handleNavigation(category.id)"
         >
           {{ category.categoryName }}
         </h4>
@@ -186,6 +198,9 @@
                 class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 text-gray-700 w-full shadow-lg p-2"
                 type="file"
               />
+              <h4 v-if="fileError" class="text-red-500 text-sm">
+                {{ fileError }}
+              </h4>
               <button
                 class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 font-semibold bg-white shadow-lg w-full p-2 text-gray-700"
               >
@@ -236,14 +251,14 @@
 </template>
 
 <script>
-import { useRouter } from "vue-router";
 import getUser from "@/composables/getUser";
-import { projectAuth, timestamp } from "@/firebase/config";
 import getUserDoc from "@/composables/getUserDoc";
-import { ref } from "@vue/reactivity";
 import useStorage from "@/composables/useStorage";
 import useCollection from "@/composables/useCollection";
 import getCollection from "@/composables/getCollection";
+import { projectAuth, timestamp } from "@/firebase/config";
+import { useRouter } from "vue-router";
+import { ref } from "@vue/reactivity";
 
 export default {
   setup() {
@@ -256,19 +271,15 @@ export default {
 
     const { documents: categories } = getCollection("inventory");
     const { _user: myProfile } = getUserDoc("users");
-    const { error, addCategory } = useCollection("inventory");
+    const { addCategory } = useCollection("inventory");
     const { url, uploadImage } = useStorage();
 
     const types = ["image/png", "image/jpg", "image/jpeg", "image/svg"];
 
-    const handleNavigation = (event, id) => {
-      if (id) {
-        router.push({
-          path: `/categories/${id}`,
-        });
-      } else {
-        router.push({ name: "Home" });
-      }
+    const handleNavigation = (id) => {
+      router.push({
+        path: `/categories/${id}`,
+      });
     };
 
     const handleLogout = async () => {
@@ -282,6 +293,7 @@ export default {
 
     const handleChanges = (e) => {
       const selected = e.target.files[0];
+      console.log(selected);
 
       if (selected && types.includes(selected.type)) {
         file.value = selected;
@@ -313,13 +325,14 @@ export default {
       handleChanges,
       handleAddCategory,
       handleNavigation,
-      user,
       handleLogout,
+      user,
       myProfile,
       dropdown,
       toggleDropdown,
       categoryName,
       categories,
+      fileError,
     };
   },
 };

@@ -6,7 +6,7 @@ const getCollection = (collection) => {
     const error = ref(null);
     const documents = ref(null);
 
-    const collectionRef = projectFirestore.collection(collection).orderBy("createdAt", "desc");
+    const collectionRef = projectFirestore.collection(collection).orderBy("createdAt", "desc").limit(10);
     const unsubscribe = collectionRef.onSnapshot((snapshot) => {
         const results = [];
         snapshot.docs.forEach((doc) => {

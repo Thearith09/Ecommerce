@@ -21,8 +21,11 @@ module.exports = {
       padding: ["hover"],
       gridColumn: ["hover"],
       gridTemplateColumns: ['hover'],
+      zIndex: ['hover'],
+      position: ['group-hover'],
+      inset: ['group-hover'],
     },
-    display: ["group-hover"]
+    display: ["hover","group-hover"]
   },
   plugins: [require("@tailwindcss/line-clamp")],
 }

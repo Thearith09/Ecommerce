@@ -18,6 +18,18 @@ const useDocument = (collection, id) => {
         }
     };
 
+    const addDoc = async (doc) => {
+        error.value = null; 
+
+        try {
+            const res = await documentRef.set(doc);
+            return res;
+
+        } catch (err) {
+            error.value = err.message;
+        }
+    };
+
     const updateDoc = async (updates) => {
         error.value = null;
 
@@ -30,7 +42,7 @@ const useDocument = (collection, id) => {
         }
     };
 
-    return { error, deleteDoc, updateDoc };
+    return { error, deleteDoc, updateDoc, addDoc };
 };
 
 export default useDocument;
