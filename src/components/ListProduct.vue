@@ -22,7 +22,7 @@
         </svg>
       </div>
 
-      <div class="text-gray-400 text-md font-semibold">
+      <div class="text-gray-400 font-semibold">
         Add a New Product
       </div>
     </div>
@@ -48,6 +48,7 @@
       </button>
     </div>
   </div>
+
   <div v-if="category" class="grid grid-cols-2 gap-1">
     <div
       v-for="product in category.products"
@@ -60,8 +61,8 @@
             <span class="text-gray-800 font-semibold inline-block">{{
               product.productName
             }}</span>
-            <span class="text-gray-500 font-semibold"
-              >${{ product.price }}</span
+            <span class="text-gray-700 font-semibold"
+              >USD {{ product.price }}</span
             >
           </div>
           <div>
@@ -70,7 +71,7 @@
           <div class="flex space-x-1">
             <p v-for="size in product.sizes" :key="size">
               <span
-                class="text-gray-500 font-semibold bg-gray-200 p-2 uppercase"
+                class="text-gray-400 shadow-inner font-semibold p-2 uppercase"
                 >{{ size }}</span
               >
             </p>
@@ -81,21 +82,23 @@
           <div class="flex justify-between">
             <button
               @click="handleEditProduct(product)"
-              class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-full p-2 font-bold text-md bg-gray-100 text-gray-400 border-r-2 border-white"
+              class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-full p-2 font-semibold bg-gray-100 text-gray-400 border-r-2 border-white"
             >
               Edit
             </button>
             <button
               @click="handleRemoveProduct(product.id, product.images)"
-              class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-full p-2 font-bold text-md bg-gray-100 text-gray-400"
+              class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-full p-2 font-semibold bg-gray-100 text-gray-400"
             >
               Remove
             </button>
           </div>
-          <div class="flex justify-end">
+
+          <div class="flex justify-end text-gray-400">
             <button
               @click="handleAddToCart(product)"
-              class="flex items-center justify-center w-9 h-9 rounded-full focus:outline-none hover:text-pink-500 text-gray-400 border border-gray-200"
+              :class="{ added: cartIds.includes(product.id) }"
+              class="flex items-center justify-center w-9 h-9 rounded-full focus:outline-none hover:text-pink-500 border border-gray-200"
               type="button"
               aria-label="like"
             >
@@ -110,7 +113,6 @@
           </div>
         </div>
       </div>
-
       <div class="h-56 w-full">
         <img
           class="h-full w-full object-cover object-center overflow-hidden"
@@ -138,6 +140,7 @@ import AddProduct from "@/components/AddProduct";
 import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
+import { watch } from "vue";
 
 export default {
   components: {
@@ -149,12 +152,22 @@ export default {
     const currentComponent = ref(null);
     const router = useRouter();
     const product = ref(null);
+    const cartIds = ref([]);
 
     const { user } = getUser();
     const { updateDoc, deleteDoc } = useDocument("inventory", props.id);
     const { error, document: category } = getDocument("inventory", props.id);
     const { document: cart } = getDocument("carts", user.value?.uid);
-    const { addDoc } = useDocument("carts", user.value?.uid);
+    const { addDoc, updateDoc: updateCart } = useDocument(
+      "carts",
+      user.value?.uid
+    );
+
+    watch(cart, () => {
+      for (let i in cart.value.items) {
+        cartIds.value[i] = cart.value.items[i].productId;
+      }
+    });
 
     const mountComponent = () => {
       currentComponent.value = "AddProduct";
@@ -199,21 +212,31 @@ export default {
       if (!user.value) {
         router.push({ name: "Login" });
       } else {
+        const item = cart.value.items.filter(
+          (item) => item.productId == product.id
+        );
         const items = cart.value.items.filter(
           (item) => item.productId != product.id
         );
-        const item = {
-          productId: product.id,
-          productName: product.productName,
-          price: product.price,
-          discount: product.discount,
-          sizes: product.sizes,
-          images: product.images,
-        };
-        await addDoc({
-          items: [...items, item],
-          createdAt: timestamp(),
-        });
+
+        if (item.length > 0) {
+          await updateCart({
+            items: [...items],
+          });
+        } else {
+          const item = {
+            productId: product.id,
+            productName: product.productName,
+            price: product.price,
+            discount: product.discount,
+            sizes: product.sizes,
+            images: product.images,
+          };
+          await addDoc({
+            items: [...items, item],
+            createdAt: timestamp(),
+          });
+        }
       }
     };
 
@@ -221,6 +244,7 @@ export default {
       error,
       product,
       category,
+      cartIds,
       currentComponent,
       mountComponent,
       unmountComponent,

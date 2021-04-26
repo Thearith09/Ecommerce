@@ -34,7 +34,7 @@ const routes = [
     props: true
   },
   {
-    path: '/cartDetails',
+    path: '/carts/addtocartDetails',
     name: 'CartDetails',
     component: CartDetails,
   }

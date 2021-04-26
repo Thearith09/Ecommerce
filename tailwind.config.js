@@ -7,14 +7,14 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: theme => ({
-        'footer': "url('/images/businessCard.png')",
+        'footer': "url('/images/business\d.png')",
         'login': "url('/images/loginBackground.png')"
        })
     },
   },
   variants: {
     extend: {
-      backgroundColor: ['active'],
+      backgroundColor: ['active', 'first'],
       textColor: ['active'],
       lineClamp: ["hover"],
       height: ["hover"],

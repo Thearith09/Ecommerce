@@ -1,9 +1,16 @@
 <template>
   <div class="grid grid-cols-5 gap-4 bg-white items-center p-5">
-    <div>
+    <div class="group relative">
       <router-link :to="{ name: 'Home' }">
-        <img class="w-44 cursor-pointer" src="@/assets/images/logo.png" />
+        <img
+          class="w-44 cursor-pointer focus:outline-none"
+          src="@/assets/images/logo.png"
+        />
       </router-link>
+      <span
+        class="hidden text-gray-400 font-semibold group-hover:inline-block absolute top-0 right-16"
+        >Home</span
+      >
     </div>
 
     <div class="col-span-3 flex justify-between items-center relative">
@@ -27,16 +34,17 @@
     </div>
 
     <div class="relative items-center flex justify-end cursor-pointer">
+      <!--Dropdown profile-->
       <div
         @mouseleave="dropdown = true"
         v-if="myProfile"
         :class="{ dropdown: dropdown }"
         class="absolute top-20 -right-5 h-auto w-96 z-10 shadow-lg"
       >
-        <div class="flex items-center p-3 bg-white shadow-lg ">
+        <div class="flex items-center p-2 bg-white shadow-lg ">
           <div>
             <h1
-              class="h-10 w-10 leading-10 bg-pink-500 text-center text-semibold font-mono text-lg uppercase text-white rounded-full inline-block"
+              class="h-8 w-8 flex items-center justify-center bg-pink-500 text-center font-semibold uppercase text-white rounded-full"
             >
               {{ user.displayName[0] }}
             </h1>
@@ -69,7 +77,7 @@
             {{ myProfile.facebook }}
           </h4>
         </div>
-        <div class="p-3 bg-white shadow-lg">
+        <div class="p-2 bg-white shadow-lg">
           <span
             @click="handleLogout"
             class="text-gray-700 cursor-pointer hover:text-pink-500 text-md font-semibol"
@@ -78,15 +86,15 @@
         </div>
       </div>
 
-      <div class="flex justify-end">
+      <div class="flex justify-end w-full">
         <div v-if="user" class="grid grid-cols-2 rounded-full w-full shadow-lg">
           <router-link
-            class="relative bg-white group cursor-pointer rounded-l-full grid grid-cols-1 hover:grid-cols-2 items-center active:bg-pink-500 active:text-white text-pink-500"
+            class="bg-white cursor-pointer rounded-l-full grid grid-cols-1  items-center"
             :to="{ name: 'CartDetails' }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-11 w-full inline-block p-2"
+              class="h-11 w-full inline-block p-2 text-pink-500 hover:text-pink-600"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -98,13 +106,9 @@
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            <span
-              class="text-thin text-gray-500 hidden group-hover:inline-block"
-              >Cart</span
-            >
             <div
-              v-if="cart"
-              class="group-hover:left-8 absolute top-0 left-16 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
+              v-if="cart && cart.items.length > 0"
+              class="absolute top-0 left-14 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
             >
               {{ cart.items.length }}
             </div>
@@ -112,26 +116,15 @@
 
           <div
             @click="toggleDropdown"
-            class="bg-white group border-l-2 border-gray-100 rounded-r-full grid grid-cols-1 hover:grid-cols-2 items-center active:bg-pink-500 active:text-white text-pink-500"
+            class="bg-white group border-l-2 border-gray-100 rounded-r-full grid grid-cols-1 items-center"
           >
-            <span
-              class="text-thin text-gray-500 hidden pl-3 group-hover:inline-block"
-              >Profile</span
-            >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-11 w-full inline-block p-2 cursor-pointer"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
-            </svg>
+            <div class="flex justify-center items-center">
+              <div
+                class="h-7 w-7 bg-pink-500 text-white rounded-full uppercase font-semibold flex justify-center items-center hover:bg-pink-600"
+              >
+                {{ user.displayName[0] }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -256,6 +249,7 @@ import getUserDoc from "@/composables/getUserDoc";
 import useStorage from "@/composables/useStorage";
 import useCollection from "@/composables/useCollection";
 import getCollection from "@/composables/getCollection";
+import getDocument from "@/composables/getDocument";
 import { projectAuth, timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
@@ -270,6 +264,7 @@ export default {
     const categoryName = ref("");
 
     const { documents: categories } = getCollection("inventory");
+    const { document: cart } = getDocument("carts", user.value?.uid);
     const { _user: myProfile } = getUserDoc("users");
     const { addCategory } = useCollection("inventory");
     const { url, uploadImage } = useStorage();
@@ -333,6 +328,7 @@ export default {
       categoryName,
       categories,
       fileError,
+      cart,
     };
   },
 };
