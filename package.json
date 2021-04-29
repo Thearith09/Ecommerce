@@ -10,6 +10,8 @@
     "@tailwindcss/line-clamp": "0.2.0",
     "core-js": "^3.6.5",
     "firebase": "^8.3.3",
+    "moment": "^2.29.1",
+    "print-js": "^1.6.0",
     "uuid": "8.3.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",

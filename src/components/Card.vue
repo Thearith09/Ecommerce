@@ -1,62 +1,96 @@
 <template>
-  <div v-for="category in categories" :key="category.id">
+  <div class="relative grid grid-cols-5 gap-4 w-full">
     <div
-      class="grid grid-cols-4 gap-4 bg-white h-96 p-5 shadow-lg hover:translate-y-2 transform transition"
+      :class="{ hideImage: end >= category.products.length - 1 }"
+      class="absolute -right-6 top-16 z-10"
     >
       <div
-        v-for="product in category.products"
-        :key="product.id"
-        class="bg-white h-96 p-5 shadow-lg hover:translate-y-2 transform transition"
+        @click="handleNext"
+        class="bg-white w-12 h-12 rounded-full flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-600"
       >
-        <div>
-          <div>
-            <img
-              :src="product.images[0].url"
-              class="w-full h-48 object-cover object-center"
-            />
-          </div>
-          <div class="relative">
-            <div
-              class="absolute bg-white left-3 -top-10 shadow-lg text-gray-100 p-6 w-11/12"
-            >
-              <h4
-                class="mt-1 text-xl text-pink-400 font-semibold uppercase leading-tight"
-              >
-                {{ product.productName }}
-              </h4>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-10 w-10"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      v-for="(product, index) in category.products"
+      :class="{ hideImage: !(index >= start && index <= end) }"
+      :key="product.id"
+      class="h-auto hover:translate-y-2 transform transition"
+    >
+      <div>
+        <img
+          :src="product.images[0].url"
+          class="w-full h-48 object-cover object-center"
+        />
+      </div>
+      <div>
+        <div class="text-gray-100 py-2">
+          <h4 class="text-pink-500 font-semibold uppercase">
+            {{ product.productName }}
+          </h4>
 
-              <div class="mt-1">
-                <span class="text-gray-400 text-sm"
-                  >Lorem ipsum dolor sit amet consectetur adipisicing
-                  elit.</span
-                >
-              </div>
-              <div class="mt-4 relative">
-                <div class="flex">
-                  <span class="text-gray-700 font-semibold">
-                    USD {{ product.price }}
-                    <span class="text-gray-400 font-normal">/piece</span>
-                  </span>
-                </div>
-                <div class="text-gray-400 ">
-                  <svg
-                    @click="handleAddToCart(product)"
-                    :class="{ added: cartIds.includes(product.id) }"
-                    fill="currentColor"
-                    viewBox="-2 -3 24 24"
-                    class="absolute -right-12 -bottom-7 hover:shadow-sm rounded-full shadow-lg hover:text-pink-500 h-10 w-10 border-2 border-gray-100 inline-block p-1 mr-2 cursor-pointer"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                    />
-                  </svg>
-                </div>
-              </div>
+          <div class="leading-tight">
+            <span class="text-gray-400 text-sm"
+              >Lorem ipsum dolor sit amet consectetur adipisicing elit.</span
+            >
+          </div>
+          <div class="mt-2 flex justify-between items-center">
+            <div class="flex">
+              <span class="text-gray-700 font-semibold">
+                USD {{ product.price }}
+                <span class="text-gray-400 font-normal">/pcs</span>
+              </span>
+            </div>
+            <div class="text-gray-400">
+              <svg
+                @click="handleAddToCart(product)"
+                :class="{ added: cartIds.includes(product.id) }"
+                fill="currentColor"
+                viewBox="-2 -3 24 24"
+                class="rounded-full hover:text-pink-500 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                />
+              </svg>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      :class="{ hideImage: start == 0 }"
+      class="absolute -left-6 top-16 z-10"
+    >
+      <div
+        @click="handlePrevious"
+        class="bg-white w-12 h-12 rounded-full flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-600"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-10 w-10"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
       </div>
     </div>
   </div>
@@ -71,11 +105,13 @@ import { useRouter } from "vue-router";
 import { ref, watch } from "vue";
 
 export default {
-  props: ["categories"],
+  props: ["category"],
   setup(props) {
     const { user } = getUser();
     const router = useRouter();
     const cartIds = ref([]);
+    const start = ref(0);
+    const end = ref(4);
 
     const { document: cart } = getDocument("carts", user.value?.uid);
     const { addDoc, updateDoc: updateCart } = useDocument(
@@ -121,7 +157,17 @@ export default {
       }
     };
 
-    return { handleAddToCart, cartIds };
+    const handlePrevious = () => {
+      start.value -= 5;
+      end.value -= 5;
+    };
+
+    const handleNext = () => {
+      end.value += 5;
+      start.value += 5;
+    };
+
+    return { handleAddToCart, handleNext, handlePrevious, cartIds, start, end };
   },
 };
 </script>

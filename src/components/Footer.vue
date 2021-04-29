@@ -23,6 +23,8 @@
 
       <div class="grid grid-cols-3 gap-4">
         <div class="flex space-x-2 border-r-2 border-gray-100">
+          <!-- <a href="https://www.facebook.com/masteritcambodia/" target="_blank">
+          </a> -->
           <img
             class="w-10 h-10 rounded-full hover:shadow-sm shadow-lg"
             src="@/assets/images/fb.png"
@@ -52,7 +54,9 @@
               class="w-10 h-10 rounded-full hover:shadow-sm shadow-lg"
               src="@/assets/images/phone.png"
             />
-            <span class="text-gray-400 pl-2">098 866 396</span>
+            <a :href="`tel:+${mobile}`">
+              <span class="text-gray-400 pl-2">098 866 396</span>
+            </a>
           </div>
         </div>
       </div>
@@ -61,7 +65,15 @@
 </template>
 
 <script>
-export default {};
+import { ref } from "@vue/reactivity";
+
+export default {
+  setup() {
+    const mobile = ref("98866396");
+
+    return { mobile };
+  },
+};
 </script>
 
 <style></style>

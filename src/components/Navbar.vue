@@ -1,17 +1,13 @@
 <template>
   <div class="grid grid-cols-5 gap-4 bg-white items-center p-5">
-    <div class="group relative">
+    <divs>
       <router-link :to="{ name: 'Home' }">
         <img
           class="w-44 cursor-pointer focus:outline-none"
           src="@/assets/images/logo.png"
         />
       </router-link>
-      <span
-        class="hidden text-gray-400 font-semibold group-hover:inline-block absolute top-0 right-16"
-        >Home</span
-      >
-    </div>
+    </divs>
 
     <div class="col-span-3 flex justify-between items-center relative">
       <svg
@@ -57,19 +53,25 @@
         <div
           class="p-3 space-y-2 bg-gray-100 text-gray-700 text-md font-semibol"
         >
-          <h4 class="border-white p-2 transform transition hover:translate-y-1">
+          <h4
+            class="p-2 transform transition hover:translate-y-1 border-b-2 border-white"
+          >
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/phone.png"
             />{{ myProfile.telephone }}
           </h4>
-          <h4 class="border-white p-2 transform transition hover:translate-y-1">
+          <h4
+            class="border-white  border-b-2 p-2 transform transition hover:translate-y-1"
+          >
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/telegram.png"
             />{{ myProfile.telegram }}
           </h4>
-          <h4 class="border-white p-2 transform transition hover:translate-y-1">
+          <h4
+            class="border-white border-b-2 p-2 transform transition hover:translate-y-1"
+          >
             <img
               class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
               src="@/assets/images/fb.png"
@@ -108,7 +110,7 @@
             </svg>
             <div
               v-if="cart && cart.items.length > 0"
-              class="absolute top-0 left-14 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
+              class="absolute top-0 left-16 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
             >
               {{ cart.items.length }}
             </div>
@@ -135,7 +137,7 @@
     class="bg-white text-gray-400 shadow-lg border-t-2 border-gray-100 grid grid-cols-8"
   >
     <div
-      class="group relative border-r-2 border-white hover:text-pink-400 h-12 col-span-1 flex space-x-2 shadow-lg cursor-pointer hover:shadow-sm items-center"
+      class="group relative border-r-2 border-gray-100 hover:text-pink-400 h-12 col-span-1 flex space-x-2 cursor-pointer hover:shadow-sm items-center"
     >
       <div
         class="absolute w-96 left-0 text-thin text-gray-400 hidden group-hover:block bg-white border-t-2 border-gray-100 top-12 z-10 shadow-lg"
@@ -170,7 +172,7 @@
     </div>
 
     <div
-      class="group relative hover:text-pink-400 border-r-2 focus:outline-none  active:bg-pink-500 active:text-white border-gray-200 h-12 flex justify-center shadow-lg cursor-pointer hover:shadow-sm items-center"
+      class="group relative hover:text-pink-400 border-r-2 focus:outline-none active:bg-pink-500 active:text-white border-gray-100 h-12 flex justify-center cursor-pointer hover:shadow-sm items-center"
     >
       <span>Add Category</span>
 
@@ -194,10 +196,18 @@
               <h4 v-if="fileError" class="text-red-500 text-sm">
                 {{ fileError }}
               </h4>
+              <h4 v-if="error" class="text-red-500">{{ error }}</h4>
               <button
+                v-if="!isPending"
                 class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 font-semibold bg-white shadow-lg w-full p-2 text-gray-700"
               >
                 Add
+              </button>
+              <button
+                v-else
+                class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 font-semibold bg-white shadow-lg w-full p-2 text-gray-700"
+              >
+                Adding...
               </button>
             </div>
           </form>
@@ -206,7 +216,7 @@
     </div>
 
     <div
-      class="group relative hover:text-pink-400 border-r-2 focus:outline-none active:bg-pink-500 active:text-white border-gray-200 flex justify-center h-12 shadow-lg cursor-pointer hover:shadow-sm items-center"
+      class="group relative hover:text-pink-400 border-r-2 focus:outline-none active:bg-pink-500 active:text-white border-gray-100 flex justify-center h-12 cursor-pointer hover:shadow-sm items-center"
     >
       <span>Add Admin</span>
       <div
@@ -234,7 +244,7 @@
 
     <div v-if="!user" class="col-start-9">
       <router-link
-        class="hover:text-pink-500 border-l-2 border-gray-200 focus:outline-none  active:bg-pink-500 active:text-white bg-white cursor-pointer inline-block p-3 text-gray-400 hover:shadow-sm shadow-lg"
+        class="hover:text-pink-500 border-l-2 border-gray-100 focus:outline-none  active:bg-pink-500 active:text-white bg-white cursor-pointer inline-block px-5 py-3 text-gray-400"
         :to="{ name: 'Login' }"
       >
         Log in
@@ -266,7 +276,7 @@ export default {
     const { documents: categories } = getCollection("inventory");
     const { document: cart } = getDocument("carts", user.value?.uid);
     const { _user: myProfile } = getUserDoc("users");
-    const { addCategory } = useCollection("inventory");
+    const { addCategory, isPending, error } = useCollection("inventory");
     const { url, uploadImage } = useStorage();
 
     const types = ["image/png", "image/jpg", "image/jpeg", "image/svg"];
@@ -288,14 +298,19 @@ export default {
 
     const handleChanges = (e) => {
       const selected = e.target.files[0];
-      console.log(selected);
+      const limitedMB = 1048576; //1MB
 
-      if (selected && types.includes(selected.type)) {
-        file.value = selected;
-        fileError.value = null;
-      } else {
+      if (selected.size > limitedMB) {
+        fileError.value = `Size of the image must be less than 1MB.`;
         file.value = null;
-        fileError.value = `Only file of type jpg, jpeg, png, svg are allowed!`;
+      } else {
+        if (selected && types.includes(selected.type)) {
+          file.value = selected;
+          fileError.value = null;
+        } else {
+          file.value = null;
+          fileError.value = `Only file of type jpg, jpeg, png, svg are allowed!`;
+        }
       }
     };
 
@@ -310,9 +325,10 @@ export default {
           createdAt: timestamp(),
         });
 
-        router.push({ name: "Categories" });
-
-        categoryName.value = "";
+        if (!error.value) {
+          router.push({ name: "Categories" });
+          categoryName.value = "";
+        }
       }
     };
 
@@ -329,6 +345,8 @@ export default {
       categories,
       fileError,
       cart,
+      isPending,
+      error,
     };
   },
 };

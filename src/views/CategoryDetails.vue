@@ -1,10 +1,16 @@
 <template>
-  <div>
-    <Navbar />
-    <div class="mx-5 my-12 shadow-lg h-auto bg-white">
-      <component :is="currentComponent" :id="id" :key="id" />
+  <div class="flex flex-col h-screen">
+    <div>
+      <Navbar />
     </div>
-    <Footer />
+    <div class="mb-auto">
+      <div class="mx-5 my-12 shadow-lg h-auto bg-white">
+        <component :is="currentComponent" :id="id" :key="id" />
+      </div>
+    </div>
+    <div>
+      <Footer />
+    </div>
   </div>
 </template>
 

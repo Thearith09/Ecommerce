@@ -134,10 +134,18 @@
           <h4 v-if="fileError" class="text-red-500 text-sm">
             {{ fileError }}
           </h4>
+          <h4 v-if="error" class="text-red-500">{{ error }}</h4>
           <button
+            v-if="!isPending"
             class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 bg-white font-semibold shadow-lg w-full p-2 text-gray-700"
           >
             {{ product ? "Edit" : "Add" }}
+          </button>
+          <button
+            v-else
+            class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 bg-white font-semibold shadow-lg w-full p-2 text-gray-700"
+          >
+            {{ product ? "Saving..." : "Adding..." }}
           </button>
         </form>
       </div>
@@ -163,8 +171,11 @@ export default {
     const fileError = ref(null);
     let conveyIndex;
 
-    const { error, updateDoc } = useDocument("inventory", props.categoryId);
-    const { url, uploadImage } = useStorage();
+    const { error, updateDoc, isPending } = useDocument(
+      "inventory",
+      props.categoryId
+    );
+    const { url, uploadImage, deleteImage } = useStorage();
 
     if (props.product) {
       const p = props.product;
@@ -200,21 +211,32 @@ export default {
     };
 
     const handleInsertImage = (e) => {
+      const limitedMB = 1048576; //1MB
       const selected = e.target.files[0];
 
-      if (selected && types.includes(selected.type)) {
-        images.value.push({
-          name: selected.name,
-        });
-        files.value.push(selected);
-      } else {
-        fileError.value = `Must be file of type jpg, jpeg, png, and svg are allowed`;
+      if (selected.size > limitedMB) {
+        fileError.value = `Size of the image must be less than 1MB.`;
         files.value = [];
+      } else {
+        if (selected && types.includes(selected.type)) {
+          images.value.unshift({
+            name: selected.name,
+          });
+          files.value.push(selected);
+        } else {
+          fileError.value = `Must be file of type jpg, jpeg, png, and svg are allowed.`;
+          files.value = [];
+        }
       }
+      e.target.value = "";
     };
 
-    const handleRemoveImage = (index) => {
-      console.log(index);
+    const handleRemoveImage = async (index) => {
+      if (images.value[index].url) {
+        await deleteImage(images.value[index].url);
+      }
+      images.value.splice(index, 1);
+      files.value.splice(index, 1);
     };
 
     const handleAdd = async () => {
@@ -223,7 +245,6 @@ export default {
           await uploadImage(files.value[i]);
           images.value[i].url = url.value;
         }
-
         if (props.product) {
           //update
           const product = {
@@ -245,6 +266,7 @@ export default {
           await updateDoc({ products });
         } else {
           //insert
+
           const newProduct = {
             id: uuidv4(),
             productName: productName.value,
@@ -259,7 +281,11 @@ export default {
           });
         }
 
-        emit("close");
+        if (!error.value) {
+          emit("close");
+        }
+      } else {
+        fileError.value = "Sizes and Images must be exist!";
       }
     };
 
@@ -282,6 +308,8 @@ export default {
       productName,
       images,
       fileError,
+      isPending,
+      error,
     };
   },
 };

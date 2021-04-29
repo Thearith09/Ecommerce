@@ -7,7 +7,7 @@
         class="text-pink-500 cursor-pointer inline-block hover:bg-pink-500 hover:text-white h-12 w-12 rounded-full focus:outline-none active:bg-pink-600"
       >
         <svg
-          @click="mountComponent"
+          @click="mountComponent('AddProduct')"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -22,7 +22,7 @@
         </svg>
       </div>
 
-      <div class="text-gray-400 font-semibold">
+      <div class="text-gray-400">
         Add a New Product
       </div>
     </div>
@@ -42,13 +42,12 @@
       </h4>
       <button
         @click="handleRemoveCategory"
-        class="absolute bottom-0 right-0 text-center font-semibold text-pink-500 hover:bg-white py-1 px-3"
+        class="absolute bottom-0 right-0 focus:outline-none text-center font-semibold text-pink-500 hover:bg-white py-1 px-3"
       >
         Remove
       </button>
     </div>
   </div>
-
   <div v-if="category" class="grid grid-cols-2 gap-1">
     <div
       v-for="product in category.products"
@@ -77,7 +76,6 @@
             </p>
           </div>
         </div>
-
         <div class="grid grid-cols-2 mt-5">
           <div class="flex justify-between">
             <button
@@ -87,13 +85,12 @@
               Edit
             </button>
             <button
-              @click="handleRemoveProduct(product.id, product.images)"
+              @click="handleRemoveProduct(product)"
               class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-full p-2 font-semibold bg-gray-100 text-gray-400"
             >
               Remove
             </button>
           </div>
-
           <div class="flex justify-end text-gray-400">
             <button
               @click="handleAddToCart(product)"
@@ -116,7 +113,7 @@
       <div class="h-56 w-full">
         <img
           class="h-full w-full object-cover object-center overflow-hidden"
-          :src="product.images[0].url"
+          :src="product.images[product.images.length - 1]?.url"
         />
       </div>
     </div>
@@ -133,29 +130,31 @@
 
 <script>
 import useDocument from "@/composables/useDocument";
-import useStorage from "@/composables/useStorage";
 import getDocument from "@/composables/getDocument";
 import getUser from "@/composables/getUser";
 import AddProduct from "@/components/AddProduct";
+import DeleteProductConfirmation from "@/components/DeleteProductConfirmation";
+import DeleteCategoryConfirmation from "@/components/DeleteCategoryConfirmation";
 import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
-import { watch } from "vue";
+import { computed, watch } from "vue";
 
 export default {
   components: {
     AddProduct,
+    DeleteProductConfirmation,
+    DeleteCategoryConfirmation,
   },
   props: ["id"],
   setup(props) {
-    const { deleteImage } = useStorage();
     const currentComponent = ref(null);
     const router = useRouter();
-    const product = ref(null);
-    const cartIds = ref([]);
+    const product = ref(null); //for updating product
+    const cartIds = ref([]); //dynamic apply style to button heart once user add or not by catching item id
+    const items = computed(() => cart.value && cart.value.items); //watching items change
 
     const { user } = getUser();
-    const { updateDoc, deleteDoc } = useDocument("inventory", props.id);
     const { error, document: category } = getDocument("inventory", props.id);
     const { document: cart } = getDocument("carts", user.value?.uid);
     const { addDoc, updateDoc: updateCart } = useDocument(
@@ -163,14 +162,14 @@ export default {
       user.value?.uid
     );
 
-    watch(cart, () => {
-      for (let i in cart.value.items) {
-        cartIds.value[i] = cart.value.items[i].productId;
-      }
+    watch(items, () => {
+      let temp = [];
+      for (let item of items.value) temp.push(item.productId);
+      cartIds.value = temp;
     });
 
-    const mountComponent = () => {
-      currentComponent.value = "AddProduct";
+    const mountComponent = (component) => {
+      currentComponent.value = component;
     };
 
     const unmountComponent = () => {
@@ -180,46 +179,30 @@ export default {
 
     const handleEditProduct = (prod) => {
       product.value = prod;
-      mountComponent();
+      mountComponent("AddProduct");
     };
 
-    const handleRemoveProduct = async (id, images) => {
-      for (let image of images) {
-        console.log(image.url);
-        await deleteImage(image.url);
-      }
-
-      const products = category.value.products.filter(
-        (product) => product.id != id
-      );
-      await updateDoc({ products });
+    const handleRemoveProduct = (prod) => {
+      product.value = prod;
+      mountComponent("DeleteProductConfirmation");
     };
 
     const handleRemoveCategory = async () => {
-      category.value.products.forEach(async (product) => {
-        for (let image of product.images) {
-          await deleteImage(image.url);
-        }
-      });
-
-      await deleteImage(category.value.url);
-      await deleteDoc(category.id);
-
-      router.push({ name: "Categories" });
+      mountComponent("DeleteCategoryConfirmation");
     };
 
     const handleAddToCart = async (product) => {
       if (!user.value) {
         router.push({ name: "Login" });
       } else {
-        const item = cart.value.items.filter(
+        const item = cart.value?.items.filter(
           (item) => item.productId == product.id
         );
-        const items = cart.value.items.filter(
+        const items = cart.value?.items.filter(
           (item) => item.productId != product.id
         );
 
-        if (item.length > 0) {
+        if (item?.length > 0) {
           await updateCart({
             items: [...items],
           });
@@ -232,15 +215,21 @@ export default {
             sizes: product.sizes,
             images: product.images,
           };
-          await addDoc({
-            items: [...items, item],
-            createdAt: timestamp(),
-          });
+          items
+            ? await addDoc({
+                items: [...items, item],
+                createdAt: timestamp(),
+              })
+            : await addDoc({
+                items: [item],
+                createdAt: timestamp(),
+              });
         }
       }
     };
 
     return {
+      cart,
       error,
       product,
       category,

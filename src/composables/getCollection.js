@@ -2,11 +2,16 @@ import { projectFirestore } from "@/firebase/config";
 import { ref } from "@vue/reactivity";
 import { watchEffect } from "@vue/runtime-core";
 
-const getCollection = (collection) => {
+const getCollection = (collection, limited) => {
     const error = ref(null);
     const documents = ref(null);
-
-    const collectionRef = projectFirestore.collection(collection).orderBy("createdAt", "desc").limit(10);
+    let collectionRef;
+    if (limited) {
+        collectionRef = projectFirestore.collection(collection).orderBy("createdAt", "desc").limit(limited);
+    } else {
+        collectionRef = projectFirestore.collection(collection).orderBy("createdAt", "desc");
+    }
+    
     const unsubscribe = collectionRef.onSnapshot((snapshot) => {
         const results = [];
         snapshot.docs.forEach((doc) => {

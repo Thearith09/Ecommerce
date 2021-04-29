@@ -9,7 +9,11 @@ module.exports = {
       backgroundImage: theme => ({
         'footer': "url('/images/business\d.png')",
         'login': "url('/images/loginBackground.png')"
-       })
+       }),
+       screens: {
+        'portrait': {'raw': '(orientation: portrait)'},
+        // => @media (orientation: portrait) { ... }
+      }
     },
   },
   variants: {
