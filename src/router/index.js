@@ -5,6 +5,8 @@ import Signup from '../views/auth/Signup.vue';
 import Categories from "../views/Categories.vue";
 import CategoryDetails from "../views/CategoryDetails.vue";
 import CartDetails from "../views/CartDetails.vue";
+import ProductSearching from "../views/ProductSearching.vue";
+import CheckoutOrder from "../views/CheckoutOrder.vue";
 
 const routes = [
   {
@@ -34,9 +36,20 @@ const routes = [
     props: true
   },
   {
-    path: '/carts/addtocartDetails',
+    path: '/carts/addtocart',
     name: 'CartDetails',
     component: CartDetails,
+  },
+  {
+    path: '/products/search/:id',
+    name: 'ProductSearching',
+    component: ProductSearching,
+    props: true
+  },
+  {
+    path: '/orders/checkoutorder',
+    name: 'CheckoutOrder',
+    component: CheckoutOrder,
   }
 ]
 

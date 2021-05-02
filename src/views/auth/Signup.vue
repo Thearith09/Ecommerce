@@ -1,14 +1,18 @@
 <template>
-  <div>
-    <Navbar />
-    <div class="grid grid-cols-3 h-auto mt-12 bg-white">
-      <div class="col-span-2">
-        <img class="" src="@/assets/images/loginBackground.png" />
+  <div class="flex flex-col h-screen bg-gray-100">
+    <div>
+      <Navbar />
+    </div>
+    <div class="relative mb-auto my-10">
+      <div>
+        <img
+          class="w-full object-cover object-center"
+          src="@/assets/images/bg-signin.png"
+        />
       </div>
-      <div class="col-span-1">
-        <form @submit.prevent="handleSignup" class="space-y-5 space-x-5">
-          <img src="@/assets/images/loginHeader.png" />
-
+      <div class="absolute top-0 right-0 w-1/2 px-10">
+        <h3 class="text-gray-400 font-bold text-center my-7">Sign up Form</h3>
+        <form @submit.prevent="handleSignup" class="space-y-5">
           <input
             v-model="username"
             class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
@@ -45,6 +49,13 @@
             required
           />
           <input
+            v-model="location"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            type="text"
+            placeholder="location"
+            required
+          />
+          <input
             v-model="password"
             class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
             type="password"
@@ -62,15 +73,15 @@
           <div class="flex">
             <button
               v-if="!isPending"
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-400 p-2 shadow-lg font-mono text-md bg-pink-500 text-white"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-600 p-2 shadow-lg font-mono text-md bg-pink-500 text-white"
             >
-              Signup
+              sign up
             </button>
             <button
               v-else
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-400 p-2 shadow-lg font-mono text-md bg-pink-500 text-white"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-600 p-2 shadow-lg font-mono text-md bg-pink-500 text-white"
             >
-              Signup...
+              signing up...
             </button>
           </div>
           <div>
@@ -78,18 +89,22 @@
               already have account?<span
                 @click="handleNavigation"
                 class="ml-2 font-semibold text-pink-500 underline cursor-pointer hover:text-pink-400"
-                >login</span
+                >signin</span
               >
             </p>
           </div>
         </form>
       </div>
     </div>
+    <div>
+      <Footer />
+    </div>
   </div>
 </template>
 
 <script>
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import useSignup from "@/composables/useSignup";
@@ -98,6 +113,7 @@ import useCollection from "@/composables/useCollection";
 export default {
   components: {
     Navbar,
+    Footer,
   },
   setup() {
     const username = ref("");
@@ -105,6 +121,7 @@ export default {
     const telephone = ref("");
     const telegram = ref("");
     const facebook = ref("");
+    const location = ref("");
     const password = ref("");
     const confirmPassword = ref("");
     const router = useRouter();
@@ -127,6 +144,7 @@ export default {
           telephone: telephone.value,
           facebook: facebook.value,
           telegram: telegram.value,
+          location: location.value,
         });
 
         if (!error.value) {
@@ -146,6 +164,7 @@ export default {
       telephone,
       telegram,
       facebook,
+      location,
       isPending,
     };
   },

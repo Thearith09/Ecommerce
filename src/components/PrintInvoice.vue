@@ -12,14 +12,14 @@
         >
           <div>
             <img
-              class="w-44 focus:outline-none"
+              class="w-28 focus:outline-none"
               src="@/assets/images/logo.png"
               alt="Easy shopping logo"
             />
           </div>
           <div class="text-gray-700 font-semibold">
             <p>{{ today }}</p>
-            <p>Invoice #123</p>
+            <p>Invoice #{{ invoiceNumber }}</p>
           </div>
         </div>
 
@@ -43,7 +43,7 @@
             </div>
             <div class="space-y-3 leading-none w-full">
               <div>
-                <span>Client:</span>
+                <span>Customer:</span>
                 <h5 class="text-pink-500 text-xl font-semibold uppercase">
                   {{ orders.name }}
                 </h5>
@@ -57,6 +57,7 @@
                     src="@/assets/images/telegram.png"
                   />
                   <span>{{ orders.telegram }}</span>
+                  <br />
                   <img
                     class="h-6 w-6 inline-block"
                     src="@/assets/images/phone.png"
@@ -84,7 +85,7 @@
                 'bg-even': index % 2 == 0,
                 'bg-odd': index % 2 != 0,
               }"
-              class="grid grid-cols-7 text-gray-700 items-center px-2 py-1"
+              class="grid grid-cols-7 text-gray-700 items-center p-2"
             >
               <div class="col-span-3 flex space-x-1 items-center">
                 <img class="h-12 w-12" :src="item.color" />
@@ -126,7 +127,7 @@
           class="border-2 border-gray-700 w-1/4 flex justify-between text-gray-700 p-1 ml-auto"
         >
           <div class="flex justify-end">Total</div>
-          <div>$ {{ total.toFixed(2) }}</div>
+          <div>${{ total.toFixed(2) }}</div>
         </div>
 
         <div class="flex justify-center space-x-5 border-t-2 border-gray-200">
@@ -193,21 +194,39 @@
 <script>
 import useDocument from "@/composables/useDocument";
 import getDocument from "@/composables/getDocument";
+import useCollection from "@/composables/useCollection";
 import getUser from "@/composables/getUser";
+import { timestamp } from "@/firebase/config";
 import moment from "moment";
 import printJS from "print-js";
 import { ref } from "@vue/reactivity";
 
 export default {
-  props: ["orders"],
+  props: ["orders", "invoiceNum"],
   setup(props, { emit }) {
-    const today = moment().format("MMMM D, YYYY");
+    const today = moment().format("dddd D, MMMM YYYY");
     const subTotal = ref(0);
     const total = ref(0);
+    const invoiceNumber = ref(props.invoiceNum);
 
     const { user } = getUser();
     const { updateDoc: updateCart } = useDocument("carts", user.value?.uid);
     const { document: cart } = getDocument("carts", user.value?.uid);
+    const { addDoc } = useCollection("orders");
+
+    if (invoiceNumber.value > 0) {
+      invoiceNumber.value++;
+
+      if (invoiceNumber.value < 10)
+        invoiceNumber.value = `000${invoiceNumber.value}`;
+      else if (invoiceNumber.value < 100)
+        invoiceNumber.value = `00${invoiceNumber.value}`;
+      else if (invoiceNumber.value < 1000)
+        invoiceNumber.value = `0${invoiceNumber.value}`;
+      else invoiceNumber.value = invoiceNumber.value;
+    } else {
+      invoiceNumber.value = "0001";
+    }
 
     if (props.orders.items.length > 0) {
       const items = props.orders.items;
@@ -219,33 +238,49 @@ export default {
     }
 
     const handlePrint = async () => {
-      let tempItems = cart.value.items.filter((doc) => {
-        let temp;
-        props.orders.items.forEach((item) => {
-          if (item.id == doc.productId && item.qty > 0 && item.size) {
-            temp = item;
-          }
+      if (user.value?.admin) {
+        printJS({
+          printable: "print-invoice",
+          type: "html",
+          targetStyles: ["*"],
         });
-        if (!temp) return doc;
-      });
-      await updateCart({
-        items: [...tempItems],
-      });
 
-      printJS({
-        printable: "print-invoice",
-        type: "html",
-        targetStyles: ["*"],
-      });
+        emit("close", true);
+      } else {
+        let tempItems = cart.value.items.filter((doc) => {
+          let temp;
+          props.orders.items.forEach((item) => {
+            if (item.id == doc.productId && item.qty > 0 && item.size) {
+              temp = item;
+            }
+          });
+          if (!temp) return doc;
+        });
+        await updateCart({
+          items: [...tempItems],
+        });
 
-      emit("close", true);
+        await addDoc({
+          uid: user.value?.uid,
+          orderedInfo: props.orders,
+          createdAt: timestamp(),
+        });
+
+        printJS({
+          printable: "print-invoice",
+          type: "html",
+          targetStyles: ["*"],
+        });
+
+        emit("close", true);
+      }
     };
 
     const handleCancel = () => {
       emit("close");
     };
 
-    return { today, subTotal, total, handlePrint, handleCancel };
+    return { today, subTotal, total, handlePrint, handleCancel, invoiceNumber };
   },
 };
 </script>

@@ -3,16 +3,18 @@
     <div>
       <Navbar />
     </div>
+
     <div class="mb-auto">
-      <div class="mx-5 my-12 h-auto">
-        <component
-          :is="currentComponent"
+      <div v-if="id != 'null'">
+        <ListProduct
           :id="id"
-          :key="id"
+          :search="search"
           :previous="previous"
           :next="next"
+          :key="id"
           @emitProducts="handleReceiveBack"
         />
+
         <div
           v-if="category"
           class="flex items-center my-5 w-1/4 mx-auto space-x-2"
@@ -43,9 +45,7 @@
               v-show="i >= start && i <= end"
               class="flex items-center px-2 text-pink-500 font-bold"
             >
-              <li class="px-1" :class="{ activePaginate: i == indexActive }">
-                {{ i }}
-              </li>
+              <li :class="{ activePaginate: i == indexActive }">{{ i }}</li>
             </ul>
           </div>
           <button
@@ -69,6 +69,19 @@
           </button>
         </div>
       </div>
+      <div class="p-10 my-10" v-else>
+        <h1 class="text-gray-700 font-bold text-2xl mb-5">
+          Sorry, we couldn't find any products for "{{ search }}"
+        </h1>
+        <h3 class="text-gray-700 font-bold text-xl mb-3">
+          Here are some tips, you could follow:
+        </h3>
+        <ul class="list-disc px-5 text-gray-700 text-lg">
+          <li>Make sure all words are spelled correctly</li>
+          <li>Try different products</li>
+          <li>Only english language searching</li>
+        </ul>
+      </div>
     </div>
     <div>
       <Footer />
@@ -79,25 +92,23 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
-import ListProduct from "@/components/ListProduct.vue";
+import ListProduct from "@/components/ListProduct";
 import { ref } from "@vue/reactivity";
 
 export default {
-  props: ["id"],
   components: {
     Navbar,
     Footer,
     ListProduct,
   },
-  setup(props) {
-    const category = ref(null);
+  props: ["id", "search"],
+  setup() {
     const start = ref(1);
     const end = ref(5);
     const previous = ref(0);
     const next = ref(5);
     const indexActive = ref(1);
-
-    const currentComponent = ref("ListProduct");
+    const category = ref(null);
 
     const handleReceiveBack = (products) => {
       category.value = products;
@@ -130,9 +141,6 @@ export default {
     };
 
     return {
-      currentComponent,
-      handleReceiveBack,
-      category,
       start,
       end,
       indexActive,
@@ -140,6 +148,8 @@ export default {
       next,
       handleNext,
       handlePrevious,
+      category,
+      handleReceiveBack,
     };
   },
 };

@@ -10,7 +10,7 @@
             />
             <h3
               v-if="item.discount > 0"
-              class="absolute bottom-0 right-0 bg-pink-500 font-mono text-white p-1"
+              class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1"
             >
               {{ item.discount }}% OFF
             </h3>
@@ -42,28 +42,34 @@
               />
             </svg>
           </div>
+
           <div
-            class="grid grid-cols-9 gap-4 items-center"
+            class="grid grid-cols-10 gap-4 items-center"
             v-for="(image, index) in item.images"
             :key="index"
+            v-show="index >= start && index <= end"
           >
-            <div
-              :class="{ hideImage: index > end }"
-              class="col-span-1 bg-blue-500 w-full"
-            >
+            <div class="col-span-1 bg-blue-500 w-full">
               <img
                 @click="handleChangeImage(image.url)"
                 class="col-span-1 h-10 w-full object-cover object-center cursor-pointer inline-block"
                 :src="image.url"
               />
             </div>
-            <div :class="{ hideImage: index > end }" class="col-span-2 w-full">
-              <span class="w-full text-gray-700 font-semibold"
-                >USD {{ item.price
+            <div class="col-span-3 w-full">
+              <span
+                v-if="item.discount > 0"
+                class="w-full text-red-600 font-semibold"
+                >USD
+                {{ (item.price - (item.price * item.discount) / 100).toFixed(2)
+                }}<span class="text-gray-400 font-normal"> /piece</span></span
+              >
+              <span v-else class="w-full text-gray-700 font-semibold"
+                >USD {{ Number(item.price).toFixed(2)
                 }}<span class="text-gray-400 font-normal"> /piece</span></span
               >
             </div>
-            <div :class="{ hideImage: index > end }" class="col-span-2">
+            <div class="col-span-2">
               <div class=" flex items-center">
                 <button
                   :class="{ frozen: qtys[index] <= 0 }"
@@ -113,7 +119,7 @@
               </div>
             </div>
 
-            <div class="col-span-4 " :class="{ hideImage: index > end }">
+            <div class="col-span-4 ">
               <div class="flex items-center justify-start space-x-1">
                 <div
                   :class="{

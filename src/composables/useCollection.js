@@ -17,7 +17,7 @@ const useCollection = (collection) => {
         }
     };
 
-    const addCategory = async (category) => {
+    const addDoc = async (category) => {
         error.value = null;
         isPending.value = true;
 
@@ -32,7 +32,7 @@ const useCollection = (collection) => {
         }
     };
 
-    return { error, addUser, addCategory, isPending };
+    return { error, addUser, addDoc, isPending };
 };
 
 export default useCollection;

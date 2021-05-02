@@ -3,8 +3,15 @@ import { ref } from "@vue/reactivity";
 
 const user = ref(null);
 
-projectAuth.onAuthStateChanged((_user) => {
-    user.value = _user;
+projectAuth.onAuthStateChanged(async (_user) => {
+    if (_user) {
+        const idTokenResult = await _user.getIdTokenResult();
+        user.value = _user;
+        user.value.admin = idTokenResult.claims.admin;
+    } else {
+        user.value = null;
+    }
+    
 });
 
 const getUser = () => {

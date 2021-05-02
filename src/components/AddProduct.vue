@@ -41,6 +41,14 @@
           />
 
           <input
+            v-model="description"
+            class="p-2 bg-white text-md text-gray-700  shadow-lg w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
+            type="text"
+            placeholder="description"
+            required
+          />
+
+          <input
             v-model="price"
             class="p-2 bg-white text-md text-gray-700  shadow-lg w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
             type="number"
@@ -167,6 +175,7 @@ export default {
     const discount = ref(null);
     const price = ref(null);
     const productName = ref("");
+    const description = ref("");
     const files = ref([]);
     const fileError = ref(null);
     let conveyIndex;
@@ -180,6 +189,7 @@ export default {
     if (props.product) {
       const p = props.product;
       productName.value = p.productName;
+      description.value = p.description;
       price.value = p.price;
       discount.value = p.discount;
       sizes.value = p.sizes;
@@ -250,6 +260,7 @@ export default {
           const product = {
             id: props.product.id,
             productName: productName.value,
+            description: description.value,
             discount: discount.value,
             price: price.value,
             sizes: sizes.value,
@@ -270,6 +281,7 @@ export default {
           const newProduct = {
             id: uuidv4(),
             productName: productName.value,
+            description: description.value,
             discount: discount.value,
             price: price.value,
             sizes: sizes.value,
@@ -306,6 +318,7 @@ export default {
       price,
       discount,
       productName,
+      description,
       images,
       fileError,
       isPending,

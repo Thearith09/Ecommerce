@@ -60,20 +60,25 @@
       <Footer />
     </div>
   </div>
-  <component :is="currentComponent" :orders="orders" @close="handleClose" />
+  <component
+    :is="currentComponent"
+    :orders="orders"
+    @close="handleClose"
+    :invoiceNum="ordersCollection?.length || 0"
+  />
 </template>
 
 <script>
 import getDocument from "@/composables/getDocument";
-import useDocument from "@/composables/useDocument";
 import getUserDoc from "@/composables/getUserDoc";
+import getCollection from "@/composables/getCollection";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import getUser from "@/composables/getUser";
 import Cart from "@/components/Cart.vue";
 import PrintInvoice from "@/components/PrintInvoice";
 import { ref } from "@vue/reactivity";
-import { computed, watch } from "vue";
+import { watch } from "vue";
 
 export default {
   components: {
@@ -91,8 +96,9 @@ export default {
     const currentComponent = ref("");
 
     const { user } = getUser();
-    const { document: cart } = getDocument("carts", user.value?.uid);
     const { _user } = getUserDoc("users");
+    const { document: cart } = getDocument("carts", user.value?.uid);
+    const { documents: ordersCollection } = getCollection("orders");
 
     watch(pieces, () => {
       if (pieces.value >= 3) shipping.value = 0;
@@ -175,6 +181,7 @@ export default {
       _user,
       currentComponent,
       orders,
+      ordersCollection,
     };
   },
 };

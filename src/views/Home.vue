@@ -3,13 +3,13 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto">
-      <div class="m-5 bg-white">
+    <div class="mb-auto 2xl:w-3/4 mx-auto">
+      <div class="bg-white">
         <Slideshow />
       </div>
       <div v-for="(category, index) in categories" :key="category.id">
-        <div v-if="category.products.length > 0" class="my-5 mx-10 space-y-5">
-          <div class="font-bold text-xl text-gray-700 uppercase">
+        <div v-if="category.products.length > 0" class="my-5 mx-10 space-y-3">
+          <div class="font-bold text-xl text-gray-700 uppercase mt-8">
             {{ header[index] }}
           </div>
           <Card :category="category" />

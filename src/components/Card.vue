@@ -1,5 +1,7 @@
 <template>
-  <div class="relative grid grid-cols-5 gap-4 w-full">
+  <div
+    class="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full"
+  >
     <div
       :class="{ hideImage: end >= category.products.length - 1 }"
       class="absolute -right-6 top-16 z-10"
@@ -24,15 +26,21 @@
     </div>
     <div
       v-for="(product, index) in category.products"
-      :class="{ hideImage: !(index >= start && index <= end) }"
       :key="product.id"
       class="h-auto hover:translate-y-2 transform transition"
+      v-show="index >= start && index <= end"
     >
-      <div>
+      <div class="relative">
         <img
           :src="product.images[0].url"
           class="w-full h-48 object-cover object-center"
         />
+        <h3
+          v-if="product.discount > 0"
+          class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1"
+        >
+          {{ product.discount }}% OFF
+        </h3>
       </div>
       <div>
         <div class="text-gray-100 py-2">
@@ -46,10 +54,21 @@
             >
           </div>
           <div class="mt-2 flex justify-between items-center">
-            <div class="flex">
+            <div>
+              <span
+                v-if="product.discount > 0"
+                class="text-red-600 font-semibold line-through block"
+                >USD {{ Number(product.price).toFixed(2) }}
+              </span>
               <span class="text-gray-700 font-semibold">
-                USD {{ product.price }}
-                <span class="text-gray-400 font-normal">/pcs</span>
+                USD
+                {{
+                  (
+                    product.price -
+                    (product.price * product.discount) / 100
+                  ).toFixed(2)
+                }}
+                <span class="text-gray-400 font-normal">/piece</span>
               </span>
             </div>
             <div class="text-gray-400">
@@ -102,7 +121,7 @@ import useDocument from "@/composables/useDocument";
 import getDocument from "@/composables/getDocument";
 import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 
 export default {
   props: ["category"],
@@ -112,12 +131,35 @@ export default {
     const cartIds = ref([]);
     const start = ref(0);
     const end = ref(4);
+    const windowWidth = ref(window.innerWidth);
 
     const { document: cart } = getDocument("carts", user.value?.uid);
     const { addDoc, updateDoc: updateCart } = useDocument(
       "carts",
       user.value?.uid
     );
+
+    const onResize = () => {
+      windowWidth.value = window.innerWidth;
+      start.value = 0;
+      end.value = 4;
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", onResize);
+    });
+
+    watchEffect(() => {
+      if (windowWidth.value < 768) {
+        end.value = 1;
+      } else if (windowWidth.value < 1024) {
+        end.value = 2;
+      } else if (windowWidth.value < 1280) {
+        end.value = 3;
+      } else {
+        end.value = 4;
+      }
+    });
 
     watch(cart, () => {
       for (let i in cart.value.items) {
@@ -129,14 +171,14 @@ export default {
       if (!user.value) {
         router.push({ name: "Login" });
       } else {
-        const item = cart.value.items.filter(
+        const item = cart.value?.items.filter(
           (item) => item.productId == product.id
         );
-        const items = cart.value.items.filter(
+        const items = cart.value?.items.filter(
           (item) => item.productId != product.id
         );
 
-        if (item.length > 0) {
+        if (item?.length > 0) {
           await updateCart({
             items: [...items],
           });
@@ -149,25 +191,62 @@ export default {
             sizes: product.sizes,
             images: product.images,
           };
-          await addDoc({
-            items: [...items, item],
-            createdAt: timestamp(),
-          });
+          if (items?.length > 0) {
+            await addDoc({
+              items: [...items, item],
+              createdAt: timestamp(),
+            });
+          } else {
+            await addDoc({
+              items: [item],
+              createdAt: timestamp(),
+            });
+          }
         }
       }
     };
 
     const handlePrevious = () => {
-      start.value -= 5;
-      end.value -= 5;
+      if (windowWidth.value < 768) {
+        start.value -= 2;
+        end.value -= 2;
+      } else if (windowWidth.value < 1024) {
+        start.value -= 3;
+        end.value -= 3;
+      } else if (windowWidth.value < 1280) {
+        start.value -= 4;
+        end.value -= 4;
+      } else {
+        start.value -= 5;
+        end.value -= 5;
+      }
     };
 
     const handleNext = () => {
-      end.value += 5;
-      start.value += 5;
+      if (windowWidth.value < 768) {
+        start.value += 2;
+        end.value += 2;
+      } else if (windowWidth.value < 1024) {
+        start.value += 3;
+        end.value += 3;
+      } else if (windowWidth.value < 1280) {
+        start.value += 4;
+        end.value += 4;
+      } else {
+        start.value += 5;
+        end.value += 5;
+      }
     };
 
-    return { handleAddToCart, handleNext, handlePrevious, cartIds, start, end };
+    return {
+      handleAddToCart,
+      handleNext,
+      handlePrevious,
+      cartIds,
+      start,
+      end,
+      windowWidth,
+    };
   },
 };
 </script>

@@ -10,6 +10,8 @@
     "@tailwindcss/line-clamp": "0.2.0",
     "core-js": "^3.6.5",
     "firebase": "^8.3.3",
+    "firebase-admin": "9.7.0",
+    "firebase-functions": "3.13.2",
     "moment": "^2.29.1",
     "print-js": "^1.6.0",
     "uuid": "8.3.2",
@@ -24,7 +26,8 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.35",
+    "eslint-plugin-vue": "7.9.0",
+    "postcss": "7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
   }
 }

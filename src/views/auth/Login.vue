@@ -1,13 +1,18 @@
 <template>
-  <div>
-    <Navbar />
-    <div class="grid grid-cols-3 h-auto mt-12 bg-white">
-      <div class="col-span-2">
-        <img src="@/assets/images/loginBackground.png" />
-      </div>
+  <div class="flex flex-col h-screen bg-gray-100">
+    <div>
+      <Navbar />
+    </div>
+    <div class="relative mb-auto my-10">
       <div>
-        <form @submit.prevent="handleLogin" class="space-y-5 space-x-5">
-          <img src="@/assets/images/loginHeader.png" />
+        <img
+          class="w-full object-cover object-center"
+          src="@/assets/images/bg-signin.png"
+        />
+      </div>
+      <div class="absolute top-1/4 right-0 px-10">
+        <h3 class="text-gray-400 font-bold text-center pb-7">Sign in Form</h3>
+        <form @submit.prevent="handleLogin" class="space-y-5">
           <input
             v-model="email"
             class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-700 font-thin p-2 shadow-lg"
@@ -26,15 +31,15 @@
           <div class="flex">
             <button
               v-if="!isPending"
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-400 shadow-lg p-2 font-mono text-md bg-pink-500 text-white"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-600 shadow-lg p-2 font-mono text-md bg-pink-500 text-white"
             >
-              Login
+              sign in
             </button>
             <button
               v-else
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-400 shadow-lg p-2 font-mono text-md bg-pink-500 text-white"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-600 shadow-lg p-2 font-mono text-md bg-pink-500 text-white"
             >
-              Login...
+              signing in...
             </button>
           </div>
           <div>
@@ -49,11 +54,15 @@
         </form>
       </div>
     </div>
+    <div>
+      <Footer />
+    </div>
   </div>
 </template>
 
 <script>
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import useLogin from "@/composables/useLogin";
@@ -61,6 +70,7 @@ import useLogin from "@/composables/useLogin";
 export default {
   components: {
     Navbar,
+    Footer,
   },
   setup() {
     const email = ref("");

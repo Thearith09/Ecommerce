@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  .dropdown,
   .hideSize,
   .hideImage,
   .popup {
@@ -24,9 +23,12 @@
     @apply cursor-not-allowed opacity-50;
   }
   .bg-even {
-    @apply bg-gray-100 border-b-2 border-t-2 border-gray-200;
+    @apply bg-gray-100 border-b-2 border-gray-200;
   }
   .bg-odd {
-    @apply bg-white border-b-2 border-t-2 border-gray-200;
+    @apply bg-white border-b-2  border-gray-200;
+  }
+  .activePaginate {
+    @apply border-b-2 border-pink-500;
   }
 }
