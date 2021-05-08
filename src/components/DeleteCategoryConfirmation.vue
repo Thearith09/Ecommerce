@@ -1,11 +1,9 @@
 <template>
   <div
-    class="flex justify-center fixed items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50"
+    class="flex justify-center fixed items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20"
   >
-    <div class="bg-white w-1/2 h-auto shadow-lg">
-      <div
-        class="p-5 font-bold text-yellow-500 flex justify-center items-center"
-      >
+    <div class="bg-white w-full sm:w-1/2 h-auto shadow-lg">
+      <div class="p-5 font-bold text-gray-700 flex justify-center items-center">
         <p>
           Once you remove this
           <span class="text-pink-500">[{{ category.categoryName }}]</span>
@@ -13,7 +11,7 @@
           sure to removing it?
         </p>
       </div>
-      <div class="flex justify-end">
+      <div class="flex justify-center">
         <div class="flex justify-between">
           <button
             class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 focus:outline-none"
@@ -41,6 +39,7 @@ import getUser from "@/composables/getUser";
 import { useRouter } from "vue-router";
 
 export default {
+  emits: ["close"],
   props: ["category"],
   setup(props, { emit }) {
     const router = useRouter();

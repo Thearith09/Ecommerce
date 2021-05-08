@@ -2,7 +2,7 @@
   <div
     class="p-5 lg:p-10 xl:p-16 grid sm:grid-cols-2 lg:grid-cols-4 bg-white shadow-lg h-auto"
   >
-    <div>
+    <div class="lg:border-r-2 border-gray-200 lg:mr-5">
       <h3 class="font-semibold text-gray-700 mb-3">Customer Services</h3>
       <ul class="font-thin text-gray-500">
         <li>Help Center</li>
@@ -11,7 +11,7 @@
       </ul>
     </div>
 
-    <div>
+    <div class="lg:border-r-2 border-gray-200 lg:mr-5">
       <h3 class="font-semibold text-gray-700 mb-3">About Us</h3>
       <ul class="font-thin text-gray-500">
         <li>Help Center</li>
@@ -23,8 +23,8 @@
     <div class="col-span-2 mt-5 lg:mt-0">
       <h3 class="font-semibold text-gray-700 mb-3">Contact Us</h3>
 
-      <div class="grid grid-cols-3 gap-4">
-        <div class="flex space-x-2 border-r-2 border-gray-100">
+      <div class="grid sm:grid-cols-3 gap-4">
+        <div class="flex space-x-2 sm:border-r-2 border-gray-100">
           <!-- <a href="https://www.facebook.com/masteritcambodia/" target="_blank">
           </a> -->
           <img

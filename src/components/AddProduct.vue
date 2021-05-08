@@ -1,13 +1,13 @@
 <template>
   <div
-    class="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-gray-900 bg-opacity-50"
+    class="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-40"
   >
-    <div class="bg-white shadow-lg w-1/2">
+    <div class="bg-white shadow w-full sm:w-3/4 md:w-3/4 lg:w-1/2">
       <div class="py-3 px-2 flex justify-between items-center">
         <span class="font-semibold text-gray-700 text-md">New Product</span>
         <div
           @click="handleClose"
-          class="relative group bg-red-500 border cursor-pointer shadow-lg w-4 h-4 rounded-full flex justify-center items-center"
+          class="relative group bg-red-500 border cursor-pointer shadow w-4 h-4 rounded-full flex justify-center items-center"
         >
           <svg
             class="w-2 h-2"
@@ -34,7 +34,7 @@
         <form @submit.prevent="handleAdd" class="space-y-5">
           <input
             v-model="productName"
-            class="p-2 bg-white text-md text-gray-700  shadow-lg w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
+            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
             type="text"
             placeholder="product name"
             required
@@ -42,7 +42,7 @@
 
           <input
             v-model="description"
-            class="p-2 bg-white text-md text-gray-700  shadow-lg w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
+            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
             type="text"
             placeholder="description"
             required
@@ -50,7 +50,7 @@
 
           <input
             v-model="price"
-            class="p-2 bg-white text-md text-gray-700  shadow-lg w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
+            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
             type="number"
             placeholder="price"
             required
@@ -58,7 +58,7 @@
 
           <input
             v-model="discount"
-            class="p-2 bg-white text-md text-gray-700  shadow-lg w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
+            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
             type="number"
             placeholder="discount"
             required
@@ -66,7 +66,7 @@
 
           <input
             v-model="size"
-            class="p-2 bg-white text-md text-gray-700 shadow-lg w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
+            class="p-2 bg-white text-md text-gray-700 shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
             type="text"
             placeholder="size"
             @keypress.space="handleInsertSize"
@@ -81,7 +81,7 @@
                 {{ size }}
                 <span
                   @click="handleRemoveSize(index)"
-                  class="absolute -top-2 -right-1 bg-red-500 w-3 h-3 rounded-full hidden group-hover:flex justify-center items-center"
+                  class="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full hidden group-hover:flex justify-center items-center"
                 >
                   <svg
                     class="w-2 h-2"
@@ -104,7 +104,7 @@
           </label>
 
           <input
-            class="p-2 bg-white text-md text-gray-700  shadow-lg w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
+            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
             type="file"
             placeholder="image"
             @change="handleInsertImage"
@@ -118,7 +118,7 @@
                 {{ image.name }}
                 <span
                   @click="handleRemoveImage(index)"
-                  class="absolute -top-1 -right-2 bg-red-500 w-3 h-3 rounded-full hidden group-hover:flex justify-center items-center"
+                  class="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full hidden group-hover:flex justify-center items-center"
                 >
                   <svg
                     class="w-2 h-2"
@@ -145,13 +145,13 @@
           <h4 v-if="error" class="text-red-500">{{ error }}</h4>
           <button
             v-if="!isPending"
-            class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 bg-white font-semibold shadow-lg w-full p-2 text-gray-700"
+            class="hover:text-pink-600 bg-white font-semibold shadow w-full p-2 text-pink-500"
           >
             {{ product ? "Edit" : "Add" }}
           </button>
           <button
             v-else
-            class="hover:text-pink-500 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 bg-white font-semibold shadow-lg w-full p-2 text-gray-700"
+            class="hover:text-pink-600 bg-white font-semibold shadow w-full p-2 text-pink-500"
           >
             {{ product ? "Saving..." : "Adding..." }}
           </button>
@@ -167,6 +167,7 @@ import useStorage from "@/composables/useStorage";
 import useDocument from "@/composables/useDocument";
 
 export default {
+  emits: ["close"],
   props: ["categoryId", "category", "product"],
   setup(props, { emit }) {
     const sizes = ref([]);

@@ -1,19 +1,42 @@
 <template>
-  <div class="bg-white">
-    <div class="flex h-auto w-full">
-      <div class="h-full w-2/4 space-y-5 p-5">
-        <div>
-          <div class="relative">
-            <img
-              class="h-52 w-full object-center object-cover rounded"
-              :src="url ? url : item.images[0].url"
-            />
-            <h3
-              v-if="item.discount > 0"
-              class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded-md"
+  <div class="bg-white w-full">
+    <div class="flex h-96">
+      <div class="h-full w-2/4 p-5">
+        <div class="relative">
+          <img
+            class="h-52 w-full object-center object-cover rounded"
+            :src="url ? url : item.images[0].url"
+          />
+          <h3
+            v-if="item.discount > 0"
+            class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
+          >
+            {{ item.discount }}% OFF
+          </h3>
+        </div>
+        <div class="flex justify-between my-5">
+          <div class="w-full">
+            <h3 class="text-gray-700 font-semibold">{{ item.productName }}</h3>
+            <h5 class="text-gray-400">
+              {{ item.description }} Lorem ipsum dolor sit amet consectetur
+              adipisicing elit. Illum neque, possimus officiis libero eaque
+            </h5>
+          </div>
+
+          <div class="text-gray-400 w-1/4 flex justify-end">
+            <svg
+              @click="handleAddToCart(item)"
+              :class="{ added: cartIds.includes(item.id) }"
+              fill="currentColor"
+              viewBox="-2 -3 24 24"
+              class="rounded-full hover:text-pink-500 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
             >
-              {{ item.discount }}% OFF
-            </h3>
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+              />
+            </svg>
           </div>
         </div>
       </div>
@@ -22,7 +45,7 @@
           <div
             :class="{ invisiblePreAndNext: start == 0 }"
             @click="handlePreviousImage"
-            class="absolute top-2 left-4 xl:left-3 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute top-2 left-4 xl:left-6 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -67,8 +90,8 @@
             <div class="col-span-2">
               <div class=" flex items-center">
                 <button
-                  :class="{ frozen: qtys[index] <= 0 }"
-                  :disabled="qtys[index] <= 0"
+                  :class="{ frozen: qtys[index] <= 1 }"
+                  :disabled="qtys[index] <= 1"
                   @click="handleDecrement(index, item)"
                   class="border-2 p-1 focus:outline-none border-gray-100 inline-block text-gray-400 hover:bg-gray-100"
                 >
@@ -90,8 +113,6 @@
                   @change="handleChanges($event, index, item)"
                   class="inline-block focus:outline-none border-t-2 border-b-2 border-gray-100 w-2/4 h-8 text-center text-sm text-gray-700"
                   type="text"
-                  min="0"
-                  placeholder="0"
                   :value="qtys[index]"
                 />
                 <button
@@ -114,7 +135,7 @@
               </div>
             </div>
 
-            <div class="col-span-4 ">
+            <div class="col-span-4">
               <div class="flex items-center justify-start space-x-1">
                 <div
                   :class="{
@@ -179,7 +200,7 @@
           <div
             :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
             @click="handleNextImage"
-            class="absolute bottom-3 left-4 xl:left-3 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute top-48 left-4 xl:left-6 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               class="h-6 w-6 inline-block"
@@ -197,20 +218,67 @@
         </div>
       </div>
     </div>
-    <div v-if="total" class="h-auto w-full bg-gray-100">
-      <div
-        class="flex justify-end p-2 text-gray-700 font-bold border-b-2 border-white"
-      >
-        Total Price: USD {{ total.toFixed(2) }}
+    <div v-if="total" class="h-auto w-full border-t-2 border-gray-200">
+      <div class="w-1/4 ml-auto py-10 text-gray-700 font-bold space-x-10">
+        <div class="px-5 text-gray-400">
+          <div class="flex justify-between pb-2">
+            <p class="underline">{{ pieces }}pieces</p>
+            <span>{{ total.toFixed(2) }}</span>
+          </div>
+          <div v-if="pieces < 3" class="flex justify-between mb-2">
+            <p>Shipping</p>
+            <p>{{ shipping.toFixed(2) }}</p>
+          </div>
+          <div v-else class="flex justify-between mb-2">
+            <p>Free Shipping</p>
+            <p>0.00</p>
+          </div>
+          <hr class="border-white" />
+          <div class="flex justify-between my-5 space-x-5">
+            <span class="font-semibold">Order Amount </span
+            ><span v-if="pieces < 3" class="font-semibold"
+              >USD {{ (total + shipping)?.toFixed(2) }}</span
+            >
+            <span v-else class="font-semibold">
+              USD
+              {{ total?.toFixed(2) }}
+            </span>
+          </div>
+          <div
+            @click="handleCheckout"
+            class="text-pink-500 hover:text-pink-600 cursor-pointer flex justify-center bg-white py-2 shadow"
+          >
+            Checkout
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  <component
+    :is="currentComponent"
+    :orders="orders"
+    @close="handleClose"
+    :invoiceNum="ordersCollection?.length || 0"
+  />
 </template>
 
 <script>
 import { ref } from "@vue/reactivity";
-import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { computed, onMounted, watch } from "vue";
+import getCollection from "@/composables/getCollection";
+import getDocument from "@/composables/getDocument";
+import useDocument from "@/composables/useDocument";
+import { timestamp } from "@/firebase/config";
+import getUser from "@/composables/getUser";
+import getUserDoc from "@/composables/getUserDoc";
+import PrintInvoice from "@/components/PrintInvoice";
+
 export default {
+  components: {
+    PrintInvoice,
+  },
+  emits: ["order"],
   props: ["item"],
   setup(props, { emit }) {
     const url = ref(null); // image url
@@ -219,29 +287,127 @@ export default {
     const end = ref(3); //limit image shows
     const starts = ref([]); //limit size shows
     const ends = ref([]); //limit size shows
-    const items = ref([]); //order items
     const total = ref(null); //total price
+    const items = ref([]);
     const indexSizes = ref([]); //for active size (chosen size)
+    const cartIds = ref([]);
+    const shipping = ref(2);
+    const orders = ref(null);
+    const pieces = ref(0);
+    const currentComponent = ref("");
+
+    const router = useRouter();
+    const docs = computed(() => cart.value && cart.value.items); //watching items change
+
+    const { _user } = getUserDoc("users");
+    const { user } = getUser();
+    const { documents: ordersCollection } = getCollection("orders");
+    const { document: cart } = getDocument("carts", user.value?.uid);
+    const { addDoc, updateDoc: updateCart } = useDocument(
+      "carts",
+      user.value?.uid
+    );
+
     onMounted(() => {
       //explicitly assign value to each element in array once the component mount
-      for (let index in props.item.images) {
+      for (let index in props.item?.images) {
         starts.value[index] = 0;
         ends.value[index] = 3;
-        qtys.value[index] = 0;
+        qtys.value[index] = 1;
       }
     });
+
+    watch(cart, () => {
+      let temp = [];
+      for (let item of docs.value) temp.push(item.productId);
+      cartIds.value = temp;
+    });
+
+    watch(pieces, () => {
+      if (pieces.value >= 3) shipping.value = 0;
+      else shipping.value = 2;
+    });
+
+    const handleClose = (completed) => {
+      if (completed) {
+        router.push({ name: "Home" });
+      } else {
+        currentComponent.value = "";
+      }
+    };
+
+    const handleCheckout = async () => {
+      //insert into orders if the item.size and item.qty exist
+      const orderedItems = items.value.filter((item) => item.size && item.qty);
+      const order = {
+        name: user.value.displayName,
+        tel: _user.value.telephone,
+        facebook: _user.value.facebook,
+        telegram: _user.value.telegram,
+        items: orderedItems,
+        shipping: shipping.value,
+      };
+      orders.value = order;
+
+      if (order.items?.length > 0) {
+        currentComponent.value = "PrintInvoice";
+      }
+    };
+
+    const handleAddToCart = async (product) => {
+      if (!user.value) {
+        router.push({ name: "Login" });
+      } else {
+        const item = cart.value?.items.filter(
+          (item) => item.productId == product.id
+        );
+        const items = cart.value?.items.filter(
+          (item) => item.productId != product.id
+        );
+
+        if (item?.length > 0) {
+          await updateCart({
+            items: [...items],
+          });
+        } else {
+          const item = {
+            productId: product.id,
+            productName: product.productName,
+            price: product.price,
+            discount: product.discount,
+            sizes: product.sizes,
+            images: product.images,
+          };
+          if (items?.length > 0) {
+            await addDoc({
+              items: [...items, item],
+              createdAt: timestamp(),
+            });
+          } else {
+            await addDoc({
+              items: [item],
+              createdAt: timestamp(),
+            });
+          }
+        }
+      }
+    };
+
     const handleChangeImage = (imageUrl) => {
       //change Big image by selecting small image
       url.value = imageUrl;
     };
+
     const handlePreviousImage = () => {
       end.value--;
       start.value--;
     };
+
     const handleNextImage = () => {
       end.value++;
       start.value++;
     };
+
     const handleInput = (e) => {
       //validate input only 0-9
       if (e.keyCode > 57 || e.keyCode < 48) {
@@ -250,19 +416,23 @@ export default {
         }
       }
     };
+
     const handleNextSize = (i) => {
       //create next function for sizes
       ends.value[i]++;
       starts.value[i]++;
     };
+
     const handlePreviousSize = (i) => {
       //create previous function for sizes
       ends.value[i]--;
       starts.value[i]--;
     };
+
     const handleActiveSize = (index, i, size) => {
       //active size (chosen size)
       indexSizes.value[index] = i;
+
       if (items.value[index]) {
         //input qty first
         items.value[index].size = size;
@@ -270,72 +440,83 @@ export default {
         //select size first
         const doc = {};
         doc.size = size;
+
+        doc.name = props.item.productName;
+        doc.id = props.item.id;
+        doc.price = props.item.price;
+        doc.discount = props.item.discount;
+        doc.qty = qtys.value[index];
+        doc.color = props.item.images[index].url;
         items.value[index] = doc;
       }
       handleTotal();
     };
+
     const handleTotal = () => {
       //total price for each cart
       let temp = 0;
+      let piecesTemp = 0;
       for (let item of items.value) {
         if (item && item.qty > 0 && item.size) {
+          piecesTemp += parseFloat(item.qty);
           temp +=
             item.price * item.qty -
             (item.discount * item.price * item.qty) / 100;
         } else {
+          piecesTemp = piecesTemp;
           temp = temp;
         }
       }
+
+      pieces.value = piecesTemp;
       total.value = temp;
       emit("order", items.value);
     };
+
     const handleChanges = (e, i, item) => {
       //handle input by listen to the changes
-      if (e.target.value[0] == 0) {
-        qtys.value[i] = 0;
+      if (e.target.value[0] == 1) {
+        qtys.value[i] = 1;
+
         handleOrder(i, item);
       } else {
         qtys.value[i] = e.target.value;
+
         handleOrder(i, item);
       }
     };
+
     const handleIncrement = (i, item) => {
       //handle input by clicking the button +
       qtys.value[i]++;
+
       handleOrder(i, item);
     };
+
     const handleDecrement = (i, item) => {
       //handle input by clicking the button -
       qtys.value[i]--;
+
       handleOrder(i, item);
     };
+
     const handleOrder = (i, item) => {
-      if (items.value[i]) {
-        //select size first
-        items.value[i].name = item.productName;
-        items.value[i].id = item.productId;
-        items.value[i].price = item.price;
-        items.value[i].discount = item.discount;
+      const exist = items.value[i] && items.value[i].id == item.id;
+      if (exist) {
         items.value[i].qty = qtys.value[i];
-        items.value[i].color = item.images[i].url;
       } else {
-        //input qty first
-        const exist = items.value[i] && items.value[i].id == item.productId;
-        if (exist) {
-          items.value[i].qty = qtys.value[i];
-        } else {
-          const doc = {};
-          doc.name = item.productName;
-          doc.id = item.productId;
-          doc.price = item.price;
-          doc.discount = item.discount;
-          doc.qty = qtys.value[i];
-          doc.color = item.images[i].url;
-          items.value[i] = doc;
-        }
+        const doc = {};
+        doc.name = item.productName;
+        doc.id = item.id;
+        doc.price = item.price;
+        doc.discount = item.discount;
+        doc.qty = qtys.value[i];
+        doc.color = item.images[i].url;
+        items.value[i] = doc;
       }
       handleTotal();
     };
+
     return {
       handleChangeImage,
       handlePreviousImage,
@@ -347,7 +528,15 @@ export default {
       handleActiveSize,
       handleIncrement,
       handleDecrement,
+      handleAddToCart,
+      handleCheckout,
+      handleClose,
+      ordersCollection,
+      items,
+      cartIds,
+      orders,
       url,
+      currentComponent,
       qtys,
       starts,
       ends,
@@ -355,7 +544,11 @@ export default {
       end,
       indexSizes,
       total,
+      pieces,
+      shipping,
     };
   },
 };
 </script>
+
+<style></style>

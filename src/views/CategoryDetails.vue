@@ -21,11 +21,11 @@
             @click="handlePrevious(category.products.length)"
             :class="{ frozen: previous <= 0 }"
             :disabled="previous <= 0"
-            class="h-10 w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-600 items-center"
+            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-600 items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7"
+              class="h-7 w-7 lg:w-9 lg:h-9"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -41,7 +41,7 @@
               v-for="i in Math.ceil(category.products.length / 5)"
               :key="i"
               v-show="i >= start && i <= end"
-              class="flex items-center px-2 text-pink-500 font-bold"
+              class="flex items-center px-2 text-pink-500 font-bold lg:text-lg"
             >
               <li class="px-1" :class="{ activePaginate: i == indexActive }">
                 {{ i }}
@@ -52,11 +52,11 @@
             @click="handleNext(category.products.length)"
             :class="{ frozen: next >= category.products.length }"
             :disabled="next >= category.products.length"
-            class="h-10 w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-600 flex justify-center items-center"
+            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-600 flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7"
+              class="h-7 w-7 lg:h-9 lg:w-9"
               viewBox="0 0 20 20"
               fill="currentColor"
             >

@@ -3,7 +3,7 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto 2xl:w-3/4 mx-auto">
+    <div class="mb-auto">
       <div class="bg-white">
         <Slideshow />
       </div>

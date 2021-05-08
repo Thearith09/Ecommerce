@@ -1,18 +1,16 @@
 <template>
   <div
-    class="flex justify-center fixed items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50"
+    class="flex justify-center fixed items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20"
   >
-    <div class="bg-white w-1/2 h-auto shadow-lg">
-      <div
-        class="font-bold p-5 text-yellow-500 flex justify-center items-center"
-      >
+    <div class="bg-white w-full sm:w-1/2 h-auto shadow">
+      <div class="font-bold p-5 text-gray-700 flex justify-center items-center">
         <p>
           Are you seriously wanting to remove this
           <span class="text-pink-500">[{{ product.productName }}]</span> product
           ?
         </p>
       </div>
-      <div class="flex justify-end">
+      <div class="flex justify-center">
         <div class="flex justify-between">
           <button
             class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 focus:outline-none"

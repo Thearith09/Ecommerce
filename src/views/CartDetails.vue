@@ -3,26 +3,27 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto">
+    <div class="mb-auto my-5">
       <div
         v-if="cart && cart.items.length > 0"
-        class="grid grid-cols-4 grid-flow-col bg-gray-100 gap-4 m-5"
+        class="grid grid-cols-layout-list-carts grid-flow-row xl:grid-cols-4 gap-4 my-5"
       >
-        <div class="row-span-2 col-span-3 shadow-md">
+        <div class="xl:col-span-3">
           <div
-            class="border-t-2 border-b-2 border-gray-100"
+            class="border-b-2 border-gray-200"
             v-for="item in cart.items"
             :key="item.productId"
           >
             <Cart :item="item" @order="emitOrder" />
           </div>
         </div>
-        <div class="col-span-1 p-3 bg-white overflow-hidden shadow-md">
-          <div v-if="pieces > 0" class="flex justify-between my-5">
+
+        <div v-if="pieces > 0" class="xl:col-span-1 p-3 bg-white">
+          <div class="flex justify-between my-5">
             <p class="text-gray-400 underline">{{ pieces }}Pieces</p>
             <p class="text-gray-700">{{ total?.toFixed(2) }}</p>
           </div>
-          <div v-if="pieces > 0" class="my-5">
+          <div class="my-5">
             <div v-if="pieces < 3" class="flex justify-between">
               <p class="text-gray-400">Shipping</p>
               <p class="text-gray-700">{{ shipping.toFixed(2) }}</p>
@@ -48,15 +49,47 @@
           <div>
             <button
               @click="handleOrder"
-              class="focus:outline-none active:bg-pink-500 active:text-white bg-white shadow-lg p-2 flex justify-center items-center cursor-pointer w-full text-pink-500 font-semibold hover:text-pink-600"
+              class="focus:outline-non py-2 flex justify-center items-center cursor-pointer w-full mx-auto text-pink-500 bg-white hover:text-pink-600 font-semibold shadow"
             >
               Order Now
             </button>
           </div>
         </div>
       </div>
+
+      <div
+        v-if="cart?.items.length <= 0"
+        class="relative w-full h-auto my-10 p-5 md:w-3/4 xl:w-1/2 md:mx-auto lg:my-20 border-2 border-gray-200"
+      >
+        <div class="flex justify-center mt-12">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-24 sm:h-28 inline-block p-5 text-pink-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+        </div>
+        <div class="text-gray-700 text-sm flex justify-center mt-7 mb-5">
+          <h3>Your cart is empty. Keep shopping for your favorite products.</h3>
+        </div>
+        <div
+          @click="handleNavigation"
+          class="text-white p-3 mb-24 flex justify-center bg-pink-500 w-2/4 sm:w-1/4 mx-auto cursor-pointer"
+        >
+          Keep Shopping
+        </div>
+      </div>
     </div>
-    <div>
+
+    <div class="mt-5">
       <Footer />
     </div>
   </div>
@@ -77,6 +110,7 @@ import Footer from "@/components/Footer";
 import getUser from "@/composables/getUser";
 import Cart from "@/components/Cart.vue";
 import PrintInvoice from "@/components/PrintInvoice";
+import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import { watch } from "vue";
 
@@ -95,6 +129,7 @@ export default {
     const orders = ref(null);
     const currentComponent = ref("");
 
+    const router = useRouter();
     const { user } = getUser();
     const { _user } = getUserDoc("users");
     const { document: cart } = getDocument("carts", user.value?.uid);
@@ -104,6 +139,10 @@ export default {
       if (pieces.value >= 3) shipping.value = 0;
       else shipping.value = 2;
     });
+
+    const handleNavigation = () => {
+      router.push({ name: "Home" });
+    };
 
     const handleClose = (completed) => {
       if (completed) {
@@ -171,8 +210,9 @@ export default {
 
     return {
       handleOrder,
-      emitOrder,
       handleClose,
+      handleNavigation,
+      emitOrder,
       cart,
       total,
       items,

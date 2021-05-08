@@ -7,6 +7,7 @@ import CategoryDetails from "../views/CategoryDetails.vue";
 import CartDetails from "../views/CartDetails.vue";
 import ProductSearching from "../views/ProductSearching.vue";
 import CheckoutOrder from "../views/CheckoutOrder.vue";
+import ProductDetails from "../views/ProductDetails.vue";
 
 const routes = [
   {
@@ -50,6 +51,12 @@ const routes = [
     path: '/orders/checkoutorder',
     name: 'CheckoutOrder',
     component: CheckoutOrder,
+  },
+  {
+    path: '/category/products/:id',
+    name: 'ProductDetails',
+    component: ProductDetails,
+    props: true
   }
 ]
 

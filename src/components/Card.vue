@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full"
+    class="relative grid grid-cols-1 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full"
   >
     <div
       :class="{ hideImage: end >= category.products.length - 1 }"
@@ -8,7 +8,7 @@
     >
       <div
         @click="handleNext"
-        class="bg-white w-12 h-12 rounded-full flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-600"
+        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-600"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -31,13 +31,24 @@
       v-show="index >= start && index <= end"
     >
       <div class="relative">
-        <img
-          :src="product.images[0].url"
-          class="w-full h-48 object-cover object-center"
-        />
+        <router-link
+          :to="{
+            name: 'ProductDetails',
+            params: {
+              id: product.id,
+              categoryId: category.id,
+              productId: product.id,
+            },
+          }"
+        >
+          <img
+            :src="product.images[0].url"
+            class="w-full h-48 object-cover object-center rounded"
+          />
+        </router-link>
         <h3
           v-if="product.discount > 0"
-          class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1"
+          class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
         >
           {{ product.discount }}% OFF
         </h3>
@@ -96,7 +107,7 @@
     >
       <div
         @click="handlePrevious"
-        class="bg-white w-12 h-12 rounded-full flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-600"
+        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-600"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +132,7 @@ import useDocument from "@/composables/useDocument";
 import getDocument from "@/composables/getDocument";
 import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
-import { onMounted, ref, watch, watchEffect } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 
 export default {
   props: ["category"],
@@ -132,6 +143,7 @@ export default {
     const start = ref(0);
     const end = ref(4);
     const windowWidth = ref(window.innerWidth);
+    const items = computed(() => cart.value && cart.value.items); //watching items change
 
     const { document: cart } = getDocument("carts", user.value?.uid);
     const { addDoc, updateDoc: updateCart } = useDocument(
@@ -150,7 +162,9 @@ export default {
     });
 
     watchEffect(() => {
-      if (windowWidth.value < 768) {
+      if (windowWidth.value < 640) {
+        end.value = 0;
+      } else if (windowWidth.value < 768) {
         end.value = 1;
       } else if (windowWidth.value < 1024) {
         end.value = 2;
@@ -162,9 +176,9 @@ export default {
     });
 
     watch(cart, () => {
-      for (let i in cart.value.items) {
-        cartIds.value[i] = cart.value.items[i].productId;
-      }
+      let temp = [];
+      for (let item of items.value) temp.push(item.productId);
+      cartIds.value = temp;
     });
 
     const handleAddToCart = async (product) => {
@@ -207,7 +221,10 @@ export default {
     };
 
     const handlePrevious = () => {
-      if (windowWidth.value < 768) {
+      if (windowWidth.value < 640) {
+        start.value -= 1;
+        end.value -= 1;
+      } else if (windowWidth.value < 768) {
         start.value -= 2;
         end.value -= 2;
       } else if (windowWidth.value < 1024) {
@@ -223,7 +240,10 @@ export default {
     };
 
     const handleNext = () => {
-      if (windowWidth.value < 768) {
+      if (windowWidth.value < 640) {
+        start.value += 1;
+        end.value += 1;
+      } else if (windowWidth.value < 768) {
         start.value += 2;
         end.value += 2;
       } else if (windowWidth.value < 1024) {

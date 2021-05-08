@@ -12,7 +12,7 @@
         </div>
         <div
           v-if="user?.admin"
-          class="text-pink-500 cursor-pointer inline-block hover:bg-pink-500 hover:text-white h-12 w-12 rounded-full focus:outline-none active:bg-pink-600"
+          class="fixed z-10 right-20 top-40 2xl:right-60 text-pink-500 cursor-pointer hover:bg-pink-500 hover:text-white h-12 w-12 rounded-full focus:outline-none"
         >
           <svg
             @click="mountComponent('AddProduct')"
@@ -30,6 +30,7 @@
           </svg>
         </div>
       </div>
+
       <div v-if="category && !search" class="h-auto mb-5">
         <div class="font-bold text-xl text-gray-700 uppercase mb-4">
           Most Popular
@@ -39,62 +40,101 @@
     </div>
   </div>
 
-  <div v-if="category" class="px-10 my-5 w-full">
+  <div v-if="category" class="sm:px-10 my-5 w-full px-5">
     <div
       v-for="(product, index) in category.products"
       v-show="index >= previous && index < next"
       :key="product.id"
-      class="flex items-center py-5 h-56 transition transform hover:translate-y-2 border-b-2 border-gray-200"
+      class="flex items-center space-x-2 py-5 h-56 transition transform hover:translate-y-2 border-b-2 border-gray-200"
     >
-      <div class="relative w-2/4 h-full">
-        <img
-          class="h-full w-full object-cover object-center overflow-hidden"
-          :src="product.images[product.images.length - 1]?.url"
-        />
+      <div class="relative w-2/3 md:w-1/2 xl:w-1/3 h-full">
+        <router-link
+          :to="{
+            name: 'ProductDetails',
+            params: {
+              id: product.id,
+              categoryId: category.id,
+              productId: product.id,
+            },
+          }"
+        >
+          <img
+            class="h-full w-full object-cover object-center overflow-hidden rounded"
+            :src="product.images[product.images.length - 1]?.url"
+          />
+        </router-link>
         <h3
-          v-if="product.discount > 0"
-          class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1"
+          v-if="product.discount > 0 && windowWidth > 768"
+          class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
         >
           {{ product.discount }}% OFF
         </h3>
       </div>
 
-      <div class="col-span-3 w-full h-full px-5">
-        <div class="text-gray-400 flex justify-between">
-          <div class="space-y-5">
+      <div class="h-full lg:w-full xl:px-5">
+        <div
+          class="flex flex-col lg:flex-row justify-between items-start h-full space-y-2 text-gray-400 sm:space-y-3 sm:px-5 md:px-10"
+        >
+          <div class="space-y-2 sm:space-y-4">
             <div class="leading-none space-y-1">
               <p class="text-gray-800 font-semibold inline-block">
                 {{ product.productName }}
               </p>
               <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
             </div>
+
             <p>In Stock</p>
-            <div class="flex space-x-1">
-              <p v-for="size in product.sizes" :key="size">
-                <span
-                  class="text-gray-400 shadow-inner font-semibold p-2 uppercase"
-                  >{{ size }}</span
+
+            <div class="flex justify-between items-center">
+              <div class="flex items-center space-x-2 ">
+                <p v-for="size in product.sizes" :key="size">
+                  <span class="text-gray-400 font-semibold uppercase">{{
+                    size
+                  }}</span>
+                </p>
+              </div>
+              <div
+                v-if="user?.admin && windowWidth < 1024"
+                class="flex space-x-3"
+              >
+                <button
+                  @click="handleEditProduct(product)"
+                  class="focus:outline-none hover:text-pink-600 text-pink-500"
                 >
-              </p>
+                  Edit
+                </button>
+                <button
+                  @click="handleRemoveProduct(product)"
+                  class="focus:outline-none hover:text-pink-600 text-pink-500"
+                >
+                  Remove
+                </button>
+              </div>
             </div>
-            <div v-if="user?.admin" class="flex">
+
+            <div
+              v-if="user?.admin && windowWidth > 1024"
+              class="flex space-x-3"
+            >
               <button
                 @click="handleEditProduct(product)"
-                class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-1/3 p-2 font-semibold bg-white shadow-md text-gray-400 border-r-2 border-white"
+                class="focus:outline-none text-pink-500 hover:text-pink-600"
               >
                 Edit
               </button>
               <button
                 @click="handleRemoveProduct(product)"
-                class="focus:outline-none active:bg-pink-600 hover:text-pink-500 w-1/3 p-2 font-semibold bg-white shadow-md text-gray-400"
+                class="focus:outline-none text-pink-500 hover:text-pink-600"
               >
                 Remove
               </button>
             </div>
           </div>
 
-          <div class="space-y-16">
-            <div class="flex space-x-5">
+          <div
+            class="flex flex-row lg:flex-col justify-between items-center w-full"
+          >
+            <div class="flex justify-end space-x-1 sm:space-x-5 lg:ml-auto">
               <span
                 v-if="product.discount > 0"
                 class="text-red-600 font-semibold line-through"
@@ -110,7 +150,8 @@
                 }}</span
               >
             </div>
-            <div class="flex justify-end text-gray-400">
+
+            <div class="text-gray-400 lg:mt-16 lg:ml-auto">
               <button
                 @click="handleAddToCart(product)"
                 :class="{ added: cartIds.includes(product.id) }"
@@ -153,7 +194,7 @@ import DeleteCategoryConfirmation from "@/components/DeleteCategoryConfirmation"
 import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
-import { computed, watch } from "vue";
+import { computed, onMounted, watch } from "vue";
 
 export default {
   components: {
@@ -162,14 +203,16 @@ export default {
     DeleteProductConfirmation,
     DeleteCategoryConfirmation,
   },
+  emits: ["emitProducts"],
   props: ["id", "search", "previous", "next"],
   setup(props, { emit }) {
     const currentComponent = ref(null);
-    const router = useRouter();
+    const windowWidth = ref(window.innerWidth);
     const product = ref(null); //for updating product
     const cartIds = ref([]); //dynamic apply style to button heart once user add or not by catching item id
     const items = computed(() => cart.value && cart.value.items); //watching items change
 
+    const router = useRouter();
     const { user } = getUser();
     const { error, document: category } = getDocument("inventory", props.id);
     const { document: cart } = getDocument("carts", user.value?.uid);
@@ -177,6 +220,14 @@ export default {
       "carts",
       user.value?.uid
     );
+
+    const onResize = () => {
+      windowWidth.value = window.innerWidth;
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", onResize);
+    });
 
     watch(category, () => {
       emit("emitProducts", category.value);
@@ -255,6 +306,7 @@ export default {
       category,
       cartIds,
       user,
+      windowWidth,
       currentComponent,
       mountComponent,
       unmountComponent,

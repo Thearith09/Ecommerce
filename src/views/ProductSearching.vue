@@ -3,15 +3,16 @@
     <div>
       <Navbar />
     </div>
-
     <div class="mb-auto">
       <div v-if="id != 'null'">
-        <ListProduct
+        <component
+          :is="currentComponent"
           :id="id"
           :search="search"
           :previous="previous"
           :next="next"
           :key="id"
+          @close="handleClose"
           @emitProducts="handleReceiveBack"
         />
 
@@ -23,11 +24,11 @@
             @click="handlePrevious(category.products.length)"
             :class="{ frozen: previous <= 0 }"
             :disabled="previous <= 0"
-            class="h-10 w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-600 items-center"
+            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-600 items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7"
+              class="h-7 w-7 lg:h-9 lg:w-9"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -52,11 +53,11 @@
             @click="handleNext(category.products.length)"
             :class="{ frozen: next >= category.products.length }"
             :disabled="next >= category.products.length"
-            class="h-10 w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-600 flex justify-center items-center"
+            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-600 flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7"
+              class="h-7 w-7 lg:h-9 lg:w-9"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -92,7 +93,7 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
-import ListProduct from "@/components/ListProduct";
+import ListProduct from "@/components/ListProduct.vue";
 import { ref } from "@vue/reactivity";
 
 export default {
@@ -101,6 +102,7 @@ export default {
     Footer,
     ListProduct,
   },
+  emits: ["emitProducts"],
   props: ["id", "search"],
   setup() {
     const start = ref(1);
@@ -109,6 +111,11 @@ export default {
     const next = ref(5);
     const indexActive = ref(1);
     const category = ref(null);
+    const currentComponent = ref("ListProduct");
+
+    const handleClose = () => {
+      currentComponent.value = "ListProduct";
+    };
 
     const handleReceiveBack = (products) => {
       category.value = products;
@@ -146,9 +153,11 @@ export default {
       indexActive,
       previous,
       next,
+      category,
+      currentComponent,
+      handleClose,
       handleNext,
       handlePrevious,
-      category,
       handleReceiveBack,
     };
   },

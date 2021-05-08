@@ -4,12 +4,12 @@
       <vueper-slide
         v-for="(slide, index) in slides"
         :key="index"
-        :image="slide.image"
+        :image="slide.link"
       />
     </vueper-slides>
-
     <div
-      class="absolute top-1/4 right-20 sm:top-1/4 md:top-1/3 lg:top-1/3 xl:top-1/3  bg-gray-700 bg-opacity-50 h-32 w-72 p-3 lg:h-44 lg:w-80 lg:p-5 z-10 items-center"
+      v-if="windowWidth >= 648"
+      class="absolute shadow top-1/4 h-32 w-64 p-3 right-20 bg-gray-700 bg-opacity-50 sm:h-32 sm:w-72 sm:top-1/4 md:top-1/3 lg:h-44 lg:w-80 lg:p-5 lg:top-1/3 xl:top-1/3 z-10 items-center"
     >
       <div class="text-white font-bold lg:mt-1">Aurora Borealis</div>
       <div
@@ -18,7 +18,7 @@
         Lorem, ipsum dolor sit amet consectetur adipisicing elit.
       </div>
       <div
-        class="h-8 w-20 lg:h-10 lg:w-24 text-gray-700 cursor-pointer hover:text-pink-500 uppercase text-xs font-semibold bg-white shadow-lg flex justify-center items-center"
+        class="h-8 w-20 lg:h-10 lg:w-24 text-gray-700 cursor-pointer hover:text-pink-500 uppercase text-xs font-semibold bg-white shadow flex justify-center items-center"
       >
         Shop Now
       </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { VueperSlides, VueperSlide } from "vueperslides";
 import "vueperslides/dist/vueperslides.css";
 
@@ -35,33 +35,30 @@ export default {
   components: { VueperSlides, VueperSlide },
   setup() {
     const parallax = ref(1);
+    const windowWidth = ref(window.innerWidth);
     const slides = ref([
       {
         title: "Aurora Borealis",
         content:
           "This Youtube video has params in the URL and extra attributes on the iframe.",
-        image: require("@/assets/images/access.jpg"),
         link: "https://source.unsplash.com/random/350*350",
       },
       {
         title: "Aurora Borealis",
         content:
           "This Youtube video has params in the URL and extra attributes on the iframe.",
-        image: require("@/assets/images/admin.jpg"),
         link: "https://source.unsplash.com/random/240*240",
       },
       {
         title: "Aurora Borealis",
         content:
           "This Youtube video has params in the URL and extra attributes on the iframe.",
-        image: require("@/assets/images/admin1.jpg"),
         link: "https://source.unsplash.com/random/320*320",
       },
       {
         title: "Aurora Borealis",
         content:
           "This Youtube video has params in the URL and extra attributes on the iframe.",
-        image: require("@/assets/images/admin3.jpg"),
         link: "https://source.unsplash.com/random/380*380",
       },
 
@@ -69,7 +66,6 @@ export default {
         title: "Aurora Borealis",
         content:
           "This Youtube video has params in the URL and extra attributes on the iframe.",
-        image: require("@/assets/images/pro1.jpg"),
         link: "https://source.unsplash.com/random/420*420",
       },
 
@@ -77,12 +73,19 @@ export default {
         title: "Aurora Borealis",
         content:
           "This Youtube video has params in the URL and extra attributes on the iframe.",
-        image: require("@/assets/images/csab.jpg"),
         link: "https://source.unsplash.com/random/520*520",
       },
     ]);
 
-    return { slides, parallax };
+    const onResize = () => {
+      windowWidth.value = window.innerWidth;
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", onResize);
+    });
+
+    return { slides, parallax, windowWidth };
   },
 };
 </script>

@@ -4,11 +4,14 @@
       <Navbar />
     </div>
 
-    <div class="mb-auto bg-white h-full border-b-2 border-t-2 border-gray-100">
-      <Checkout :orders="orders" />
+    <div
+      class="mb-auto grid grid-cols-layout-list-carts md:grid-cols-none h-auto"
+    >
+      <div class="bg-white my-5">
+        <Checkout :orders="orders" />
+      </div>
     </div>
-
-    <div>
+    <div class="mt-5">
       <Footer />
     </div>
   </div>
@@ -29,7 +32,9 @@ export default {
   setup() {
     const { documents: orders } = getCollection("orders");
 
-    return { orders };
+    return {
+      orders,
+    };
   },
 };
 </script>

@@ -3,68 +3,71 @@
     <div>
       <Navbar />
     </div>
-    <div class="relative mb-auto my-10">
-      <div>
+    <div class="my-5 mb-auto xl:relative">
+      <div v-if="windowWidth >= 1280">
         <img
           class="w-full object-cover object-center"
           src="@/assets/images/bg-signin.png"
         />
       </div>
-      <div class="absolute top-0 right-0 w-1/2 px-10">
-        <h3 class="text-gray-400 font-bold text-center my-7">Sign up Form</h3>
+      <div
+        class="w-full p-3 bg-white sm:px-20 md:px-32 xl:bg-transparent xl:absolute top-0 -right-24 xl:w-2/3"
+      >
+        <h3 class="text-pink-500 font-bold text-center my-5">Sign up Form</h3>
         <form @submit.prevent="handleSignup" class="space-y-5">
           <input
+            autofocus
             v-model="username"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="text"
             placeholder="username"
             required
           />
           <input
             v-model="email"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="email"
             placeholder="email"
             required
           />
           <input
             v-model="telephone"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="text"
             placeholder="telephone"
             required
           />
           <input
             v-model="telegram"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="text"
             placeholder="telegram name"
             required
           />
           <input
             v-model="facebook"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="text"
             placeholder="facebook name"
             required
           />
           <input
             v-model="location"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="text"
             placeholder="location"
             required
           />
           <input
             v-model="password"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="password"
             placeholder="password"
             required
           />
           <input
             v-model="confirmPassword"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-11/12 text-gray-800 font-thin p-2 shadow-lg"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="password"
             placeholder="confirm password"
             required
@@ -73,13 +76,13 @@
           <div class="flex">
             <button
               v-if="!isPending"
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-600 p-2 shadow-lg font-mono text-md bg-pink-500 text-white"
+              class="focus:outline-none  hover:text-pink-600 hover:translate-x-2 transition transform p-2 shadow font-mono text-md bg-white text-pink-500"
             >
               sign up
             </button>
             <button
               v-else
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 active:bg-pink-600 hover:bg-pink-600 p-2 shadow-lg font-mono text-md bg-pink-500 text-white"
+              class="focus:outline-none p-2 shadow font-mono text-md bg-white text-pink-500"
             >
               signing up...
             </button>
@@ -96,7 +99,7 @@
         </form>
       </div>
     </div>
-    <div>
+    <div class="mt-5">
       <Footer />
     </div>
   </div>
@@ -109,6 +112,7 @@ import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import useSignup from "@/composables/useSignup";
 import useCollection from "@/composables/useCollection";
+import { onMounted } from "@vue/runtime-core";
 
 export default {
   components: {
@@ -124,9 +128,19 @@ export default {
     const location = ref("");
     const password = ref("");
     const confirmPassword = ref("");
+    const windowWidth = ref(window.innerWidth);
+
     const router = useRouter();
     const { error, signup, isPending } = useSignup();
     const { addUser } = useCollection("users");
+
+    const onResize = () => {
+      windowWidth.value = window.innerWidth;
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", onResize);
+    });
 
     const handleNavigation = () => {
       router.push({ name: "Login" });
@@ -166,6 +180,7 @@ export default {
       facebook,
       location,
       isPending,
+      windowWidth,
     };
   },
 };

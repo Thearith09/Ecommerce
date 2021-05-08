@@ -7,12 +7,28 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: theme => ({
-        'footer': "url('/images/business\d.png')",
-        'login': "url('/images/loginBackground.png')"
        }),
        screens: {
         'portrait': {'raw': '(orientation: portrait)'},
         // => @media (orientation: portrait) { ... }
+      },
+      gridTemplateColumns: {
+        // Simple 16 column grid
+       '16': 'repeat(16, minmax(0, 1fr))',
+
+        
+        //list addtocart layout on phone screen
+       'layout-list-carts': '1000px minmax(360px, 1fr) 500px',
+
+       //invoice layout on phone screen
+       'layout-invoice': '700px minmax(700px, 1fr)',
+      },
+      gridTemplateRows: {
+        // Simple 8 row grid
+       '8': 'repeat(8, minmax(0, 1fr))',
+
+        // Complex site-specific row configuration
+      //  'layout': '100px minmax(100px, 1fr) 100px',
       }
     },
   },
