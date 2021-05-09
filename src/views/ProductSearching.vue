@@ -93,14 +93,14 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
-import ListProduct from "@/components/ListProduct.vue";
+import ListProducts from "@/components/ListProducts.vue";
 import { ref } from "@vue/reactivity";
 
 export default {
   components: {
     Navbar,
     Footer,
-    ListProduct,
+    ListProducts,
   },
   emits: ["emitProducts"],
   props: ["id", "search"],
@@ -111,10 +111,10 @@ export default {
     const next = ref(5);
     const indexActive = ref(1);
     const category = ref(null);
-    const currentComponent = ref("ListProduct");
+    const currentComponent = ref("ListProducts");
 
     const handleClose = () => {
-      currentComponent.value = "ListProduct";
+      currentComponent.value = "ListProducts";
     };
 
     const handleReceiveBack = (products) => {

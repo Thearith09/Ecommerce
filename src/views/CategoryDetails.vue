@@ -79,7 +79,7 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
-import ListProduct from "@/components/ListProduct.vue";
+import ListProducts from "@/components/ListProducts.vue";
 import { ref } from "@vue/reactivity";
 
 export default {
@@ -87,7 +87,7 @@ export default {
   components: {
     Navbar,
     Footer,
-    ListProduct,
+    ListProducts,
   },
   setup(props) {
     const category = ref(null);
@@ -97,7 +97,7 @@ export default {
     const next = ref(5);
     const indexActive = ref(1);
 
-    const currentComponent = ref("ListProduct");
+    const currentComponent = ref("ListProducts");
 
     const handleReceiveBack = (products) => {
       category.value = products;
