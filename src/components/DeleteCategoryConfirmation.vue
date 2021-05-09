@@ -11,7 +11,7 @@
           sure to removing it?
         </p>
       </div>
-      <div class="flex justify-center">
+      <div class="flex justify-start px-5">
         <div class="flex justify-between">
           <button
             class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 focus:outline-none"
@@ -34,24 +34,18 @@
 <script>
 import useStorage from "@/composables/useStorage";
 import useDocument from "@/composables/useDocument";
-import getDocument from "@/composables/getDocument";
+import getCollection from "@/composables/getCollection";
 import getUser from "@/composables/getUser";
-import { useRouter } from "vue-router";
 
 export default {
   emits: ["close"],
   props: ["category"],
   setup(props, { emit }) {
-    const router = useRouter();
-
     const { user } = getUser();
     const { deleteImage } = useStorage();
-    const { document: cart } = getDocument("carts", user.value?.uid);
+    const { document: carts } = getCollection("carts");
     const { updateDoc: updateCart } = useDocument("carts", user.value?.uid);
-    const { updateDoc, deleteDoc } = useDocument(
-      "inventory",
-      props.category.id
-    );
+    const { deleteDoc } = useDocument("inventory", props.category.id);
 
     const handleCancel = () => {
       emit("close");
@@ -61,11 +55,13 @@ export default {
       const category = props.category;
       const itemIds = [];
 
-      category.products.forEach(async (product) => {
-        cart.value.items.forEach((item) => {
-          if (item.productId == product.id) {
-            itemIds.push(item.productId);
-          }
+      category?.products.forEach(async (product) => {
+        carts.value?.forEach((cart) => {
+          cart.items.forEach((item) => {
+            if (item.productId == product.id) {
+              itemIds.push(item.productId);
+            }
+          });
         });
 
         for (let image of product.images) {
@@ -73,17 +69,18 @@ export default {
         }
       });
 
-      const items = cart.value.items.filter((item) => {
-        if (!itemIds.includes(item.productId)) return item;
-        return;
-      });
+      carts.value?.forEach(async (cart) => {
+        const items = cart.items.filter(
+          (item) => !itemIds.includes(item.productId)
+        );
 
-      await updateCart({ items });
+        await updateCart({ items });
+      });
 
       await deleteImage(category.url);
       await deleteDoc(category.id);
 
-      router.push({ name: "Categories" });
+      emit("close");
     };
 
     return { handleCancel, handleRemove };

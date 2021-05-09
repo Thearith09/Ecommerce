@@ -58,7 +58,7 @@
 
     <div
       v-if="orders?.length > 0"
-      class="flex items-center my-5 w-1/4 mx-auto space-x-2"
+      class="flex items-center w-1/4 mx-auto space-x-2"
     >
       <button
         @click="handlePrevious(orders.length)"

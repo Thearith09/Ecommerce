@@ -4,8 +4,14 @@
       <Navbar />
     </div>
     <div class="mb-auto">
+      <component
+        :is="currentComponent"
+        @close="currentComponent = ''"
+        :category="category"
+      />
+
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row gap-5 my-12 mx-5"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row gap-5 m-5"
       >
         <div
           class="h-64 hover:shadow-lg bg-white relative transform transition hover:translate-y-2 cursor-pointer"
@@ -22,10 +28,17 @@
           </router-link>
 
           <h4
-            class="absolute top-0 w-1/2 text-center font-semibold text-white py-2 bg-pink-500 rounded"
+            class="absolute top-0 w-1/2 text-center font-semibold text-white py-2 bg-pink-500 bg-opacity-80 rounded"
           >
             {{ category.categoryName }}
           </h4>
+          <div
+            @click="handleRemoveCategory(category)"
+            v-if="user?.admin"
+            class="absolute bottom-0 right-0 text-center font-semibold text-pink-500 hover:text-pink-600"
+          >
+            Remove
+          </div>
         </div>
       </div>
     </div>
@@ -39,15 +52,36 @@
 import getCollection from "@/composables/getCollection";
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
+import getUser from "@/composables/getUser";
+import DeleteCategoryConfirmation from "@/components/DeleteCategoryConfirmation";
+import { ref } from "@vue/reactivity";
 
 export default {
   components: {
     Navbar,
     Footer,
+    DeleteCategoryConfirmation,
   },
   setup() {
+    const currentComponent = ref("");
+    const category = ref("");
+
+    const { user } = getUser();
     const { error, documents: categories } = getCollection("inventory");
-    return { error, categories };
+
+    const handleRemoveCategory = (doc) => {
+      currentComponent.value = "DeleteCategoryConfirmation";
+      category.value = doc;
+    };
+
+    return {
+      error,
+      categories,
+      user,
+      handleRemoveCategory,
+      currentComponent,
+      category,
+    };
   },
 };
 </script>

@@ -142,16 +142,19 @@
           <h4 v-if="fileError" class="text-red-500 text-sm">
             {{ fileError }}
           </h4>
+          <h4 v-if="warning" class="text-red-500 text-sm">
+            {{ warning }}
+          </h4>
           <h4 v-if="error" class="text-red-500">{{ error }}</h4>
           <button
             v-if="!isPending"
-            class="hover:text-pink-600 bg-white font-semibold shadow w-full p-2 text-pink-500"
+            class="hover:text-pink-600 bg-white font-semibold shadow w-full p-2 text-pink-500 focus:outline-none"
           >
             {{ product ? "Edit" : "Add" }}
           </button>
           <button
             v-else
-            class="hover:text-pink-600 bg-white font-semibold shadow w-full p-2 text-pink-500"
+            class="hover:text-pink-600 bg-white font-semibold shadow w-full p-2 text-pink-500 focus:outline-none"
           >
             {{ product ? "Saving..." : "Adding..." }}
           </button>
@@ -179,6 +182,7 @@ export default {
     const description = ref("");
     const files = ref([]);
     const fileError = ref(null);
+    const warning = ref(null);
     let conveyIndex;
 
     const { error, updateDoc, isPending } = useDocument(
@@ -201,6 +205,7 @@ export default {
 
     const handleInsertSize = () => {
       let index = conveyIndex ? conveyIndex() : null;
+      warning.value = null;
 
       if (index !== null) {
         sizes.value[index] = size.value;
@@ -224,8 +229,9 @@ export default {
     const handleInsertImage = (e) => {
       const limitedMB = 1048576; //1MB
       const selected = e.target.files[0];
+      warning.value = null;
 
-      if (selected.size > limitedMB) {
+      if (selected?.size > limitedMB) {
         fileError.value = `Size of the image must be less than 1MB.`;
         files.value = [];
       } else {
@@ -233,7 +239,7 @@ export default {
           images.value.unshift({
             name: selected.name,
           });
-          files.value.push(selected);
+          files.value.unshift(selected);
         } else {
           fileError.value = `Must be file of type jpg, jpeg, png, and svg are allowed.`;
           files.value = [];
@@ -245,6 +251,9 @@ export default {
     const handleRemoveImage = async (index) => {
       if (images.value[index].url) {
         await deleteImage(images.value[index].url);
+        images.value.splice(index, 1);
+        files.value.splice(index, 1);
+        return;
       }
       images.value.splice(index, 1);
       files.value.splice(index, 1);
@@ -298,7 +307,7 @@ export default {
           emit("close");
         }
       } else {
-        fileError.value = "Sizes and Images must be exist!";
+        warning.value = "Sizes and Images must be exist!";
       }
     };
 
@@ -321,7 +330,7 @@ export default {
       productName,
       description,
       images,
-      fileError,
+      warning,
       isPending,
       error,
     };

@@ -62,12 +62,12 @@
           </div>
 
           <div
-            class="grid grid-cols-10 gap-4 items-center"
+            class="grid grid-cols-10 gap-2 items-center"
             v-for="(image, index) in item.images"
             :key="index"
             v-show="index >= start && index <= end"
           >
-            <div class="col-span-1 bg-blue-500 w-full">
+            <div class="col-span-1 w-full">
               <img
                 @click="handleChangeImage(image.url)"
                 class="col-span-1 h-10 w-full object-cover object-center cursor-pointer inline-block rounded"
@@ -200,7 +200,7 @@
           <div
             :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
             @click="handleNextImage"
-            class="absolute top-48 left-4 xl:left-6 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute top-48 left-4 xl:left-6 2xl:left-4 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               class="h-6 w-6 inline-block"
@@ -218,6 +218,7 @@
         </div>
       </div>
     </div>
+
     <div v-if="total" class="h-auto w-full border-t-2 border-gray-200">
       <div class="w-1/4 ml-auto py-10 text-gray-700 font-bold space-x-10">
         <div class="px-5 text-gray-400">
@@ -254,6 +255,7 @@
       </div>
     </div>
   </div>
+
   <component
     :is="currentComponent"
     :orders="orders"
@@ -338,6 +340,10 @@ export default {
 
     const handleCheckout = async () => {
       //insert into orders if the item.size and item.qty exist
+      if (!user.value) {
+        return router.push({ name: "Login" });
+      }
+
       const orderedItems = items.value.filter((item) => item.size && item.qty);
       const order = {
         name: user.value.displayName,

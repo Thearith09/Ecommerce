@@ -1,10 +1,10 @@
 <template>
   <div
-    class="justify-center items-center inset-0 h-screen w-full overflow-scroll fixed bg-gray-700 bg-opacity-50 z-40"
+    class="justify-center items-center inset-0 h-screen w-full fixed bg-gray-700 bg-opacity-50 z-40"
   >
     <div class="md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
       <div
-        class="relative grid grid-cols-layout-invoice md:grid-cols-none w-full"
+        class="relative grid grid-cols-layout-invoice md:grid-cols-none w-full overflow-x-scroll"
       >
         <div
           id="print-invoice"

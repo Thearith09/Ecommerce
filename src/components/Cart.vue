@@ -10,7 +10,7 @@
             />
             <h3
               v-if="item.discount > 0"
-              class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded-md"
+              class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
             >
               {{ item.discount }}% OFF
             </h3>
@@ -22,7 +22,7 @@
           <div
             :class="{ invisiblePreAndNext: start == 0 }"
             @click="handlePreviousImage"
-            class="absolute top-2 left-4 xl:left-3 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute top-2 left-4 lg:left-3 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -39,12 +39,12 @@
           </div>
 
           <div
-            class="grid grid-cols-10 gap-4 items-center"
+            class="grid grid-cols-10 gap-2 lg:gap-3 items-center"
             v-for="(image, index) in item.images"
             :key="index"
             v-show="index >= start && index <= end"
           >
-            <div class="col-span-1 bg-blue-500 w-full">
+            <div class="col-span-1 w-full">
               <img
                 @click="handleChangeImage(image.url)"
                 class="col-span-1 h-10 w-full object-cover object-center cursor-pointer inline-block rounded"
@@ -179,7 +179,7 @@
           <div
             :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
             @click="handleNextImage"
-            class="absolute bottom-3 left-4 xl:left-3 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute bottom-3 left-4 lg:left-3 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               class="h-6 w-6 inline-block"

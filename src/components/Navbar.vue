@@ -293,10 +293,10 @@
           <div
             class="group relative h-6 w-6 bg-pink-500 text-white rounded-full font-semibold flex justify-center items-center hover:bg-pink-600"
           >
-            {{ user.displayName[0] }}
+            <span class="uppercase">{{ user.displayName[0] }}</span>
             <!--Dropdown profile-->
             <div
-              class="group absolute -bottom-9 -left-4 h-10 w-16 bg-transparent uppercase z-20"
+              class="group absolute -bottom-9 -left-4 h-10 w-16 bg-transparent z-20"
             ></div>
             <div
               v-if="myProfile"
@@ -319,16 +319,16 @@
               </div>
               <div class="px-7 py-5 space-y-3 bg-white">
                 <p
-                  class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                  class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
                 >
                   <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
                   src="@/assets/images/phone.png"
                 />{{ myProfile.telephone }} -->
-                  Account Setting
+                  Account Settings
                 </p>
                 <p
-                  class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                  class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
                 >
                   <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
@@ -337,7 +337,7 @@
                   Order History
                 </p>
                 <p
-                  class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                  class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
                 >
                   <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
@@ -350,23 +350,12 @@
               <div class="px-5 py-3 bg-white border-2 border-gray-200">
                 <span
                   @click="handleLogout"
-                  class="text-gray-700 cursor-pointer hover:text-pink-500"
+                  class="text-gray-400 cursor-pointer hover:text-pink-500 flex items-center space-x-1"
                 >
-                  <svg
-                    class="h-6 w-6 inline-block"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                  sign out</span
+                  <span class="material-icons">
+                    logout
+                  </span>
+                  <span>sign out</span></span
                 >
               </div>
             </div>
@@ -502,16 +491,16 @@
             </div>
             <div class="px-7 py-5 space-y-3 bg-white">
               <p
-                class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
                 <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
                   src="@/assets/images/phone.png"
                 />{{ myProfile.telephone }} -->
-                Account Setting
+                Account Settings
               </p>
               <p
-                class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
                 <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
@@ -520,7 +509,7 @@
                 Order History
               </p>
               <p
-                class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
                 <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
@@ -533,23 +522,12 @@
             <div class="px-5 py-3 bg-white border-2 border-gray-200">
               <span
                 @click="handleLogout"
-                class="text-gray-700 cursor-pointer hover:text-pink-500"
+                class="text-gray-400 cursor-pointer hover:text-pink-500 flex items-center space-x-1"
               >
-                <svg
-                  class="h-6 w-6 inline-block"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-                sign out</span
+                <span class="material-icons">
+                  logout
+                </span>
+                <span>sign out</span></span
               >
             </div>
           </div>
@@ -657,7 +635,7 @@
         <div
           class="group relative  h-7 w-7 lg:h-9 lg:w-9 bg-pink-500 text-white rounded-full font-semibold flex justify-center items-center hover:bg-pink-600"
         >
-          {{ user.displayName[0] }}
+          <span class="uppercase">{{ user.displayName[0] }}</span>
           <!--Dropdown profile-->
           <div
             class="group absolute -bottom-9 -left-4 h-10 w-16 bg-transparent uppercase z-20"
@@ -683,16 +661,16 @@
             </div>
             <div class="px-7 py-5 space-y-3 bg-white">
               <p
-                class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
                 <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
                   src="@/assets/images/phone.png"
                 />{{ myProfile.telephone }} -->
-                Account Setting
+                Account Settings
               </p>
               <p
-                class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
                 <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
@@ -701,7 +679,7 @@
                 Order History
               </p>
               <p
-                class="text-gray-700 text-md font-normal hover:text-pink-500 cursor-pointer"
+                class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
                 <!-- <img
                   class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
@@ -714,23 +692,12 @@
             <div class="px-5 py-3 bg-white border-2 border-gray-200">
               <span
                 @click="handleLogout"
-                class="text-gray-700 cursor-pointer hover:text-pink-500"
+                class="text-gray-400 cursor-pointer hover:text-pink-500 flex items-center space-x-1"
               >
-                <svg
-                  class="h-6 w-6 inline-block"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-                sign out</span
+                <span class="material-icons">
+                  logout
+                </span>
+                <span>sign out</span></span
               >
             </div>
           </div>
@@ -806,7 +773,7 @@
     </div>
 
     <div
-      class="group relative hover:text-pink-500 focus:outline-none h-12 flex sm:pl-2 cursor-pointer items-center"
+      class="group relative hover:text-pink-500 focus:outline-none h-12 flex justify-center sm:pl-2 cursor-pointer items-center"
     >
       <span class="break-normal leading-none text-center">Add Category</span>
 
@@ -852,9 +819,9 @@
     </div>
 
     <div
-      class="group relative hover:text-pink-500 focus:outline-none flex h-12 cursor-pointer items-center"
+      class="group relative hover:text-pink-500 focus:outline-none flex justify-center h-12 cursor-pointer items-center"
     >
-      <span class="text-center leading-none break-normal">Add Admin</span>
+      <span class="text-center leading-none break-normal">Promote Admin</span>
       <div
         class="absolute w-96 text-thin left-0 text-gray-400 hidden group-hover:block bg-white border-t-2 border-gray-100 top-12 z-10 shadow-lg"
       >
@@ -882,7 +849,9 @@
     <div
       class="col-span-1 hover:text-pink-500 focus:outline-none flex h-12 cursor-pointer items-center"
     >
-      <span class="text-center">Report</span>
+      <router-link :to="{ name: 'Reports' }">
+        <span class="text-center">Reports</span>
+      </router-link>
     </div>
   </div>
   <!--end sub navbar for admin-->

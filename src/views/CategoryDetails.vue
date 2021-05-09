@@ -14,8 +14,8 @@
           @emitProducts="handleReceiveBack"
         />
         <div
-          v-if="category"
-          class="flex items-center my-5 w-1/4 mx-auto space-x-2"
+          v-if="category?.products.length > 0"
+          class="flex items-center mt-10 w-1/4 mx-auto space-x-2"
         >
           <button
             @click="handlePrevious(category.products.length)"

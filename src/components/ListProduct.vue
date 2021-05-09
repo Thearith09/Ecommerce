@@ -12,26 +12,25 @@
         </div>
         <div
           v-if="user?.admin"
-          class="fixed z-10 right-20 top-40 2xl:right-60 text-pink-500 cursor-pointer hover:bg-pink-500 hover:text-white h-12 w-12 rounded-full focus:outline-none"
+          class="fixed z-10 right-20 top-40 2xl:right-60 text-pink-500 cursor-pointer hover:text-pink-600 h-12 w-12 focus:outline-none"
         >
           <svg
             @click="mountComponent('AddProduct')"
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            class="h-10 w-10"
+            viewBox="0 0 20 20"
+            fill="currentColor"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
             />
           </svg>
         </div>
       </div>
 
-      <div v-if="category && !search" class="h-auto mb-5">
+      <div v-if="category?.products.length > 0 && !search" class="h-auto mb-5">
         <div class="font-bold text-xl text-gray-700 uppercase mb-4">
           Most Popular
         </div>
@@ -190,7 +189,6 @@ import getUser from "@/composables/getUser";
 import AddProduct from "@/components/AddProduct";
 import Card from "@/components/Card.vue";
 import DeleteProductConfirmation from "@/components/DeleteProductConfirmation";
-import DeleteCategoryConfirmation from "@/components/DeleteCategoryConfirmation";
 import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
@@ -201,7 +199,6 @@ export default {
     AddProduct,
     Card,
     DeleteProductConfirmation,
-    DeleteCategoryConfirmation,
   },
   emits: ["emitProducts"],
   props: ["id", "search", "previous", "next"],
@@ -258,10 +255,6 @@ export default {
       mountComponent("DeleteProductConfirmation");
     };
 
-    const handleRemoveCategory = async () => {
-      mountComponent("DeleteCategoryConfirmation");
-    };
-
     const handleAddToCart = async (product) => {
       if (!user.value) {
         router.push({ name: "Login" });
@@ -311,7 +304,6 @@ export default {
       mountComponent,
       unmountComponent,
       handleRemoveProduct,
-      handleRemoveCategory,
       handleEditProduct,
       handleAddToCart,
     };

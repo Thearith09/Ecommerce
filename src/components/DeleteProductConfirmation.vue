@@ -10,7 +10,7 @@
           ?
         </p>
       </div>
-      <div class="flex justify-center">
+      <div class="flex justify-end">
         <div class="flex justify-between">
           <button
             class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 focus:outline-none"

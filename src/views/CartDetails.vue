@@ -6,7 +6,7 @@
     <div class="mb-auto my-5">
       <div
         v-if="cart && cart.items.length > 0"
-        class="grid grid-cols-layout-list-carts grid-flow-row xl:grid-cols-4 gap-4 my-5"
+        class="grid grid-cols-layout-list-carts grid-flow-row xl:grid-cols-4 gap-4"
       >
         <div class="xl:col-span-3">
           <div
@@ -49,7 +49,7 @@
           <div>
             <button
               @click="handleOrder"
-              class="focus:outline-non py-2 flex justify-center items-center cursor-pointer w-full mx-auto text-pink-500 bg-white hover:text-pink-600 font-semibold shadow"
+              class="focus:outline-none py-2 flex justify-center items-center cursor-pointer w-full mx-auto text-pink-500 bg-white hover:text-pink-600 font-semibold shadow"
             >
               Order Now
             </button>
@@ -58,8 +58,8 @@
       </div>
 
       <div
-        v-if="cart?.items.length <= 0"
-        class="relative w-full h-auto my-10 p-5 md:w-3/4 xl:w-1/2 md:mx-auto lg:my-20 border-2 border-gray-200"
+        v-if="!cart || cart?.items.length <= 0"
+        class="relative w-full h-auto my-10 p-5 md:w-3/4 xl:w-1/2 md:mx-auto lg:my-20 border-2 border-gray-200 bg-white"
       >
         <div class="flex justify-center mt-12">
           <svg

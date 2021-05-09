@@ -8,6 +8,20 @@ import CartDetails from "../views/CartDetails.vue";
 import ProductSearching from "../views/ProductSearching.vue";
 import CheckoutOrder from "../views/CheckoutOrder.vue";
 import ProductDetails from "../views/ProductDetails.vue";
+import Reports from "../views/Reports.vue";
+
+import { projectAuth } from "@/firebase/config";
+
+const requireAuth = (from, to, next) => {
+  const user = projectAuth.currentUser;
+
+  if (user?.admin) {
+    next();
+    
+  } else {
+    next({ name: "Home" });
+  }
+};
 
 const routes = [
   {
@@ -51,12 +65,19 @@ const routes = [
     path: '/orders/checkoutorder',
     name: 'CheckoutOrder',
     component: CheckoutOrder,
+    beforeEnter: requireAuth,
   },
   {
     path: '/category/products/:id',
     name: 'ProductDetails',
     component: ProductDetails,
     props: true
+  },
+  {
+    path: '/reports',
+    name: 'Reports',
+    component: Reports,
+    beforeEnter: requireAuth,
   }
 ]
 
