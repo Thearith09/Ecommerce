@@ -1,13 +1,6 @@
 <template>
-  <div>
-    <vueper-slides
-      class="relative"
-      @load="handleImage"
-      fade
-      :bullets="false"
-      progress
-      fractions
-    >
+  <div class="relative">
+    <vueper-slides @load="handleImage" fade :bullets="false" progress fractions>
       <vueper-slide
         v-for="(slide, index) in slides"
         :key="index"
@@ -16,24 +9,24 @@
         @click="handleNavigation(slide.categoryId)"
       >
       </vueper-slide>
+    </vueper-slides>
+    <div
+      v-if="windowWidth >= 648"
+      class="absolute shadow top-0 h-32 w-64 p-3 right-20 bg-gray-700 bg-opacity-50 sm:h-32 sm:w-72 sm:top-1/4 md:top-1/3 lg:h-44 lg:w-80 lg:p-5 lg:top-1/3 xl:top-1/3 z-10 items-center"
+    >
+      <div class="text-white font-bold mt-3 lg:mt-6">Product Quotes</div>
       <div
-        v-if="windowWidth >= 648"
-        class="absolute shadow top-0 h-32 w-64 p-3 right-20 bg-gray-700 bg-opacity-50 sm:h-32 sm:w-72 sm:top-1/4 md:top-1/3 lg:h-44 lg:w-80 lg:p-5 lg:top-1/3 xl:top-1/3 z-10 items-center"
+        class="text-gray-200 font-semibold text-sm leading-none mt-1 mb-3 lg:mb-6"
       >
-        <div class="text-white font-bold mt-3 lg:mt-6">Product Quotes</div>
-        <div
-          class="text-gray-200 font-semibold text-sm leading-none mt-1 mb-3 lg:mb-6"
-        >
-          Good products can be sold by honest advertising. If you don’t think
-          the product is good, you have no business to be advertising it.
-        </div>
-        <!-- <div
+        Good products can be sold by honest advertising. If you don’t think the
+        product is good, you have no business to be advertising it.
+      </div>
+      <!-- <div
           class="h-8 w-20 lg:h-10 lg:w-24 text-gray-700 cursor-pointer hover:text-pink-500 uppercase text-xs font-semibold bg-white shadow flex justify-center items-center"
         >
           Shop Now
         </div> -->
-      </div>
-    </vueper-slides>
+    </div>
   </div>
 </template>
 
@@ -56,7 +49,7 @@ export default {
     watch(categories, () => {
       categories.value?.forEach((category) => {
         category.products.forEach((product) => {
-          if (product.discount > 10) {
+          if (product.discount >= 10) {
             product.images.forEach((image) => {
               slides.value.push({
                 categoryId: category.id,

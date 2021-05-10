@@ -714,7 +714,7 @@
   >
     <div
       v-if="windowWidth > 640"
-      class="group hover:text-pink-500 relative h-12 col-span-1 flex space-x-2 cursor-pointer items-center"
+      class="group hover:text-pink-500 relative h-12 col-span-1 flex justify-center space-x-2 cursor-pointer items-center"
     >
       <div
         class="absolute w-96 left-0 text-thin text-gray-400 hidden group-hover:block bg-white border-t-2 border-gray-100 top-12 z-10 shadow-lg"
@@ -847,7 +847,7 @@
     </div>
 
     <div
-      class="col-span-1 hover:text-pink-500 focus:outline-none flex h-12 cursor-pointer items-center"
+      class="col-span-1 hover:text-pink-500 focus:outline-none flex justify-center pr-6 h-12 cursor-pointer items-center"
     >
       <router-link :to="{ name: 'Reports' }">
         <span class="text-center">Reports</span>

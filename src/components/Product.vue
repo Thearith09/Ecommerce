@@ -18,8 +18,7 @@
           <div class="w-full">
             <h3 class="text-gray-700 font-semibold">{{ item.productName }}</h3>
             <h5 class="text-gray-400">
-              {{ item.description }} Lorem ipsum dolor sit amet consectetur
-              adipisicing elit. Illum neque, possimus officiis libero eaque
+              {{ item.description }}
             </h5>
           </div>
 

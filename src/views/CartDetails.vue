@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div v-if="pieces > 0" class="xl:col-span-1 p-3 bg-white">
+        <div v-if="pieces > 0" class="p-3 bg-white">
           <div class="flex justify-between my-5">
             <p class="text-gray-400 underline">{{ pieces }}Pieces</p>
             <p class="text-gray-700">{{ total?.toFixed(2) }}</p>

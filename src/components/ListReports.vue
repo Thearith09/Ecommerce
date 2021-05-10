@@ -1,23 +1,26 @@
 <template>
   <div class="h-auto bg-white">
     <div v-if="reports?.length > 0">
-      <div class="mx-10">
-        <div class="flex items-end space-x-5 my-32">
+      <div class="mx-5 sm:mx-10 py-5 md:mb-10">
+        <div class="flex flex-col space-y-5 items-start lg:text-lg">
           <span class="text-gray-700 font-semibold"
-            ><span class="text-pink-500 text-4xl">{{ reports.length }}</span>
+            ><span class="text-pink-500 lg:text-xl">{{ reports.length }}</span>
             Invoices in total from
             <span class="text-gray-700 px-2 ">{{ dateFrom }}</span> to
             <span class="text-gray-700 px-2 ">{{ dateTo }}</span></span
           >
-          <span class="text-pink-500 font-bold text-4xl"
+
+          <span
+            class="text-pink-500 font-bold border-2 border-gray-200 p-5 text-xl"
             >USD {{ total.toFixed(2) }}</span
           >
         </div>
       </div>
 
-      <div class="mx-10 my-10">
+      <!--for greater than 768px screenn-->
+      <div v-if="windowWidth >= 768" class="mx-10">
         <div
-          class="grid grid-cols-6 md:grid-cols-7 lg:grid-cols-6 md:gap-2 items-center text-gray-700 font-bold border-t-2 border-gray-200 pt-5"
+          class="grid grid-cols-6 md:grid-cols-7 lg:grid-cols-6 md:gap-2 items-center text-gray-700 font-bold border-t-2 border-gray-200 pt-5 px-2"
         >
           <div></div>
           <div>Admin</div>
@@ -33,9 +36,9 @@
           v-show="index + 1 >= start && index + 1 <= end"
         >
           <div
-            class="my-5 h-16 border-b-2 border-t-2 border-gray-200 transform transition hover:translate-y-1 grid grid-cols-6 md:grid-cols-7 lg:grid-cols-6 md:gap-2 items-center"
+            class="font-semibold text-gray-700 my-5 h-16 border-b-2 border-t-2 border-gray-200 transform transition hover:translate-y-1 grid grid-cols-6 md:grid-cols-7 lg:grid-cols-6 md:gap-2 items-center px-2"
           >
-            <div class="col-span-1 pl-2">
+            <div class="col-span-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6 text-pink-500"
@@ -57,12 +60,12 @@
             </div>
 
             <div class="col-span-1 md:col-span-2 lg:col-span-1">
-              <span class="text-gray-700">{{
+              <span>{{
                 date(report.createdAt?.toDate()).format("dddd D, MMMM YYYY")
               }}</span>
             </div>
 
-            <div class="col-span-1">
+            <div class="col-span-1 text-pink-500">
               {{ report.customer }}
             </div>
 
@@ -77,10 +80,57 @@
           </div>
         </div>
       </div>
+      <!--end for greater than 768px screen-->
+
+      <!--for less than 768px screenn-->
+      <div v-if="windowWidth < 768" class="mx-5 sm:mx-10">
+        <div
+          class="flex justify-between items-center border-b-2 border-gray-200"
+          v-for="(report, index) in reports"
+          :key="report.id"
+          v-show="index + 1 >= start && index + 1 <= end"
+        >
+          <div class="w-full text-gray-700 font-bold py-5">
+            <div></div>
+            <div>Admin</div>
+            <div>Date</div>
+            <div>Customer</div>
+            <div>Customer Contact</div>
+            <div>Payment Type</div>
+          </div>
+
+          <div
+            class="text-gray-700 w-full transform transition hover:translate-y-1 py-5"
+          >
+            <div>
+              <span>{{ report.admin }}</span>
+            </div>
+
+            <div>
+              <span>{{
+                date(report.createdAt?.toDate()).format("dddd D, MMMM YYYY")
+              }}</span>
+            </div>
+
+            <div class="text-pink-500">
+              {{ report.customer }}
+            </div>
+
+            <div>
+              {{ report.customerTel }}
+            </div>
+            <div>
+              <span>{{ report.paymentType }} - </span>
+              <span>{{ report.paymentId }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end for less than 768px screen-->
 
       <div
         v-if="reports?.length > 0"
-        class="flex items-center mb-10 w-1/4 mx-auto space-x-2"
+        class="flex items-center w-1/4 mx-auto space-x-2 py-5 md:pb-10 pl-5"
       >
         <button
           @click="handlePrevious(reports.length)"
@@ -134,7 +184,7 @@
       </div>
     </div>
 
-    <div v-else class="p-10 bg-gray-100">
+    <div v-else class="p-5 lg:p-10 bg-gray-100">
       <h1 class="text-gray-700 font-bold text-2xl mb-5">
         Oop, Something went wrong!
       </h1>
