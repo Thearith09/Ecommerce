@@ -5,6 +5,7 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    
     extend: {
       backgroundImage: theme => ({
        }),
@@ -29,7 +30,20 @@ module.exports = {
 
         // Complex site-specific row configuration
       //  'layout': '100px minmax(100px, 1fr) 100px',
-      }
+      },
+      screens: {
+        // for small phone screen
+        '4sm': '370px',
+        '3sm': '390px',
+        '2sm': '430px',
+        // => @media (min-width: 640px) { ... }
+  
+        // 'laptop': '1024px',
+        // => @media (min-width: 1024px) { ... }
+  
+        // 'desktop': '1280px',
+        // => @media (min-width: 1280px) { ... }
+      },
     },
   },
   variants: {
