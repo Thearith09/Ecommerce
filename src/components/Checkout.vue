@@ -15,7 +15,7 @@
           <div></div>
           <div class="text-gray-700 font-semibold">Customer</div>
           <div class="col-span-2 text-center text-gray-700 font-semibold">
-            Customer Contact
+            Date
           </div>
           <div></div>
           <div></div>

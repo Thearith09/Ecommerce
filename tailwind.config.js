@@ -19,7 +19,7 @@ module.exports = {
 
         
         //list addtocart layout on phone screen
-       'layout-list-carts': '1000px minmax(360px, 1fr) 500px',
+      //  'layout-list-carts': '1000px minmax(360px, 1fr) 500px',
 
        //invoice layout on phone screen
        'layout-invoice': '700px minmax(700px, 1fr)',

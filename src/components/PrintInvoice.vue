@@ -1,6 +1,6 @@
 <template>
   <div
-    class="justify-center items-center inset-0 h-screen w-full fixed bg-gray-700 bg-opacity-50 z-40"
+    class="justify-center items-center inset-0 h-screen overflow-scroll w-full fixed bg-gray-700 bg-opacity-50 z-40"
   >
     <div class="md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
       <div

@@ -1,6 +1,44 @@
 <template>
   <div class="bg-white w-full">
-    <!--screen greater than 1024pxx-->
+    <div v-if="total" class="h-auto w-full border-b-2 border-gray-200">
+      <div
+        class="w-full sm:w-2/4 lg:w-1/3 xl:w-1/4 ml-auto py-10 text-gray-700 font-bold space-x-10"
+      >
+        <div class="px-5 text-gray-400">
+          <div class="flex justify-between pb-2">
+            <p class="underline">{{ pieces }}pieces</p>
+            <span>{{ total.toFixed(2) }}</span>
+          </div>
+          <div v-if="pieces < 3" class="flex justify-between mb-2">
+            <p>Shipping</p>
+            <p>{{ shipping.toFixed(2) }}</p>
+          </div>
+          <div v-else class="flex justify-between mb-2">
+            <p>Free Shipping</p>
+            <p>0.00</p>
+          </div>
+          <hr class="border-white" />
+          <div class="flex justify-between my-5 space-x-5">
+            <span class="font-semibold">Order Amount </span
+            ><span v-if="pieces < 3" class="font-semibold"
+              >USD {{ (total + shipping)?.toFixed(2) }}</span
+            >
+            <span v-else class="font-semibold">
+              USD
+              {{ total?.toFixed(2) }}
+            </span>
+          </div>
+          <div
+            @click="handleCheckout"
+            class="text-pink-500 hover:text-pink-600 cursor-pointer flex justify-center bg-white py-2 shadow"
+          >
+            Checkout
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--start screen greater than or equal 1024px-->
     <div v-if="windowWidth >= 1024" class="flex h-96">
       <div class="h-full w-2/4 p-5">
         <div class="relative">
@@ -17,7 +55,9 @@
         </div>
         <div class="flex justify-between my-5">
           <div class="w-full">
-            <h3 class="text-gray-700 font-semibold">{{ item.productName }}</h3>
+            <h3 class="text-gray-700 font-semibold uppercase">
+              {{ item.productName }}
+            </h3>
             <h5 class="text-gray-400">
               {{ item.description }}
             </h5>
@@ -219,9 +259,9 @@
         </div>
       </div>
     </div>
-    <!--end screen greater than 1024pxx-->
+    <!--end screen greater than or equal 1024pxx-->
 
-    <!--screen less than 1024pxx-->
+    <!--start screen less than 1024px-->
     <div v-if="windowWidth < 1024" class="flex flex-col h-auto pb-5">
       <div
         class="flex flex-col sm:flex-row sm:justify-between sm:space-x-5 h-full w-full p-5 pb-0"
@@ -240,7 +280,9 @@
         </div>
         <div class="flex justify-between my-2 sm:my-0 w-full">
           <div class="w-full sm:space-y-2">
-            <h3 class="text-gray-700 font-semibold">{{ item.productName }}</h3>
+            <h3 class="text-gray-700 font-semibold uppercase">
+              {{ item.productName }}
+            </h3>
             <h5 class="text-gray-400 leading-none">
               {{ item.description }}
             </h5>
@@ -293,7 +335,7 @@
           <div
             :class="{ invisiblePreAndNext: start == 0 }"
             @click="handlePreviousImage"
-            class="absolute -top-4 left-6 4sm:left-7 3sm:left-8 2sm:left-10 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute -top-4 left-5 4sm:left-7 3sm:left-8 2sm:left-10 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -436,7 +478,7 @@
           <div
             :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
             @click="handleNextImage"
-            class="absolute -bottom-3 left-6 4sm:left-7 3sm:left-8 2sm:left-10 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute -bottom-3 left-5 4sm:left-7 3sm:left-8 2sm:left-10 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               class="h-6 w-6 inline-block"
@@ -455,44 +497,6 @@
       </div>
     </div>
     <!--end screen less than 1024px-->
-
-    <div v-if="total" class="h-auto w-full border-t-2 border-gray-200">
-      <div
-        class="w-full sm:w-2/4 lg:w-1/3 xl:w-1/4 ml-auto py-10 text-gray-700 font-bold space-x-10"
-      >
-        <div class="px-5 text-gray-400">
-          <div class="flex justify-between pb-2">
-            <p class="underline">{{ pieces }}pieces</p>
-            <span>{{ total.toFixed(2) }}</span>
-          </div>
-          <div v-if="pieces < 3" class="flex justify-between mb-2">
-            <p>Shipping</p>
-            <p>{{ shipping.toFixed(2) }}</p>
-          </div>
-          <div v-else class="flex justify-between mb-2">
-            <p>Free Shipping</p>
-            <p>0.00</p>
-          </div>
-          <hr class="border-white" />
-          <div class="flex justify-between my-5 space-x-5">
-            <span class="font-semibold">Order Amount </span
-            ><span v-if="pieces < 3" class="font-semibold"
-              >USD {{ (total + shipping)?.toFixed(2) }}</span
-            >
-            <span v-else class="font-semibold">
-              USD
-              {{ total?.toFixed(2) }}
-            </span>
-          </div>
-          <div
-            @click="handleCheckout"
-            class="text-pink-500 hover:text-pink-600 cursor-pointer flex justify-center bg-white py-2 shadow"
-          >
-            Checkout
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <component

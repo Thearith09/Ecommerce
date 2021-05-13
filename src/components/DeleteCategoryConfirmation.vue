@@ -45,7 +45,7 @@ export default {
     const { deleteImage } = useStorage();
     const { document: carts } = getCollection("carts");
     const { updateDoc: updateCart } = useDocument("carts", user.value?.uid);
-    const { deleteDoc } = useDocument("inventory", props.category.id);
+    const { deleteDoc } = useDocument("inventory", props.category?.id);
 
     const handleCancel = () => {
       emit("close");
@@ -55,8 +55,8 @@ export default {
       const category = props.category;
       const itemIds = [];
 
-      category?.products.forEach(async (product) => {
-        carts.value?.forEach((cart) => {
+      category.products.forEach(async (product) => {
+        carts?.value.forEach((cart) => {
           cart.items.forEach((item) => {
             if (item.productId == product.id) {
               itemIds.push(item.productId);
@@ -69,7 +69,7 @@ export default {
         }
       });
 
-      carts.value?.forEach(async (cart) => {
+      carts?.value.forEach(async (cart) => {
         const items = cart.items.filter(
           (item) => !itemIds.includes(item.productId)
         );
