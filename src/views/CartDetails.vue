@@ -8,7 +8,7 @@
         v-if="cart && cart.items.length > 0"
         class="grid xl:grid-cols-4 gap-4"
       >
-        <div class="bg-white">
+        <div class="bg-white border-b-2 border-gray-200">
           <div class="py-3 px-5 w-full sm:w-2/4 lg:w-1/3 xl:w-full ml-auto">
             <div v-if="pieces > 0" class="flex justify-between my-5">
               <p class="text-gray-400 underline">{{ pieces }}Pieces</p>
