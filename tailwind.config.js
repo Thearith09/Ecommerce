@@ -5,6 +5,7 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    
     extend: {
       backgroundImage: theme => ({
        }),
@@ -18,7 +19,7 @@ module.exports = {
 
         
         //list addtocart layout on phone screen
-       'layout-list-carts': '1000px minmax(360px, 1fr) 500px',
+      //  'layout-list-carts': '1000px minmax(360px, 1fr) 500px',
 
        //invoice layout on phone screen
        'layout-invoice': '700px minmax(700px, 1fr)',
@@ -29,7 +30,20 @@ module.exports = {
 
         // Complex site-specific row configuration
       //  'layout': '100px minmax(100px, 1fr) 100px',
-      }
+      },
+      screens: {
+        // for small phone screen
+        '4sm': '370px',
+        '3sm': '390px',
+        '2sm': '430px',
+        // => @media (min-width: 640px) { ... }
+  
+        // 'laptop': '1024px',
+        // => @media (min-width: 1024px) { ... }
+  
+        // 'desktop': '1280px',
+        // => @media (min-width: 1280px) { ... }
+      },
     },
   },
   variants: {

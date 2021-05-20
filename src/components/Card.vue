@@ -59,8 +59,8 @@
             {{ product.productName }}
           </h4>
 
-          <div class="leading-tight">
-            <span class="text-gray-400 text-sm"
+          <div class="leading-none">
+            <span class="text-gray-400 text-sm leading-none"
               >Lorem ipsum dolor sit amet consectetur adipisicing elit.</span
             >
           </div>

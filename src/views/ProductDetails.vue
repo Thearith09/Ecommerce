@@ -7,7 +7,7 @@
     <div class="mb-auto my-5">
       <div v-if="category">
         <div
-          class="grid grid-cols-layout-list-carts grid-flow-row lg:grid-cols-none"
+          class="h-auto"
           v-for="product in category.products"
           :key="product.id"
         >

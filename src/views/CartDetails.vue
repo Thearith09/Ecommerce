@@ -6,8 +6,48 @@
     <div class="mb-auto my-5">
       <div
         v-if="cart && cart.items.length > 0"
-        class="grid grid-cols-layout-list-carts grid-flow-row xl:grid-cols-4 gap-4"
+        class="grid xl:grid-cols-4 gap-4"
       >
+        <div class="bg-white border-b-2 border-gray-200">
+          <div class="py-3 px-5 w-full sm:w-2/4 lg:w-1/3 xl:w-full ml-auto">
+            <div v-if="pieces > 0" class="flex justify-between my-5">
+              <p class="text-gray-400 underline">{{ pieces }}Pieces</p>
+              <p class="text-gray-700">{{ total?.toFixed(2) }}</p>
+            </div>
+            <div v-if="pieces > 0" class="my-5">
+              <div v-if="pieces < 3" class="flex justify-between">
+                <p class="text-gray-400">Shipping</p>
+                <p class="text-gray-700">{{ shipping.toFixed(2) }}</p>
+              </div>
+              <div v-else class="flex justify-between">
+                <p class="text-gray-400">Free Shipping</p>
+                <p class="text-gray-700">0.00</p>
+              </div>
+            </div>
+            <hr />
+            <p v-if="pieces > 0" class="flex justify-between my-5">
+              <span class="text-gray-400 font-semibold">Order Amount: </span
+              ><span
+                v-if="pieces && pieces < 3"
+                class="text-gray-700 font-semibold"
+                >USD {{ (total + shipping)?.toFixed(2) }}</span
+              >
+              <span v-else class="text-gray-700 font-semibold">
+                USD
+                {{ total?.toFixed(2) }}
+              </span>
+            </p>
+            <div>
+              <button
+                @click="handleOrder"
+                class="focus:outline-none py-2 flex justify-center items-center cursor-pointer w-full mx-auto text-pink-500 bg-white hover:text-pink-600 font-semibold shadow"
+              >
+                Order Now
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="xl:col-span-3">
           <div
             class="border-b-2 border-gray-200"
@@ -15,44 +55,6 @@
             :key="item.productId"
           >
             <Cart :item="item" @order="emitOrder" />
-          </div>
-        </div>
-
-        <div v-if="pieces > 0" class="xl:col-span-1 p-3 bg-white">
-          <div class="flex justify-between my-5">
-            <p class="text-gray-400 underline">{{ pieces }}Pieces</p>
-            <p class="text-gray-700">{{ total?.toFixed(2) }}</p>
-          </div>
-          <div class="my-5">
-            <div v-if="pieces < 3" class="flex justify-between">
-              <p class="text-gray-400">Shipping</p>
-              <p class="text-gray-700">{{ shipping.toFixed(2) }}</p>
-            </div>
-            <div v-else class="flex justify-between">
-              <p class="text-gray-400">Free Shipping</p>
-              <p class="text-gray-700">0.00</p>
-            </div>
-          </div>
-          <hr />
-          <p class="flex justify-between my-5">
-            <span class="text-gray-400 font-semibold">Order Amount: </span
-            ><span
-              v-if="pieces && pieces < 3"
-              class="text-gray-700 font-semibold"
-              >USD {{ (total + shipping)?.toFixed(2) }}</span
-            >
-            <span v-else class="text-gray-700 font-semibold">
-              USD
-              {{ total?.toFixed(2) }}
-            </span>
-          </p>
-          <div>
-            <button
-              @click="handleOrder"
-              class="focus:outline-none py-2 flex justify-center items-center cursor-pointer w-full mx-auto text-pink-500 bg-white hover:text-pink-600 font-semibold shadow"
-            >
-              Order Now
-            </button>
           </div>
         </div>
       </div>

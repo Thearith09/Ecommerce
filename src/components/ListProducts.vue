@@ -38,15 +38,16 @@
       </div>
     </div>
   </div>
-
   <div v-if="category" class="sm:px-10 my-5 w-full px-5">
     <div
       v-for="(product, index) in category.products"
       v-show="index >= previous && index < next"
       :key="product.id"
-      class="flex items-center space-x-2 py-5 h-56 transition transform hover:translate-y-2 border-b-2 border-gray-200"
+      class="flex flex-col sm:flex-row items-center space-x-2 py-5 h-auto sm:h-56 transition transform hover:translate-y-2 border-b-2 border-gray-200"
     >
-      <div class="relative w-2/3 md:w-1/2 xl:w-1/3 h-full">
+      <div
+        class="relative w-full h-48 mb-2 sm:mb-0 sm:w-2/3 md:w-1/2 xl:w-1/3 "
+      >
         <router-link
           :to="{
             name: 'ProductDetails',
@@ -63,18 +64,17 @@
           />
         </router-link>
         <h3
-          v-if="product.discount > 0 && windowWidth > 768"
+          v-if="product.discount > 0"
           class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
         >
           {{ product.discount }}% OFF
         </h3>
       </div>
-
-      <div class="h-full lg:w-full xl:px-5">
+      <div class="h-full w-full xl:px-5">
         <div
           class="flex flex-col lg:flex-row justify-between items-start h-full space-y-2 text-gray-400 sm:space-y-3 sm:px-5 md:px-10"
         >
-          <div class="space-y-2 sm:space-y-4">
+          <div class="space-y-2 lg:space-y-4">
             <div class="leading-none space-y-1">
               <p class="text-gray-800 font-semibold inline-block">
                 {{ product.productName }}
@@ -84,37 +84,15 @@
 
             <p>In Stock</p>
 
-            <div class="flex justify-between items-center">
-              <div class="flex items-center space-x-2 ">
-                <p v-for="size in product.sizes" :key="size">
-                  <span class="text-gray-400 font-semibold uppercase">{{
-                    size
-                  }}</span>
-                </p>
-              </div>
-              <div
-                v-if="user?.admin && windowWidth < 1024"
-                class="flex space-x-3"
-              >
-                <button
-                  @click="handleEditProduct(product)"
-                  class="focus:outline-none hover:text-pink-600 text-pink-500"
-                >
-                  Edit
-                </button>
-                <button
-                  @click="handleRemoveProduct(product)"
-                  class="focus:outline-none hover:text-pink-600 text-pink-500"
-                >
-                  Remove
-                </button>
-              </div>
+            <div class="flex items-center space-x-2 ">
+              <p v-for="size in product.sizes" :key="size">
+                <span class="text-gray-400 font-semibold uppercase">{{
+                  size
+                }}</span>
+              </p>
             </div>
 
-            <div
-              v-if="user?.admin && windowWidth > 1024"
-              class="flex space-x-3"
-            >
+            <div v-if="user?.admin" class="flex space-x-3">
               <button
                 @click="handleEditProduct(product)"
                 class="focus:outline-none text-pink-500 hover:text-pink-600"
@@ -193,7 +171,6 @@ import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import { computed, onMounted, watch } from "vue";
-
 export default {
   components: {
     AddProduct,
@@ -208,7 +185,6 @@ export default {
     const product = ref(null); //for updating product
     const cartIds = ref([]); //dynamic apply style to button heart once user add or not by catching item id
     const items = computed(() => cart.value && cart.value.items); //watching items change
-
     const router = useRouter();
     const { user } = getUser();
     const { error, document: category } = getDocument("inventory", props.id);
@@ -217,44 +193,35 @@ export default {
       "carts",
       user.value?.uid
     );
-
     const onResize = () => {
       windowWidth.value = window.innerWidth;
     };
-
     onMounted(() => {
       window.addEventListener("resize", onResize);
     });
-
     watch(category, () => {
       emit("emitProducts", category.value);
     });
-
     watch(items, () => {
       let temp = [];
       for (let item of items.value) temp.push(item.productId);
       cartIds.value = temp;
     });
-
     const mountComponent = (component) => {
       currentComponent.value = component;
     };
-
     const unmountComponent = () => {
       currentComponent.value = null;
       product.value = null;
     };
-
     const handleEditProduct = (prod) => {
       product.value = prod;
       mountComponent("AddProduct");
     };
-
     const handleRemoveProduct = (prod) => {
       product.value = prod;
       mountComponent("DeleteProductConfirmation");
     };
-
     const handleAddToCart = async (product) => {
       if (!user.value) {
         router.push({ name: "Login" });
@@ -265,7 +232,6 @@ export default {
         const items = cart.value?.items.filter(
           (item) => item.productId != product.id
         );
-
         if (item?.length > 0) {
           await updateCart({
             items: [...items],
@@ -291,7 +257,6 @@ export default {
         }
       }
     };
-
     return {
       cart,
       error,
@@ -310,5 +275,4 @@ export default {
   },
 };
 </script>
-
 <style></style>

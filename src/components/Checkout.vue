@@ -1,5 +1,5 @@
 <template>
-  <div v-if="paginateOrders" class="h-full my-10">
+  <div v-if="paginateOrders" class="h-full my-5">
     <div class="mx-10" v-if="orders?.length > 0">
       <div
         class="text-gray-700 font-bold text-2xl border-b-2 border-gray-200 py-5"
@@ -8,57 +8,134 @@
       </div>
     </div>
 
-    <div class="mx-10 my-10">
-      <div v-for="(order, index) in paginateOrders" :key="order.id">
+    <div class="mx-10">
+      <!--for screen greater than 768px-->
+      <div v-if="windowWidth >= 768">
+        <div class="grid grid-cols-6 gap-1 items-center pt-5">
+          <div></div>
+          <div class="text-gray-700 font-semibold">Customer</div>
+          <div class="col-span-2 text-center text-gray-700 font-semibold">
+            Date
+          </div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+
         <div
-          class="my-5 h-16 border-b-2 border-t-2 border-gray-200 transform transition hover:translate-y-1 grid grid-cols-6 gap-1 items-center px-2"
+          class="my-5"
+          v-for="(order, index) in paginateOrders"
+          :key="order.id"
         >
-          <div class="col-span-1 ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-pink-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          <div
+            class="h-16 border-b-2 border-t-2 border-gray-200 transform transition hover:translate-y-1 grid grid-cols-6 gap-1 items-center"
+          >
+            <div class="col-span-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-pink-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+            </div>
+            <div class="col-span-1 leading-none">
+              <span class="block text-pink-500 font-semibold">{{
+                order.orderedInfo?.name
+              }}</span>
+              <span class="text-gray-700 text-sm">{{
+                order.orderedInfo?.tel
+              }}</span>
+            </div>
+            <div class="col-span-2 text-gray-700 font-semibold text-center">
+              {{ date(order.createdAt?.toDate()).format("dddd D, MMMM YYYY") }}
+            </div>
+            <div
+              @click="handlePrint(order.orderedInfo, orders?.length, index)"
+              class="col-span-1 border-2 py-1 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
+              Invoice
+            </div>
+            <div
+              @click="handleClearOrder(order)"
+              class="col-span-1 border-2 py-1 px-2 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
+            >
+              Clear
+            </div>
           </div>
-          <div class="col-span-1 leading-none px-2">
-            <span class="block text-pink-500 font-semibold">{{
-              order.orderedInfo?.name
-            }}</span>
-            <span class="text-gray-700 text-sm">{{
-              order.orderedInfo?.tel
-            }}</span>
-          </div>
-          <div class="col-span-2 text-gray-700 font-semibold text-center">
-            {{ date(order.createdAt?.toDate()).format("dddd D, MMMM YYYY") }}
-          </div>
+        </div>
+      </div>
+      <!--end for screen greater than 768px-->
+
+      <!--for screen less than 768px-->
+      <div v-if="windowWidth < 768">
+        <div
+          v-for="(order, index) in paginateOrders"
+          :key="order.id"
+          class="border-b-2 border-gray-200"
+        >
           <div
-            @click="handlePrint(order.orderedInfo, orders?.length, index)"
-            class="col-span-1 border-2 py-1 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
+            class="my-5 transform transition hover:translate-y-1 items-center"
           >
-            Invoice
-          </div>
-          <div
-            @click="handleClearOrder(order)"
-            class="col-span-1 border-2 py-1 px-2 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
-          >
-            Clear
+            <div>
+              <div class="flex justify-between">
+                <div class="space-y-4 w-full">
+                  <div>Customer</div>
+                  <div>Customer Contact</div>
+                  <div>Date</div>
+                </div>
+
+                <div class="space-y-4 w-full">
+                  <div>
+                    <span class="block text-pink-500 font-semibold">{{
+                      order.orderedInfo?.name
+                    }}</span>
+                  </div>
+                  <div>
+                    <span class="text-gray-700 font-semibold">{{
+                      order.orderedInfo?.tel
+                    }}</span>
+                  </div>
+                  <div class="text-gray-700 font-semibold">
+                    {{
+                      date(order.createdAt?.toDate()).format(
+                        "dddd D, MMMM YYYY"
+                      )
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              @click="handlePrint(order.orderedInfo, orders?.length, index)"
+              class="my-3 border-2 py-1 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
+            >
+              Invoice
+            </div>
+
+            <div
+              @click="handleClearOrder(order)"
+              class="border-2 py-1 px-2 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
+            >
+              Clear
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <!--end for screen less than 768px-->
 
     <div
       v-if="orders?.length > 0"
-      class="flex items-center w-1/4 mx-auto space-x-2"
+      class="flex items-center w-1/4 mx-auto space-x-2 py-5 md:pb-10"
     >
       <button
         @click="handlePrevious(orders.length)"
@@ -128,7 +205,7 @@ import PrintInvoice from "@/components/PrintInvoice.vue";
 import getCollection from "@/composables/getCollection";
 import DeleteOrderConfirmation from "@/components/DeleteOrderConfirmation.vue";
 import { ref } from "@vue/reactivity";
-import { watchEffect } from "@vue/runtime-core";
+import { onMounted, watchEffect } from "@vue/runtime-core";
 
 export default {
   components: {
@@ -148,6 +225,7 @@ export default {
     const next = ref(1);
     const indexActive = ref(1);
     const paginateOrders = ref(null);
+    const windowWidth = ref(window.innerWidth);
 
     const {
       documents: ordersCollection,
@@ -157,6 +235,14 @@ export default {
 
     watchEffect(() => {
       paginateOrders.value = ordersCollection?.value;
+    });
+
+    const onResize = () => {
+      windowWidth.value = window.innerWidth;
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", onResize);
     });
 
     const handlePrint = (orderedInfo, length, index) => {
@@ -215,6 +301,7 @@ export default {
       indexActive,
       handlePrevious,
       handleNext,
+      windowWidth,
     };
   },
 };

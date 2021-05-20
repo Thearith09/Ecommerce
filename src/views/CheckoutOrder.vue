@@ -4,10 +4,8 @@
       <Navbar />
     </div>
 
-    <div
-      class="mb-auto grid grid-cols-layout-list-carts md:grid-cols-none h-auto"
-    >
-      <div class="bg-white my-5">
+    <div class="mb-auto h-auto">
+      <div class="bg-white">
         <Checkout :orders="orders" />
       </div>
     </div>
