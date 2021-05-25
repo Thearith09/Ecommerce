@@ -31,4 +31,7 @@
   .activePaginate {
     @apply border-b-2 border-pink-500;
   }
+  .activeLanguage {
+    @apply border-2 border-gray-400;
+  }
 }

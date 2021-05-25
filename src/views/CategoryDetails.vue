@@ -3,7 +3,7 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div class="mx-5 my-12 h-auto">
         <component
           :is="currentComponent"

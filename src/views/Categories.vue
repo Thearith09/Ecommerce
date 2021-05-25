@@ -3,7 +3,7 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <component
         :is="currentComponent"
         @close="currentComponent = ''"
@@ -14,7 +14,7 @@
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row gap-5 m-5"
       >
         <div
-          class="h-64 hover:shadow-lg bg-white relative transform transition hover:translate-y-2 cursor-pointer"
+          class="h-64 hover:shadow bg-white relative transform transition hover:translate-y-2 cursor-pointer rounded"
           v-for="category in categories"
           :key="category.id"
         >

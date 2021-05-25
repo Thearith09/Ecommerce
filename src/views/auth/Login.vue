@@ -3,7 +3,7 @@
     <div>
       <Navbar />
     </div>
-    <div class="my-5 mb-auto md:relative">
+    <div class="my-5 mb-auto md:relative 2xl:w-3/4 2xl:mx-auto">
       <div v-if="windowWidth >= 768">
         <img
           class="lg:w-full object-cover object-center"

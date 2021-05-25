@@ -4,7 +4,7 @@
       <Navbar />
     </div>
 
-    <div class="mb-auto">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div class="flex h-auto my-5">
         <form
           class="flex flex-col w-full bg-white p-5 py-10 space-x-1 space-y-5 items-center justify-start sm:flex-row sm:justify-center sm:space-y-0 md:mx-auto md:space-x-5 lg:p-10"

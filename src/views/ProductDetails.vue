@@ -4,7 +4,7 @@
       <Navbar />
     </div>
 
-    <div class="mb-auto my-5">
+    <div class="mb-auto my-5 2xl:w-3/4 2xl:mx-auto">
       <div v-if="category">
         <div
           class="h-auto"

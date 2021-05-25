@@ -32,7 +32,7 @@
 
       <div v-if="category?.products.length > 0 && !search" class="h-auto mb-5">
         <div class="font-bold text-xl text-gray-700 uppercase mb-4">
-          Most Popular
+          {{ $t("MOST POPULAR") }}
         </div>
         <Card :category="category" />
       </div>

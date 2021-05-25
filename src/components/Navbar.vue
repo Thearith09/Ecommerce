@@ -85,7 +85,7 @@
     <!-- screen greater than 640px without user-->
     <div
       v-if="!user && windowWidth >= 640"
-      class="grid sm:grid-cols-6 sm:space-x-5 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 items-center"
+      class="grid sm:grid-cols-6 sm:space-x-5 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 2xl:grid-cols-12 items-center mr-3"
     >
       <div class="col-span-1">
         <router-link :to="{ name: 'Home' }">
@@ -125,7 +125,7 @@
       </div>
 
       <div
-        class="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6 flex justify-between items-center relative"
+        class="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6 2xl:col-span-9 flex justify-between items-center relative"
       >
         <svg
           fill="none"
@@ -148,7 +148,7 @@
         />
       </div>
 
-      <div class="col-span-1 flex justify-end items-center w-full pr-5">
+      <div class="col-span-1 flex justify-end items-center w-full">
         <router-link
           class="hover:text-pink-600 inline-block focus:outline-none cursor-pointer text-pink-500"
           :to="{ name: 'Login' }"
@@ -347,7 +347,7 @@
                   Purchase History
                 </p>
               </div>
-              <div class="px-5 py-3 bg-white border-2 border-gray-200">
+              <div class="px-5 py-3 bg-white border-t-2 border-gray-200">
                 <span
                   @click="handleLogout"
                   class="text-gray-400 cursor-pointer hover:text-pink-500 flex items-center space-x-1"
@@ -367,8 +367,8 @@
 
     <!--screen greater than 640px within user-->
     <div
-      v-if="user && !user?.admin && windowWidth >= 640"
-      class="grid sm:grid-cols-6 sm:space-x-5 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 items-center"
+      v-if="user && windowWidth >= 640"
+      class="grid sm:grid-cols-6 sm:space-x-5 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 2xl:grid-cols-12 items-center mr-3"
     >
       <div class="col-span-1">
         <router-link :to="{ name: 'Home' }">
@@ -408,7 +408,7 @@
       </div>
 
       <div
-        class="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6 flex justify-between items-center relative"
+        class="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6 2xl:col-span-9 flex justify-between items-center relative"
       >
         <svg
           fill="none"
@@ -431,17 +431,51 @@
         />
       </div>
 
-      <div
-        class="col-span-1 items-center flex justify-end space-x-3 lg:space-x-5 w-full pr-5"
-      >
-        <div class="flex justify-end">
+      <div class="col-span-1 flex justify-between items-center w-full">
+        <div v-if="!user.admin">
+          <img
+            class="w-9 cursor-pointer"
+            src="@/assets/images/kh-flag-256.png"
+            alt="combodia flag icon"
+          />
+        </div>
+        <div v-if="user?.admin" class="flex">
+          <router-link
+            class="relative cursor-pointer items-center"
+            :to="{ name: 'CheckoutOrder' }"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 inline-block text-pink-500 hover:text-pink-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+
+            <div
+              v-if="orders?.length > 0"
+              class="absolute -top-1 left-3 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
+            >
+              {{ orders.length }}
+            </div>
+          </router-link>
+        </div>
+
+        <div class="flex">
           <router-link
             class="relative cursor-pointer items-center"
             :to="{ name: 'CartDetails' }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-10 lg:h-11 inline-block p-2 text-pink-500 hover:text-pink-600"
+              class="h-7 inline-block text-pink-500 hover:text-pink-600"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -455,7 +489,7 @@
             </svg>
             <div
               v-if="cart && cart.items.length > 0"
-              class="absolute top-0 left-4 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
+              class="absolute -top-1 left-3 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
             >
               {{ cart.items.length }}
             </div>
@@ -463,7 +497,7 @@
         </div>
 
         <div
-          class="group relative  h-7 w-7 lg:h-9 lg:w-9 bg-pink-500 text-white rounded-full font-semibold flex justify-center items-center hover:bg-pink-600"
+          class="group relative h-7 w-7 bg-pink-500 hover:bg-pink-600 text-white rounded-full font-semibold flex justify-center items-center"
         >
           <span class="uppercase">{{ user.displayName[0] }}</span>
           <!--Dropdown profile-->
@@ -484,42 +518,102 @@
                   {{ user.displayName[0] }}
                 </h1>
               </div>
+
               <div class="ml-2 leading-none text-gray-700">
-                <p>{{ user.displayName }}</p>
+                <p class="font-bold">{{ user.displayName }}</p>
                 <span class="text-sm text-gray-400">{{ user.email }}</span>
               </div>
             </div>
-            <div class="px-7 py-5 space-y-3 bg-white">
+
+            <div v-if="!user.admin" class="px-7 py-5 space-y-3 bg-white">
               <p
                 class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
-                <!-- <img
-                  class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
-                  src="@/assets/images/phone.png"
-                />{{ myProfile.telephone }} -->
                 Account Settings
               </p>
               <p
                 class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
-                <!-- <img
-                  class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
-                  src="@/assets/images/telegram.png"
-                />{{ myProfile.telegram }} -->
                 Order History
               </p>
               <p
                 class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
-                <!-- <img
-                  class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
-                  src="@/assets/images/fb.png"
-                />
-                {{ myProfile.facebook }} -->
                 Purchase History
               </p>
             </div>
-            <div class="px-5 py-3 bg-white border-2 border-gray-200">
+
+            <div v-else class="px-7 py-5 space-y-3 bg-white">
+              <div
+                class="flex text-sm justify-between text-gray-700 hover:text-pink-500 cursor-pointer"
+              >
+                <p>
+                  Account Settings
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+
+              <div
+                class="flex text-sm justify-between text-gray-700 hover:text-pink-500 cursor-pointer"
+              >
+                <p>
+                  Add Category
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+
+              <div
+                class="flex text-sm justify-between text-gray-700 hover:text-pink-500 cursor-pointer"
+              >
+                <p>
+                  Promote as Admin
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+
+              <div
+                class="text-sm text-gray-700 hover:text-pink-500 cursor-pointer"
+              >
+                <p>
+                  Reports
+                </p>
+              </div>
+            </div>
+
+            <div class="px-5 py-3 bg-white border-t-2 border-gray-200">
               <span
                 @click="handleLogout"
                 class="text-gray-400 cursor-pointer hover:text-pink-500 flex items-center space-x-1"
@@ -537,9 +631,9 @@
     <!--end screen greater than 640px within user-->
 
     <!--screen greater than 640px for admin-->
-    <div
+    <!-- <div
       v-if="user?.admin && windowWidth > 640"
-      class="grid sm:grid-cols-5 sm:space-x-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 items-center"
+      class="grid sm:grid-cols-5 sm:space-x-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-12 items-center mr-3"
     >
       <div class="col-span-1">
         <router-link :to="{ name: 'Home' }">
@@ -551,7 +645,7 @@
       </div>
 
       <div
-        class="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6 flex justify-between items-center relative"
+        class="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6 2xl:col-start-2 2xl:col-end-12 flex justify-between items-center relative"
       >
         <svg
           fill="none"
@@ -574,7 +668,7 @@
         />
       </div>
 
-      <div class="col-span-1 items-center flex justify-between w-full pr-3">
+      <div class="col-span-1 items-center flex justify-between w-full">
         <div class="flex justify-end">
           <router-link
             class="relative cursor-pointer items-center"
@@ -636,7 +730,7 @@
           class="group relative  h-7 w-7 lg:h-9 lg:w-9 bg-pink-500 text-white rounded-full font-semibold flex justify-center items-center hover:bg-pink-600"
         >
           <span class="uppercase">{{ user.displayName[0] }}</span>
-          <!--Dropdown profile-->
+
           <div
             class="group absolute -bottom-9 -left-4 h-10 w-16 bg-transparent uppercase z-20"
           ></div>
@@ -663,33 +757,20 @@
               <p
                 class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
-                <!-- <img
-                  class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
-                  src="@/assets/images/phone.png"
-                />{{ myProfile.telephone }} -->
                 Account Settings
               </p>
               <p
                 class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
-                <!-- <img
-                  class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
-                  src="@/assets/images/telegram.png"
-                />{{ myProfile.telegram }} -->
                 Order History
               </p>
               <p
                 class="text-gray-700 text-sm font-normal hover:text-pink-500 cursor-pointer"
               >
-                <!-- <img
-                  class="w-8 h-8 rounded-full mr-1 inline-block bg-white"
-                  src="@/assets/images/fb.png"
-                />
-                {{ myProfile.facebook }} -->
                 Purchase History
               </p>
             </div>
-            <div class="px-5 py-3 bg-white border-2 border-gray-200">
+            <div class="px-5 py-3 bg-white border-t-2 border-gray-200">
               <span
                 @click="handleLogout"
                 class="text-gray-400 cursor-pointer hover:text-pink-500 flex items-center space-x-1"
@@ -703,14 +784,14 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!--end screen greater than 640px for admin-->
   </div>
 
   <!--sub navbar for admin-->
-  <div
+  <!-- <div
     v-if="user?.admin"
-    class="bg-white text-gray-400 shadow-lg border-t-2 border-gray-100 grid grid-cols-4 space-x-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9"
+    class="flex justify-center items-center space-x-10 bg-white text-gray-400 shadow border-t-2 border-gray-100"
   >
     <div
       v-if="windowWidth > 640"
@@ -737,7 +818,7 @@
       <span class="material-icons material-icons-outlined">
         list
       </span>
-      <span>Categories</span>
+      <span>{{ $t("Categories") }}</span>
       <span
         class="hidden group-hover:block material-icons material-icons-outlined"
       >
@@ -769,13 +850,15 @@
           <router-link :to="{ name: 'Categories' }">All Categories</router-link>
         </h4>
       </div>
-      <span>Categories</span>
+      <span>{{ $t("Categories") }}</span>
     </div>
 
     <div
       class="group relative hover:text-pink-500 focus:outline-none h-12 flex justify-center sm:pl-2 cursor-pointer items-center"
     >
-      <span class="break-normal leading-none text-center">Add Category</span>
+      <span class="break-normal leading-none text-center">{{
+        $t("Add Category")
+      }}</span>
 
       <div
         class="absolute w-96 text-thin left-0 text-gray-400 hidden group-hover:block bg-white border-t-2 border-gray-100 top-12 z-10 shadow-lg"
@@ -821,7 +904,9 @@
     <div
       class="group relative hover:text-pink-500 focus:outline-none flex justify-center h-12 cursor-pointer items-center"
     >
-      <span class="text-center leading-none break-normal">Promote Admin</span>
+      <span class="text-center leading-none break-normal">{{
+        $t("Promote Admin")
+      }}</span>
       <div
         class="absolute w-96 text-thin left-0 text-gray-400 hidden group-hover:block bg-white border-t-2 border-gray-100 top-12 z-10 shadow-lg"
       >
@@ -850,10 +935,10 @@
       class="col-span-1 hover:text-pink-500 focus:outline-none flex justify-center pr-6 h-12 cursor-pointer items-center"
     >
       <router-link :to="{ name: 'Reports' }">
-        <span class="text-center">Reports</span>
+        <span class="text-center">{{ $t("Reports") }}</span>
       </router-link>
     </div>
-  </div>
+  </div> -->
   <!--end sub navbar for admin-->
 
   <component :is="currentComponent" @close="currentComponent = ''" />

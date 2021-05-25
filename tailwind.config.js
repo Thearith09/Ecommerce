@@ -33,9 +33,7 @@ module.exports = {
       },
       screens: {
         // for small phone screen
-        '4sm': '370px',
-        '3sm': '390px',
-        '2sm': '430px',
+        '2sm': '420px',
         // => @media (min-width: 640px) { ... }
   
         // 'laptop': '1024px',

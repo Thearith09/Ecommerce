@@ -2,32 +2,25 @@
   <div
     class="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-40"
   >
-    <div class="bg-white shadow w-full sm:w-3/4 md:w-3/4 lg:w-1/2">
-      <div class="py-3 px-2 flex justify-between items-center">
+    <div
+      class="bg-white shadow w-full sm:w-3/4 md:w-3/4 lg:w-1/2 2xl:w-1/3 rounded"
+    >
+      <div class="py-3 px-2 flex justify-between items-end">
         <span class="font-semibold text-gray-700 text-md">New Product</span>
-        <div
+
+        <svg
           @click="handleClose"
-          class="relative group bg-red-500 border cursor-pointer shadow w-4 h-4 rounded-full flex justify-center items-center"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-gray-400 cursor-pointer"
+          viewBox="0 0 20 20x"
+          fill="currentColor"
         >
-          <svg
-            class="w-2 h-2"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-          <span
-            class="text-gray-900 text-sm absolute bottom-3 -right-2 hidden group-hover:block"
-            >close</span
-          >
-        </div>
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
       </div>
 
       <div class="bg-white h-auto my-5 px-5">

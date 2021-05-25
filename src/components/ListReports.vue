@@ -11,7 +11,7 @@
           >
 
           <span
-            class="text-pink-500 font-bold border-2 border-gray-200 p-5 text-xl"
+            class="text-pink-500 rounded font-bold border-2 border-gray-200 p-5 text-xl"
             >USD {{ total.toFixed(2) }}</span
           >
         </div>

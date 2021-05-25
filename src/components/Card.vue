@@ -4,7 +4,7 @@
   >
     <div
       :class="{ hideImage: end >= category.products.length - 1 }"
-      class="absolute -right-6 top-16 z-10"
+      class="absolute -right-5 top-16 z-10"
     >
       <div
         @click="handleNext"
@@ -12,7 +12,7 @@
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-10 w-10"
+          class="h-8 w-8"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -24,6 +24,7 @@
         </svg>
       </div>
     </div>
+
     <div
       v-for="(product, index) in category.products"
       :key="product.id"
@@ -79,7 +80,6 @@
                     (product.price * product.discount) / 100
                   ).toFixed(2)
                 }}
-                <span class="text-gray-400 font-normal">/piece</span>
               </span>
             </div>
             <div class="text-gray-400">
@@ -101,9 +101,10 @@
         </div>
       </div>
     </div>
+
     <div
       :class="{ hideImage: start == 0 }"
-      class="absolute -left-6 top-16 z-10"
+      class="absolute -left-5 top-16 z-10"
     >
       <div
         @click="handlePrevious"
@@ -111,7 +112,7 @@
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-10 w-10"
+          class="h-8 w-8"
           viewBox="0 0 20 20"
           fill="currentColor"
         >

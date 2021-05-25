@@ -2,29 +2,25 @@
   <div
     class="flex justify-center fixed items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20"
   >
-    <div class="relative bg-white w-full md:w-1/2 h-auto shadow">
+    <div
+      class="relative bg-white w-full md:w-2/3 lg:w-1/2 2xl:w-1/3 h-auto shadow rounded"
+    >
       <div
         @click="handleCancel"
-        class="absolute right-0 top-0 group bg-red-500 border cursor-pointer shadow w-4 h-4 rounded-full flex justify-center items-center"
+        class="absolute right-0 top-0 group cursor-pointer flex justify-center items-center"
       >
         <svg
-          class="w-2 h-2"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          class="h-5 w-5 text-gray-400 cursor-pointer"
+          viewBox="0 0 20 20x"
+          fill="currentColor"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
           />
         </svg>
-        <span
-          class="text-gray-900 text-sm absolute right-5 hidden group-hover:block"
-          >close</span
-        >
       </div>
       <div class="font-bold p-5 text-gray-700 flex justify-center items-center">
         <p>

@@ -63,12 +63,12 @@
                 v-if="item.discount > 0"
                 class="w-full text-red-600 font-semibold"
                 >USD
-                {{ (item.price - (item.price * item.discount) / 100).toFixed(2)
-                }}<span class="text-gray-400 font-normal"> /piece</span></span
+                {{
+                  (item.price - (item.price * item.discount) / 100).toFixed(2)
+                }}</span
               >
               <span v-else class="w-full text-gray-700 font-semibold"
-                >USD {{ Number(item.price).toFixed(2)
-                }}<span class="text-gray-400 font-normal"> /piece</span></span
+                >USD {{ Number(item.price).toFixed(2) }}</span
               >
             </div>
             <div class="col-span-2">
@@ -237,12 +237,12 @@
               v-if="item.discount > 0"
               class="w-full text-red-600 font-semibold"
               >USD
-              {{ (item.price - (item.price * item.discount) / 100).toFixed(2)
-              }}<span class="text-gray-400 font-normal"> /piece</span></span
+              {{
+                (item.price - (item.price * item.discount) / 100).toFixed(2)
+              }}</span
             >
             <span v-else class="w-full text-gray-700 font-semibold"
-              >USD {{ Number(item.price).toFixed(2)
-              }}<span class="text-gray-400 font-normal"> /piece</span></span
+              >USD {{ Number(item.price).toFixed(2) }}</span
             >
           </div>
         </div>
@@ -253,12 +253,13 @@
           {{ item.productName }}
         </h3>
         <span v-if="item.discount > 0" class="w-full text-red-600 font-semibold"
-          >USD {{ (item.price - (item.price * item.discount) / 100).toFixed(2)
-          }}<span class="text-gray-400 font-normal"> /piece</span></span
+          >USD
+          {{
+            (item.price - (item.price * item.discount) / 100).toFixed(2)
+          }}</span
         >
         <span v-else class="w-full text-gray-700 font-semibold"
-          >USD {{ Number(item.price).toFixed(2)
-          }}<span class="text-gray-400 font-normal"> /piece</span></span
+          >USD {{ Number(item.price).toFixed(2) }}</span
         >
       </div>
 

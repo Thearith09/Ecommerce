@@ -2,8 +2,10 @@
   <div
     class="flex justify-center fixed items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20"
   >
-    <div class="bg-white w-full sm:w-1/2 h-auto shadow-lg">
-      <div class="p-5 font-bold text-gray-700 flex justify-center items-center">
+    <div class="bg-white p-5 w-full sm:w-1/2 2xl:w-1/3 h-auto shadow rounded">
+      <div
+        class="pb-5 font-bold text-gray-700 flex justify-center items-center"
+      >
         <p>
           Once you remove this
           <span class="text-pink-500">[{{ category.categoryName }}]</span>
@@ -11,16 +13,16 @@
           sure to removing it?
         </p>
       </div>
-      <div class="flex justify-start px-5">
+      <div class="flex justify-start">
         <div class="flex justify-between">
           <button
-            class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 focus:outline-none"
+            class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 focus:outline-none rounded-l"
             @click="handleCancel"
           >
             NO
           </button>
           <button
-            class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 focus:outline-none"
+            class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 focus:outline-none rounded-r"
             @click="handleRemove"
           >
             YES

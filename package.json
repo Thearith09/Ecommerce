@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
     "@tailwindcss/line-clamp": "0.2.0",
@@ -16,10 +17,12 @@
     "print-js": "^1.6.0",
     "uuid": "8.3.2",
     "vue": "^3.0.0",
+    "vue-i18n": "^9.1.0",
     "vue-router": "^4.0.0-0",
     "vueperslides": "3.2.0"
   },
   "devDependencies": {
+    "@intlify/vue-i18n-loader": "^2.1.0",
     "@tailwindcss/postcss7-compat": "^2.1.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
@@ -28,6 +31,7 @@
     "autoprefixer": "^9.8.6",
     "eslint-plugin-vue": "7.9.0",
     "postcss": "7.0.35",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0",
+    "vue-cli-plugin-i18n": "2.1.0"
   }
 }

@@ -3,7 +3,7 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto my-5">
+    <div class="mb-auto my-5 2xl:w-3/4 2xl:mx-auto">
       <div
         v-if="cart && cart.items.length > 0"
         class="grid xl:grid-cols-4 gap-4"
@@ -61,7 +61,7 @@
 
       <div
         v-if="!cart || cart?.items.length <= 0"
-        class="relative w-full h-auto my-10 p-5 md:w-3/4 xl:w-1/2 md:mx-auto lg:my-20 border-2 border-gray-200 bg-white"
+        class="relative rounded w-full h-auto my-10 p-5 md:w-3/4 xl:w-1/2 md:mx-auto lg:my-20 border-2 border-gray-200 bg-white"
       >
         <div class="flex justify-center mt-12">
           <svg
@@ -79,9 +79,11 @@
             />
           </svg>
         </div>
+
         <div class="text-gray-700 text-sm flex justify-center mt-7 mb-5">
           <h3>Your cart is empty. Keep shopping for your favorite products.</h3>
         </div>
+
         <div
           @click="handleNavigation"
           class="text-white p-3 mb-24 flex justify-center bg-pink-500 w-2/4 sm:w-1/4 mx-auto cursor-pointer"
