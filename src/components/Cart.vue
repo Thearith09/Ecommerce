@@ -29,7 +29,7 @@
           <div
             :class="{ invisiblePreAndNext: start == 0 }"
             @click="handlePreviousImage"
-            class="absolute top-2 left-4 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute top-2 left-4 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +77,7 @@
                   :class="{ frozen: qtys[index] <= 0 }"
                   :disabled="qtys[index] <= 0"
                   @click="handleDecrement(index, item)"
-                  class="border-2 p-1 focus:outline-none border-gray-100 inline-block text-gray-400 hover:bg-gray-100"
+                  class="border-2 p-1 focus:outline-none border-gray-100 inline-block text-gray-500 hover:bg-gray-100"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +103,7 @@
                 />
                 <button
                   @click="handleIncrement(index, item)"
-                  class="border-2 p-1 focus:outline-none border-gray-100 inline-block text-gray-400 cursor-pointer hover:bg-gray-100"
+                  class="border-2 p-1 focus:outline-none border-gray-100 inline-block text-gray-500 cursor-pointer hover:bg-gray-100"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +131,7 @@
                 >
                   <svg
                     @click="handlePreviousSize(index)"
-                    class="h-6 w-6 inline-block text-gray-400"
+                    class="h-6 w-6 inline-block text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                     fill="currentColor"
@@ -144,7 +144,7 @@
                   </svg>
                 </div>
                 <div
-                  class="text-gray-400"
+                  class="text-gray-500"
                   v-for="(size, i) in item.sizes"
                   :key="i"
                 >
@@ -167,7 +167,7 @@
                 >
                   <svg
                     @click="handleNextSize(index)"
-                    class="h-6 w-6 inline-block text-gray-400"
+                    class="h-6 w-6 inline-block text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                     fill="currentColor"
@@ -187,7 +187,7 @@
           <div
             :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
             @click="handleNextImage"
-            class="absolute bottom-11 left-4 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute bottom-11 left-4 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               class="h-6 w-6 inline-block"
@@ -268,7 +268,7 @@
           <div
             :class="{ invisiblePreAndNext: start == 0 }"
             @click="handlePreviousImage"
-            class="absolute -top-4 left-5 4sm:left-7 3sm:left-8 2sm:left-10 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute -top-4 left-5 4sm:left-7 3sm:left-8 2sm:left-10 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -304,7 +304,7 @@
                 :class="{ frozen: qtys[index] <= 1 }"
                 :disabled="qtys[index] <= 1"
                 @click="handleDecrement(index, item)"
-                class="border-2 p-1 h-10 focus:outline-none border-gray-100 inline-block text-gray-400 hover:bg-gray-100"
+                class="border-2 p-1 h-10 focus:outline-none border-gray-100 inline-block text-gray-500 hover:bg-gray-100"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -329,7 +329,7 @@
               <button
                 v-if="windowWidth > 640"
                 @click="handleIncrement(index, item)"
-                class="border-2 p-1 h-10 focus:outline-none border-gray-100 inline-block text-gray-400 cursor-pointer hover:bg-gray-100"
+                class="border-2 p-1 h-10 focus:outline-none border-gray-100 inline-block text-gray-500 cursor-pointer hover:bg-gray-100"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -357,7 +357,7 @@
               >
                 <svg
                   @click="handlePreviousSize(index)"
-                  class="h-6 w-6 inline-block text-gray-400"
+                  class="h-6 w-6 inline-block text-gray-500"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -370,7 +370,7 @@
                 </svg>
               </div>
               <div
-                class="text-gray-400"
+                class="text-gray-500"
                 v-for="(size, i) in item.sizes"
                 :key="i"
               >
@@ -393,7 +393,7 @@
               >
                 <svg
                   @click="handleNextSize(index)"
-                  class="h-6 w-6 inline-block text-gray-400"
+                  class="h-6 w-6 inline-block text-gray-500"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -411,7 +411,7 @@
           <div
             :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
             @click="handleNextImage"
-            class="absolute -bottom-3 left-5 4sm:left-7 3sm:left-8 2sm:left-10 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute -bottom-3 left-5 4sm:left-7 3sm:left-8 2sm:left-10 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               class="h-6 w-6 inline-block"

@@ -59,13 +59,13 @@
             </div>
             <div
               @click="handlePrint(order.orderedInfo, orders?.length, index)"
-              class="col-span-1 border-2 py-1 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
+              class="col-span-1 border-2 py-1 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-700 hover:text-pink-700 cursor-pointer"
             >
               Invoice
             </div>
             <div
               @click="handleClearOrder(order)"
-              class="col-span-1 border-2 py-1 px-2 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
+              class="col-span-1 border-2 py-1 px-2 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-700 hover:text-pink-700 cursor-pointer"
             >
               Clear
             </div>
@@ -116,14 +116,14 @@
 
             <div
               @click="handlePrint(order.orderedInfo, orders?.length, index)"
-              class="my-3 border-2 py-1 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
+              class="my-3 border-2 py-1 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-700 hover:text-pink-700 cursor-pointer"
             >
               Invoice
             </div>
 
             <div
               @click="handleClearOrder(order)"
-              class="border-2 py-1 px-2 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-600 hover:text-pink-600 cursor-pointer"
+              class="border-2 py-1 px-2 border-pink-500 text-pink-500 font-semibold text-center hover:border-pink-700 hover:text-pink-700 cursor-pointer"
             >
               Clear
             </div>
@@ -141,7 +141,7 @@
         @click="handlePrevious(orders.length)"
         :class="{ frozen: previous <= 0 }"
         :disabled="previous <= 0"
-        class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-600 items-center"
+        class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-700 items-center"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +172,7 @@
         @click="handleNext(orders.length)"
         :class="{ frozen: next >= Math.ceil(orders.length / 10) }"
         :disabled="next >= Math.ceil(orders.length / 10)"
-        class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-600 flex justify-center items-center"
+        class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-700 flex justify-center items-center"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -36,7 +36,7 @@
           <div class="flex">
             <button
               v-if="!isPending"
-              class="focus:outline-none hover:text-pink-600 hover:translate-x-2 transition transform shadow p-2 font-mono text-md bg-white text-pink-500"
+              class="focus:outline-none hover:text-pink-700 hover:translate-x-2 transition transform shadow p-2 font-mono text-md bg-white text-pink-500"
             >
               sign in
             </button>
@@ -51,7 +51,7 @@
             <p class="text-gray-800 font-thin">
               doesn't have account yet?<span
                 @click="handleNavigation"
-                class="ml-2 font-semibold text-pink-500 underline cursor-pointer hover:text-pink-400"
+                class="ml-2 font-semibold text-pink-500 underline cursor-pointer hover:text-pink-700"
                 >signup</span
               >
             </p>

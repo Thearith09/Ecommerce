@@ -7,38 +7,40 @@
     <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div class="flex h-auto my-5">
         <form
-          class="flex flex-col w-full bg-white p-5 py-10 space-x-1 space-y-5 items-center justify-start sm:flex-row sm:justify-center sm:space-y-0 md:mx-auto md:space-x-5 lg:p-10"
+          class="bg-white flex flex-col w-full p-2 sm:p-5 py-10 space-x-1 space-y-5 items-center justify-start sm:flex-row sm:justify-center sm:space-y-0 md:mx-auto md:space-x-5 lg:p-10"
           @submit.prevent="handleFilter"
         >
           <div class="w-full flex">
             <label
-              class="shadow w-1/4 sm:w-2/4 md:w-1/3 text-white bg-pink-500 flex items-center justify-center"
+              class="shadow w-1/4 md:w-1/3 text-white bg-pink-500 flex items-center justify-center"
               for="dateFrom"
-              >Date From</label
+              >From</label
             >
             <input
               v-model="dateFrom"
               id="dateFrom"
-              class="shadow p-2 w-3/4 text-gray-400 focus:outline-none"
+              class="shadow p-2 w-3/4 text-gray-500 focus:outline-none"
               type="date"
             />
           </div>
+
           <div class="w-full flex">
             <input
               v-model="dateTo"
               id="dateTo"
-              class="shadow p-2 w-3/4 text-gray-400 focus:outline-none"
+              class="shadow p-2 w-3/4 text-gray-500 focus:outline-none"
               type="date"
             />
             <label
-              class="shadow w-1/4 sm:w-2/4 md:w-1/3 text-white bg-pink-500 flex items-center justify-center"
+              class="shadow w-1/4 md:w-1/3 text-white bg-pink-500 flex items-center justify-center"
               for="dateFrom"
-              >Date To</label
+              >To</label
             >
           </div>
-          <div class="flex w-full sm:w-3/4 lg:w-2/4">
+
+          <div class="flex w-full sm:w-3/4">
             <button
-              class="text-pink-500 shadow p-2 space-x-2 hover:text-pink-600 w-full flex justify-center items-center focus:outline-none"
+              class="text-pink-500 shadow w-full p-2 space-x-2 hover:text-pink-700 flex justify-center items-center focus:outline-none"
             >
               <span class="material-icons"> filter_list </span>
               <span>Filter By Date</span>
@@ -46,6 +48,7 @@
           </div>
         </form>
       </div>
+
       <div class="h-auto">
         <component
           :is="currentComponent"

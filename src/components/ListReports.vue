@@ -136,7 +136,7 @@
           @click="handlePrevious(reports.length)"
           :class="{ frozen: previous <= 0 }"
           :disabled="previous <= 0"
-          class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-600 items-center"
+          class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-700 items-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +166,7 @@
           @click="handleNext(reports.length)"
           :class="{ frozen: next >= Math.ceil(reports.length / 10) }"
           :disabled="next >= Math.ceil(reports.length / 10)"
-          class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-600 flex justify-center items-center"
+          class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-700 flex justify-center items-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

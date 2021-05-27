@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-10 py-5 sm:py-10 flex flex-col sm:flex-row-reverse sm:space-y-0 bg-white shadow-lg h-auto"
+    class="px-10 py-5 sm:py-10 flex flex-col sm:flex-row-reverse sm:space-y-0 bg-white shadow-lg h-auto min-w-max sm:min-w-0"
   >
     <div class="pb-5 sm:pb-0 w-full sm:w-3/4 md:w-2/4 lg:w-3/4 xl:w-full">
       <div
@@ -30,7 +30,7 @@
         <h3 class="font-bold text-gray-700 mb-3">
           {{ $t("Customer Services") }}
         </h3>
-        <ul class="font-thin text-gray-500">
+        <ul class="text-gray-500">
           <li>Help Center</li>
           <li>Report Abuse</li>
           <li>Submit a Dispute</li>
@@ -39,7 +39,7 @@
 
       <div>
         <h3 class="font-bold text-gray-700 mb-3">{{ $t("About Us") }}</h3>
-        <ul class="font-thin text-gray-500">
+        <ul class="text-gray-500">
           <li>Help Center</li>
           <li>Report Abuse</li>
           <li>Submit a Dispute</li>

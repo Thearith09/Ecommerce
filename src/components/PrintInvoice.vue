@@ -171,7 +171,7 @@
         <div @click="handleCancel" class="absolute top-0 left-0 cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-400 cursor-pointer"
+            class="h-5 w-5 text-gray-500 cursor-pointer"
             viewBox="0 0 20 20x"
             fill="currentColor"
           >

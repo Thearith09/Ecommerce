@@ -21,7 +21,7 @@
         product is good, you have no business to be advertising it.
       </div>
       <div
-          class="h-8 w-20 lg:h-10 lg:w-24 text-gray-700 cursor-pointer hover:text-pink-500 uppercase text-xs font-semibold bg-white shadow flex justify-center items-center"
+          class="h-8 w-20 lg:h-10 lg:w-24 text-gray-700 cursor-pointer hover:text-pink-700 uppercase text-xs font-semibold bg-white shadow flex justify-center items-center"
         >
           Shop Now
         </div>

@@ -12,7 +12,7 @@
         </div>
         <div
           v-if="user?.admin"
-          class="fixed z-10 right-20 top-40 2xl:right-60 text-pink-500 cursor-pointer hover:text-pink-600 h-12 w-12 focus:outline-none"
+          class="fixed z-10 right-20 2xl:right-64 text-pink-500 cursor-pointer hover:text-pink-700 h-12 w-12 focus:outline-none"
         >
           <svg
             @click="mountComponent('AddProduct')"
@@ -38,6 +38,7 @@
       </div>
     </div>
   </div>
+
   <div v-if="category" class="sm:px-10 my-5 w-full px-5">
     <div
       v-for="(product, index) in category.products"
@@ -72,7 +73,7 @@
       </div>
       <div class="h-full w-full xl:px-5">
         <div
-          class="flex flex-col lg:flex-row justify-between items-start h-full space-y-2 text-gray-400 sm:space-y-3 sm:px-5 md:px-10"
+          class="flex flex-col lg:flex-row justify-between items-start h-full space-y-2 text-gray-500 sm:space-y-3 sm:px-5 md:px-10"
         >
           <div class="space-y-2 lg:space-y-4">
             <div class="leading-none space-y-1">
@@ -86,7 +87,7 @@
 
             <div class="flex items-center space-x-2 ">
               <p v-for="size in product.sizes" :key="size">
-                <span class="text-gray-400 font-semibold uppercase">{{
+                <span class="text-gray-500 font-semibold uppercase">{{
                   size
                 }}</span>
               </p>
@@ -95,13 +96,13 @@
             <div v-if="user?.admin" class="flex space-x-3">
               <button
                 @click="handleEditProduct(product)"
-                class="focus:outline-none text-pink-500 hover:text-pink-600"
+                class="focus:outline-none text-pink-500 hover:text-pink-700"
               >
                 Edit
               </button>
               <button
                 @click="handleRemoveProduct(product)"
-                class="focus:outline-none text-pink-500 hover:text-pink-600"
+                class="focus:outline-none text-pink-500 hover:text-pink-700"
               >
                 Remove
               </button>
@@ -128,11 +129,11 @@
               >
             </div>
 
-            <div class="text-gray-400 lg:mt-16 lg:ml-auto">
+            <div class="text-gray-500 lg:mt-16 lg:ml-auto">
               <button
                 @click="handleAddToCart(product)"
                 :class="{ added: cartIds.includes(product.id) }"
-                class="flex items-center justify-center w-9 h-9 rounded-full focus:outline-none hover:text-pink-500 border border-gray-200"
+                class="flex items-center justify-center w-9 h-9 rounded-full focus:outline-none hover:text-pink-700 border border-gray-200"
                 type="button"
                 aria-label="like"
               >

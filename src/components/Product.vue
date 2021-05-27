@@ -1,13 +1,14 @@
 <template>
   <div class="bg-white w-full rounded">
+    {{ windowWidth }}
     <div
       v-if="total"
-      class="h-auto w-full border-b-2 border-gray-200 bg-white min-w-max"
+      class="h-auto w-full border-b-2 border-gray-200 bg-white min-w-max xl:min-w-0"
     >
       <div
         class="w-full sm:w-2/4 lg:w-1/3 xl:w-1/4 ml-auto py-10 text-gray-700 font-bold space-x-10"
       >
-        <div class="px-5 text-gray-400">
+        <div class="px-5 text-gray-500">
           <div class="flex justify-between pb-2">
             <p class="underline">{{ pieces }}pieces</p>
             <span>{{ total.toFixed(2) }}</span>
@@ -33,7 +34,7 @@
           </div>
           <div
             @click="handleCheckout"
-            class="text-pink-500 hover:text-pink-600 cursor-pointer flex justify-center bg-white py-2 shadow"
+            class="text-pink-500 hover:text-pink-700 cursor-pointer flex justify-center bg-white py-2 shadow"
           >
             Checkout
           </div>
@@ -42,7 +43,7 @@
     </div>
 
     <!--start screen greater than or equal 1024px-->
-    <div v-if="windowWidth >= 1024" class="flex px-5 min-w-max bg-white">
+    <div v-if="windowWidth >= 1024" class="flex px-5">
       <div class="h-full w-96 py-5">
         <div class="relative w-80">
           <img
@@ -62,18 +63,18 @@
             <h3 class="text-gray-700 font-semibold uppercase">
               {{ item.productName }}
             </h3>
-            <h5 class="text-gray-400 leading-none">
+            <h5 class="text-gray-500 leading-none">
               {{ item.description }}
             </h5>
           </div>
 
-          <div class="text-gray-400 w-1/4 flex justify-end">
+          <div class="text-gray-500 w-1/4 flex justify-end">
             <svg
               @click="handleAddToCart(item)"
               :class="{ added: cartIds.includes(item.id) }"
               fill="currentColor"
               viewBox="-2 -3 24 24"
-              class="rounded-full hover:text-pink-500 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
+              class="rounded-full hover:text-pink-700 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
             >
               <path
                 fill-rule="evenodd"
@@ -90,7 +91,7 @@
           <div
             :class="{ invisiblePreAndNext: start == 0 }"
             @click="handlePreviousImage"
-            class="absolute -top-3 left-12 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute -top-3 left-12 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +108,7 @@
           </div>
 
           <div
-            class="flex space-x-3 space-y-2 items-center px-5"
+            class="flex space-x-3 space-y-1 items-center px-5"
             v-for="(image, index) in item.images"
             :key="index"
             v-show="index >= start && index <= end"
@@ -121,12 +122,12 @@
             </div>
 
             <div class="w-44 flex space-x-1">
-              <span class="w-full text-gray-700 font-semibold line-through"
+              <span class="w-full text-gray-700 text-sm line-through block"
                 >USD {{ Number(item.price).toFixed(2) }}</span
               >
               <span
                 v-if="item.discount > 0"
-                class="w-full text-red-600 font-semibold"
+                class="w-full block text-red-600 text-sm"
                 >USD
                 {{
                   (item.price - (item.price * item.discount) / 100).toFixed(2)
@@ -139,7 +140,7 @@
                 :class="{ frozen: qtys[index] <= 1 }"
                 :disabled="qtys[index] <= 1"
                 @click="handleDecrement(index, item)"
-                class="border-2 h-10 p-1 focus:outline-none border-gray-200 inline-block text-gray-400 hover:bg-gray-100"
+                class="border-2 h-10 p-1 focus:outline-none border-gray-200 inline-block text-gray-500 hover:bg-gray-100"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +166,7 @@
 
               <button
                 @click="handleIncrement(index, item)"
-                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-400 cursor-pointer hover:bg-gray-100"
+                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-500 cursor-pointer hover:bg-gray-100"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +188,7 @@
                 :class="{
                   invisiblePreAndNext: starts[index] == 0,
                 }"
-                class="border-2 h-10 flex items-center border-gray-200 text-gray-400 hover:bg-gray-100 cursor-pointer"
+                class="border-2 h-10 flex items-center border-gray-200 text-gray-500 hover:bg-gray-100 cursor-pointer"
               >
                 <svg
                   @click="handlePreviousSize(index)"
@@ -211,7 +212,7 @@
                     activeSize: i == indexSizes[index],
                   }"
                   v-if="i >= starts[index] && i <= ends[index]"
-                  class="px-10 mx-px font-semibold text-gray-400 uppercase border-2 border-gray-200 h-10 w-10 flex items-center justify-center cursor-pointer"
+                  class="px-10 mx-px font-semibold text-gray-500 uppercase border-2 border-gray-200 h-10 w-10 flex items-center justify-center cursor-pointer"
                 >
                   {{ size }}
                 </span>
@@ -225,7 +226,7 @@
               >
                 <svg
                   @click="handleNextSize(index)"
-                  class="h-7 w-7 inline-block text-gray-400"
+                  class="h-7 w-7 inline-block text-gray-500"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -244,7 +245,7 @@
           <div
             :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
             @click="handleNextImage"
-            class="absolute -bottom-3 left-12 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute -bottom-3 left-12 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               class="h-6 w-6 inline-block"
@@ -265,13 +266,8 @@
     <!--end screen greater than or equal 1024pxx-->
 
     <!--start screen less than 1024px-->
-    <div
-      v-if="windowWidth < 1024"
-      class="flex flex-col h-auto pb-5 min-w-max bg-white"
-    >
-      <div
-        class="flex flex-col sm:flex-row sm:space-x-5 h-full w-full p-5 pb-0"
-      >
+    <div v-if="windowWidth < 1024" class="flex flex-col h-auto pb-5">
+      <div class="flex sflex-row space-x-5 h-full w-full p-5 pb-0">
         <div class="relative w-80">
           <img
             class="h-52 w-full object-cover object-center rounded"
@@ -290,10 +286,10 @@
             <h3 class="text-gray-700 font-semibold uppercase">
               {{ item.productName }}
             </h3>
-            <h5 class="text-gray-400 leading-none">
+            <h5 class="text-gray-500 leading-none">
               {{ item.description }}
             </h5>
-            <div v-if="windowWidth >= 768" class="w-full pt-3 space-x-3">
+            <div class="w-full pt-3 space-x-3">
               <span class="w-full text-gray-700 font-semibold line-through"
                 >USD {{ Number(item.price).toFixed(2) }}</span
               >
@@ -308,13 +304,13 @@
             </div>
           </div>
 
-          <div class="text-gray-400 w-1/4 flex justify-end">
+          <div class="text-gray-500 w-1/4 flex justify-end">
             <svg
               @click="handleAddToCart(item)"
               :class="{ added: cartIds.includes(item.id) }"
               fill="currentColor"
               viewBox="-2 -3 24 24"
-              class="rounded-full hover:text-pink-500 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
+              class="rounded-full hover:text-pink-700 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
             >
               <path
                 fill-rule="evenodd"
@@ -326,27 +322,12 @@
         </div>
       </div>
 
-      <div
-        v-if="windowWidth >= 640 && windowWidth < 768"
-        class="space-x-5 px-5 pt-3"
-      >
-        <span class="w-full text-gray-700 font-semibold line-through"
-          >USD {{ Number(item.price).toFixed(2) }}</span
-        >
-        <span v-if="item.discount > 0" class="w-full text-red-600 font-semibold"
-          >USD
-          {{
-            (item.price - (item.price * item.discount) / 100).toFixed(2)
-          }}</span
-        >
-      </div>
-
       <div class="py-1 sm:py-3 w-full">
         <div class="relative space-y-3 w-full">
           <div
             :class="{ invisiblePreAndNext: start == 0 }"
             @click="handlePreviousImage"
-            class="absolute -top-4 left-12 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute -top-4 left-12 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -381,7 +362,7 @@
                 :class="{ frozen: qtys[index] <= 1 }"
                 :disabled="qtys[index] <= 1"
                 @click="handleDecrement(index, item)"
-                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-400 hover:bg-gray-100"
+                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-500 hover:bg-gray-100"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -407,7 +388,7 @@
 
               <button
                 @click="handleIncrement(index, item)"
-                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-400 cursor-pointer hover:bg-gray-100"
+                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-500 cursor-pointer hover:bg-gray-100"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -429,7 +410,7 @@
                 :class="{
                   invisiblePreAndNext: starts[index] == 0,
                 }"
-                class="border-2 h-10 flex items-center border-gray-200 text-gray-400 hover:bg-gray-100 cursor-pointer"
+                class="border-2 h-10 flex items-center border-gray-200 text-gray-500 hover:bg-gray-100 cursor-pointer"
               >
                 <svg
                   @click="handlePreviousSize(index)"
@@ -453,7 +434,7 @@
                     activeSize: i == indexSizes[index],
                   }"
                   v-if="i >= starts[index] && i <= ends[index]"
-                  class="mx-px px-8 font-semibold text-gray-400 uppercase border-2 border-gray-200 h-10 w-10 flex items-center justify-center cursor-pointer"
+                  class="mx-px px-8 font-semibold text-gray-500 uppercase border-2 border-gray-200 h-10 w-10 flex items-center justify-center cursor-pointer"
                 >
                   {{ size }}
                 </span>
@@ -467,7 +448,7 @@
               >
                 <svg
                   @click="handleNextSize(index)"
-                  class="h-7 w-7 inline-block text-gray-400"
+                  class="h-7 w-7 inline-block text-gray-500"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -486,7 +467,7 @@
           <div
             :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
             @click="handleNextImage"
-            class="absolute -bottom-3 left-12 w-8 h-8 hover:text-pink-600 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
+            class="absolute -bottom-3 left-12 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
           >
             <svg
               class="h-6 w-6 inline-block"
@@ -566,19 +547,11 @@ export default {
       //listening for resizing
       window.addEventListener("resize", onResize);
 
-      if (windowWidth.value < 410) {
-        //explicitly assign value to each element in array once the component mount
-        for (let index in props.item?.images) {
-          starts.value[index] = 0;
-          ends.value[index] = 0;
-          qtys.value[index] = 1;
-        }
-      } else {
-        for (let index in props.item?.images) {
-          starts.value[index] = 0;
-          ends.value[index] = 3;
-          qtys.value[index] = 1;
-        }
+      //explicitly assign value to each element in array once the component mount
+      for (let index in props.item?.images) {
+        starts.value[index] = 0;
+        ends.value[index] = 3;
+        qtys.value[index] = 1;
       }
     });
 
@@ -595,21 +568,6 @@ export default {
 
     const onResize = () => {
       windowWidth.value = window.innerWidth;
-
-      if (windowWidth.value > 410) {
-        //re-assign value to each element in array once the screen is resized
-        for (let index in props.item?.images) {
-          starts.value[index] = 0;
-          ends.value[index] = 3;
-          qtys.value[index] = 1;
-        }
-      } else {
-        for (let index in props.item?.images) {
-          starts.value[index] = 0;
-          ends.value[index] = 0;
-          qtys.value[index] = 1;
-        }
-      }
     };
 
     const handleClose = (completed) => {

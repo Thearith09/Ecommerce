@@ -11,7 +11,7 @@
         <svg
           @click="handleClose"
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-gray-400 cursor-pointer"
+          class="h-5 w-5 text-gray-500 cursor-pointer"
           viewBox="0 0 20 20x"
           fill="currentColor"
         >
@@ -141,13 +141,13 @@
           <h4 v-if="error" class="text-red-500">{{ error }}</h4>
           <button
             v-if="!isPending"
-            class="hover:text-pink-600 bg-white font-semibold shadow w-full p-2 text-pink-500 focus:outline-none"
+            class="hover:text-pink-700 bg-white font-semibold shadow w-full p-2 text-pink-500 focus:outline-none"
           >
             {{ product ? "Edit" : "Add" }}
           </button>
           <button
             v-else
-            class="hover:text-pink-600 bg-white font-semibold shadow w-full p-2 text-pink-500 focus:outline-none"
+            class="hover:text-pink-700 bg-white font-semibold shadow w-full p-2 text-pink-500 focus:outline-none"
           >
             {{ product ? "Saving..." : "Adding..." }}
           </button>

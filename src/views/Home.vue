@@ -4,7 +4,7 @@
       <Navbar />
     </div>
     <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
-      <div class="bg-white">
+      <div>
         <Slideshow />
       </div>
       <div v-for="(category, index) in categories" :key="category.id">

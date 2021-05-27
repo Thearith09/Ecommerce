@@ -18,13 +18,13 @@
 
         <div
           v-if="category"
-          class="flex items-center my-5 w-1/4 mx-auto space-x-2"
+          class="flex justify-center items-center my-5 w-1/4 mx-auto space-x-2"
         >
           <button
             @click="handlePrevious(category.products.length)"
             :class="{ frozen: previous <= 0 }"
             :disabled="previous <= 0"
-            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-600 items-center"
+            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-700 items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@
             @click="handleNext(category.products.length)"
             :class="{ frozen: next >= category.products.length }"
             :disabled="next >= category.products.length"
-            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-600 flex justify-center items-center"
+            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-700 flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -8,7 +8,7 @@
     >
       <div
         @click="handleNext"
-        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-600"
+        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-700"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -61,18 +61,16 @@
           </h4>
 
           <div class="leading-none">
-            <span class="text-gray-400 text-sm leading-none"
+            <span class="text-gray-500 text-sm leading-none"
               >Lorem ipsum dolor sit amet consectetur adipisicing elit.</span
             >
           </div>
           <div class="mt-2 flex justify-between items-center">
-            <div>
-              <span
-                v-if="product.discount > 0"
-                class="text-red-600 font-semibold line-through block"
+            <div v-if="product.discount > 0">
+              <span class="block text-gray-700 font-semibold line-through"
                 >USD {{ Number(product.price).toFixed(2) }}
               </span>
-              <span class="text-gray-700 font-semibold">
+              <span class="text-red-600 font-semibold">
                 USD
                 {{
                   (
@@ -82,13 +80,18 @@
                 }}
               </span>
             </div>
-            <div class="text-gray-400">
+            <div v-else>
+              <span class="block text-gray-700 font-semibold"
+                >USD {{ Number(product.price).toFixed(2) }}
+              </span>
+            </div>
+            <div class="text-gray-500">
               <svg
                 @click="handleAddToCart(product)"
                 :class="{ added: cartIds.includes(product.id) }"
                 fill="currentColor"
                 viewBox="-2 -3 24 24"
-                class="rounded-full hover:text-pink-500 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
+                class="rounded-full hover:text-pink-700 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
               >
                 <path
                   fill-rule="evenodd"
@@ -108,7 +111,7 @@
     >
       <div
         @click="handlePrevious"
-        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-600"
+        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-700"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

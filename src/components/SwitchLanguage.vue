@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-center fixed items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20"
+    class="flex justify-center fixed items-start sm:items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20"
   >
     <div
       class="relative px-2 py-5 sm:px-5 text-gray-700 bg-white w-96 sm:w-2/3 lg:w-1/2 h-auto rounded"
@@ -12,7 +12,7 @@
         <svg
           @click="handleClose"
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-gray-400 cursor-pointer"
+          class="h-5 w-5 text-gray-500 cursor-pointer"
           viewBox="0 0 20 20x"
           fill="currentColor"
         >

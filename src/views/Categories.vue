@@ -35,7 +35,7 @@
           <div
             @click="handleRemoveCategory(category)"
             v-if="user?.admin"
-            class="absolute bottom-0 right-0 text-center font-semibold text-pink-500 hover:text-pink-600"
+            class="absolute bottom-0 right-0 text-center font-semibold text-pink-500 hover:text-pink-700"
           >
             Remove
           </div>

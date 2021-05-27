@@ -11,7 +11,7 @@
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-gray-400 cursor-pointer"
+          class="h-5 w-5 text-gray-500 cursor-pointer"
           viewBox="0 0 20 20x"
           fill="currentColor"
         >
@@ -59,13 +59,13 @@
           <div class="flex items-center justify-between">
             <button
               @click="handleClearPaidInvoice"
-              class="w-full bg-white hover:text-pink-600 text-pink-500 shadow py-2 focus:outline-none"
+              class="w-full bg-white hover:text-pink-700 text-pink-500 shadow py-2 focus:outline-none"
             >
               Customer Paid
             </button>
             <button
               @click="handleClearInvoice"
-              class="w-full bg-white hover:text-pink-600 text-pink-500 shadow py-2 focus:outline-none"
+              class="w-full bg-white hover:text-pink-700 text-pink-500 shadow py-2 focus:outline-none"
             >
               Customer Cancel
             </button>

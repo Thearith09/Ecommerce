@@ -1,16 +1,33 @@
 <template>
   <div
     v-if="windowWidth < 640"
-    class="inset-0 z-30 bg-white fixed h-screen w-full p-3"
+    class="inset-0 z-30 bg-white fixed h-screen w-full px-3"
   >
-    <input
-      autofocus
-      v-model="search"
-      @keypress.enter="handleSearch"
-      class="focus:outline-none shadow font-thin w-full p-3 text-sm mr-2 pl-10"
-      type="search"
-      placeholder="searching..."
-    />
+    <div class="relative">
+      <input
+        autofocus
+        v-model="search"
+        @keydown="handleShowCross"
+        @keypress.enter="handleSearch"
+        class="focus:outline-none shadow font-thin w-full p-3 text-sm mr-2 pl-10"
+        type="search"
+        placeholder="searching..."
+      />
+      <svg
+        v-if="show"
+        @click="handleSearch"
+        xmlns="http://www.w3.org/2000/svg"
+        class="absolute top-3 right-5 h-5 w-5 text-gray-500 cursor-pointer"
+        viewBox="0 0 20 20x"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -18,13 +35,19 @@
 import { ref } from "@vue/reactivity";
 import getCollection from "@/composables/getCollection";
 import { useRouter } from "vue-router";
-import { onMounted } from "@vue/runtime-core";
+import { onMounted, watch } from "@vue/runtime-core";
 
 export default {
   emits: ["close"],
   setup(props, { emit }) {
+    const show = ref(true);
     const search = ref("");
     const windowWidth = ref(window.innerWidth);
+
+    watch(search, () => {
+      if (search.value != "") show.value = false;
+      else show.value = true;
+    });
 
     const router = useRouter();
     const { documents: categories } = getCollection("inventory");
@@ -57,7 +80,7 @@ export default {
       }
     };
 
-    return { search, windowWidth, handleSearch };
+    return { search, show, windowWidth, handleSearch };
   },
 };
 </script>
