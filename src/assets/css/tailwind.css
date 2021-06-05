@@ -16,6 +16,9 @@
   .added {
     @apply text-pink-500;
   }
+  .activeBorder {
+    @apply border-2 border-pink-500 text-pink-500;
+  }
   .reset {
     @apply text-gray-500;
   }

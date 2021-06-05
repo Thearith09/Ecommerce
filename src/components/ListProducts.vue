@@ -2,14 +2,15 @@
   <div class="px-10">
     <div class="h-full border-b-2 border-gray-200">
       <div class="flex justify-between my-5">
-        <div v-if="search && category">
+        <div v-if="search && products?.length > 0">
           <div class="text-gray-700 font-bold text-2xl">
-            {{ category.products.length }} results for "{{ search }}"
+            {{ products?.length }} results for "{{ search }}"
             <span class="block text-pink-500 font-bold text-lg"
-              >{{ category.categoryName }} Products</span
+              >{{ name }} Products</span
             >
           </div>
         </div>
+
         <div
           v-if="user?.admin"
           class="fixed z-10 right-20 2xl:right-64 text-pink-500 cursor-pointer hover:text-pink-700 h-12 w-12 focus:outline-none"
@@ -30,18 +31,17 @@
         </div>
       </div>
 
-      <div v-if="category?.products.length > 0 && !search" class="h-auto mb-5">
+      <div v-if="products?.length > 0 && !search" class="h-auto mb-5">
         <div class="font-bold text-xl text-gray-700 uppercase mb-4">
           {{ $t("MOST POPULAR") }}
         </div>
-        <Card :category="category" />
+        <Card :name="name" />
       </div>
     </div>
   </div>
-
-  <div v-if="category" class="sm:px-10 my-5 w-full px-5">
+  <div v-if="products" class="sm:px-10 my-5 w-full px-5">
     <div
-      v-for="(product, index) in category.products"
+      v-for="(product, index) in products"
       v-show="index >= previous && index < next"
       :key="product.id"
       class="flex flex-col sm:flex-row items-center space-x-2 py-5 h-auto sm:h-56 transition transform hover:translate-y-2 border-b-2 border-gray-200"
@@ -54,8 +54,7 @@
             name: 'ProductDetails',
             params: {
               id: product.id,
-              categoryId: category.id,
-              productId: product.id,
+              categoryName: name,
             },
           }"
         >
@@ -128,24 +127,6 @@
                 }}</span
               >
             </div>
-
-            <div class="text-gray-500 lg:mt-16 lg:ml-auto">
-              <button
-                @click="handleAddToCart(product)"
-                :class="{ added: cartIds.includes(product.id) }"
-                class="flex items-center justify-center w-9 h-9 rounded-full focus:outline-none hover:text-pink-700 border border-gray-200"
-                type="button"
-                aria-label="like"
-              >
-                <svg width="20" height="20" fill="currentColor">
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                  />
-                </svg>
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -155,115 +136,76 @@
   <component
     @close="unmountComponent"
     :is="currentComponent"
-    :categoryId="id"
+    :name="name"
     :product="product"
-    :category="category"
+    :products="products"
   />
 </template>
 
 <script>
-import useDocument from "@/composables/useDocument";
 import getDocument from "@/composables/getDocument";
 import getUser from "@/composables/getUser";
 import AddProduct from "@/components/AddProduct";
 import Card from "@/components/Card.vue";
 import DeleteProductConfirmation from "@/components/DeleteProductConfirmation";
-import { timestamp } from "@/firebase/config";
-import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
-import { computed, onMounted, watch } from "vue";
+import { onMounted, watch } from "vue";
 export default {
   components: {
     AddProduct,
     Card,
     DeleteProductConfirmation,
   },
-  emits: ["emitProducts"],
-  props: ["id", "search", "previous", "next"],
+  props: ["name", "search", "previous", "next"],
   setup(props, { emit }) {
     const currentComponent = ref(null);
     const windowWidth = ref(window.innerWidth);
     const product = ref(null); //for updating product
-    const cartIds = ref([]); //dynamic apply style to button heart once user add or not by catching item id
-    const items = computed(() => cart.value && cart.value.items); //watching items change
-    const router = useRouter();
     const { user } = getUser();
-    const { error, document: category } = getDocument("inventory", props.id);
-    const { document: cart } = getDocument("carts", user.value?.uid);
-    const { addDoc, updateDoc: updateCart } = useDocument(
-      "carts",
-      user.value?.uid
+
+    const { error, documents: products } = getDocument(
+      "inventory",
+      props.name,
+      "products"
     );
+    const { documents: carts } = getDocument("carts", user.value?.uid, "items");
+
     const onResize = () => {
       windowWidth.value = window.innerWidth;
     };
+
     onMounted(() => {
       window.addEventListener("resize", onResize);
     });
-    watch(category, () => {
-      emit("emitProducts", category.value);
+
+    watch(products, () => {
+      emit("emitProducts", products.value);
     });
-    watch(items, () => {
-      let temp = [];
-      for (let item of items.value) temp.push(item.productId);
-      cartIds.value = temp;
-    });
+
     const mountComponent = (component) => {
       currentComponent.value = component;
     };
+
     const unmountComponent = () => {
       currentComponent.value = null;
       product.value = null;
     };
+
     const handleEditProduct = (prod) => {
       product.value = prod;
       mountComponent("AddProduct");
     };
+
     const handleRemoveProduct = (prod) => {
       product.value = prod;
       mountComponent("DeleteProductConfirmation");
     };
-    const handleAddToCart = async (product) => {
-      if (!user.value) {
-        router.push({ name: "Login" });
-      } else {
-        const item = cart.value?.items.filter(
-          (item) => item.productId == product.id
-        );
-        const items = cart.value?.items.filter(
-          (item) => item.productId != product.id
-        );
-        if (item?.length > 0) {
-          await updateCart({
-            items: [...items],
-          });
-        } else {
-          const item = {
-            productId: product.id,
-            productName: product.productName,
-            price: product.price,
-            discount: product.discount,
-            sizes: product.sizes,
-            images: product.images,
-          };
-          items
-            ? await addDoc({
-                items: [...items, item],
-                createdAt: timestamp(),
-              })
-            : await addDoc({
-                items: [item],
-                createdAt: timestamp(),
-              });
-        }
-      }
-    };
+
     return {
-      cart,
+      carts,
       error,
       product,
-      category,
-      cartIds,
+      products,
       user,
       windowWidth,
       currentComponent,
@@ -271,7 +213,6 @@ export default {
       unmountComponent,
       handleRemoveProduct,
       handleEditProduct,
-      handleAddToCart,
     };
   },
 };

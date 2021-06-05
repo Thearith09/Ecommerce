@@ -164,7 +164,7 @@ import useDocument from "@/composables/useDocument";
 
 export default {
   emits: ["close"],
-  props: ["categoryId", "category", "product"],
+  props: ["name", "products", "product"],
   setup(props, { emit }) {
     const sizes = ref([]);
     const size = ref(null);
@@ -178,15 +178,16 @@ export default {
     const warning = ref(null);
     let conveyIndex;
 
-    const { error, updateDoc, isPending } = useDocument(
+    const { error, addDoc, updateDoc, isPending } = useDocument(
       "inventory",
-      props.categoryId
+      props.name,
+      "products"
     );
     const { url, uploadImage, deleteImage } = useStorage();
 
     if (props.product) {
       const p = props.product;
-      productName.value = p.productName;
+      productName.value = p.name;
       description.value = p.description;
       price.value = p.price;
       discount.value = p.discount;
@@ -208,6 +209,7 @@ export default {
         size.value = "";
       }
     };
+
     const handleUpdateSize = (value, index) => {
       size.value = value;
       conveyIndex = () => {
@@ -261,8 +263,7 @@ export default {
         if (props.product) {
           //update
           const product = {
-            id: props.product.id,
-            productName: productName.value,
+            name: productName.value,
             description: description.value,
             discount: discount.value,
             price: price.value,
@@ -270,30 +271,20 @@ export default {
             images: images.value,
           };
 
-          const products = props.category.products.map((prod) => {
-            if (prod.id == product.id) {
-              prod = product;
-            }
-            return prod;
-          });
-
-          await updateDoc({ products });
+          await updateDoc(product);
         } else {
           //insert
 
           const newProduct = {
-            id: uuidv4(),
-            productName: productName.value,
+            name: productName.value,
             description: description.value,
             discount: discount.value,
-            price: price.value,
+            price: Number(price.value).toFixed(2),
             sizes: sizes.value,
             images: images.value,
           };
 
-          await updateDoc({
-            products: [...props.category.products, newProduct],
-          });
+          await addDoc(newProduct);
         }
 
         if (!error.value) {

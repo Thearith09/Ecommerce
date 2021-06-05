@@ -5,17 +5,14 @@
     </div>
     <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div>
-        <Slideshow />
+        <!-- <Slideshow /> -->
       </div>
       <div v-for="(category, index) in categories" :key="category.id">
-        <div
-          v-if="category.products.length > 0"
-          class="my-5 mx-10 2xl:mx-0 space-y-3"
-        >
+        <div class="my-5 mx-10 2xl:mx-0 space-y-3">
           <div class="font-bold text-xl text-gray-700 uppercase mt-8">
             {{ $t(`${header[index].toUpperCase()}`) }}
           </div>
-          <Card :category="category" />
+          <Card :name="category.name" />
         </div>
       </div>
     </div>
@@ -51,7 +48,7 @@ export default {
       "Just for you",
       "Recommended for you",
     ]);
-    const { documents: categories } = getCollection("inventory", 5);
+    const { documents: categories } = getCollection("inventory");
 
     return { user, categories, header };
   },

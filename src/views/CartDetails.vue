@@ -3,64 +3,19 @@
     <div>
       <Navbar />
     </div>
+
     <div class="mb-auto my-5 2xl:w-3/4 2xl:mx-auto">
       <div
-        v-if="cart && cart.items.length > 0"
-        class="grid xl:grid-cols-4 gap-4"
+        class="bg-white 3sm:p-5 3sm:space-y-2 rounded min-w-max 3sm:min-w-0 "
+        v-if="carts"
       >
-        <div class="bg-white border-b-2 border-gray-200">
-          <div class="py-3 px-5 w-full sm:w-2/4 lg:w-1/3 xl:w-full ml-auto">
-            <div v-if="pieces > 0" class="flex justify-between my-5">
-              <p class="text-gray-500 underline">{{ pieces }}Pieces</p>
-              <p class="text-gray-700">{{ total?.toFixed(2) }}</p>
-            </div>
-            <div v-if="pieces > 0" class="my-5">
-              <div v-if="pieces < 3" class="flex justify-between">
-                <p class="text-gray-500">Shipping</p>
-                <p class="text-gray-700">{{ shipping.toFixed(2) }}</p>
-              </div>
-              <div v-else class="flex justify-between">
-                <p class="text-gray-500">Free Shipping</p>
-                <p class="text-gray-700">0.00</p>
-              </div>
-            </div>
-            <hr />
-            <p v-if="pieces > 0" class="flex justify-between my-5">
-              <span class="text-gray-500 font-semibold">Order Amount: </span
-              ><span
-                v-if="pieces && pieces < 3"
-                class="text-gray-700 font-semibold"
-                >USD {{ (total + shipping)?.toFixed(2) }}</span
-              >
-              <span v-else class="text-gray-700 font-semibold">
-                USD
-                {{ total?.toFixed(2) }}
-              </span>
-            </p>
-            <div>
-              <button
-                @click="handleOrder"
-                class="focus:outline-none py-2 flex justify-center items-center cursor-pointer w-full mx-auto text-pink-500 bg-white hover:text-pink-700 font-semibold shadow"
-              >
-                Order Now
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="xl:col-span-3">
-          <div
-            class="border-b-2 border-gray-200"
-            v-for="item in cart.items"
-            :key="item.productId"
-          >
-            <Cart :item="item" @order="emitOrder" />
-          </div>
+        <div v-for="item in carts" :key="item.id">
+          <Cart :item="item" @order="emitOrder" />
         </div>
       </div>
 
       <div
-        v-if="!cart || cart?.items.length <= 0"
+        v-if="carts?.length <= 0"
         class="relative rounded w-full h-auto my-10 p-5 md:w-3/4 xl:w-1/2 md:mx-auto lg:my-20 border-2 border-gray-200 bg-white"
       >
         <div class="flex justify-center mt-12">
@@ -136,7 +91,11 @@ export default {
     const router = useRouter();
     const { user } = getUser();
     const { _user } = getUserDoc("users");
-    const { document: cart } = getDocument("carts", user.value?.uid);
+    const { documents: carts } = getDocument(
+      "carts",
+      user.value?.displayName,
+      "items"
+    );
     const { documents: ordersCollection } = getCollection("orders");
 
     watch(pieces, () => {
@@ -217,7 +176,7 @@ export default {
       handleClose,
       handleNavigation,
       emitOrder,
-      cart,
+      carts,
       total,
       items,
       pieces,

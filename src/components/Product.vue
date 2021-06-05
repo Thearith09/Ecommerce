@@ -532,15 +532,16 @@ export default {
     const currentComponent = ref("");
 
     const router = useRouter();
-    const docs = computed(() => cart.value && cart.value.items); //watching items change
+    const docs = computed(() => cart.value); //watching items change
 
     const { _user } = getUserDoc("users");
     const { user } = getUser();
     const { documents: ordersCollection } = getCollection("orders");
-    const { document: cart } = getDocument("carts", user.value?.uid);
+    const { documents: cart } = getDocument("carts", user.value?.uid, "items");
     const { addDoc, updateDoc: updateCart } = useDocument(
       "carts",
-      user.value?.uid
+      user.value?.uid,
+      "items"
     );
 
     onMounted(() => {
@@ -557,7 +558,7 @@ export default {
 
     watch(cart, () => {
       let temp = [];
-      for (let item of docs.value) temp.push(item.productId);
+      for (let item of docs.value) temp.push(item.id);
       cartIds.value = temp;
     });
 
@@ -604,20 +605,14 @@ export default {
       if (!user.value) {
         router.push({ name: "Login" });
       } else {
-        const item = cart.value?.items.filter(
-          (item) => item.productId == product.id
-        );
-        const items = cart.value?.items.filter(
-          (item) => item.productId != product.id
-        );
+        const item = cart.value?.filter((item) => item.id == product.id);
+        const items = cart.value?.filter((item) => item.id != product.id);
 
         if (item?.length > 0) {
-          await updateCart({
-            items: [...items],
-          });
+          await updateCart({});
         } else {
           const item = {
-            productId: product.id,
+            id: product.id,
             productName: product.productName,
             price: product.price,
             discount: product.discount,
@@ -625,15 +620,9 @@ export default {
             images: product.images,
           };
           if (items?.length > 0) {
-            await addDoc({
-              items: [...items, item],
-              createdAt: timestamp(),
-            });
+            await addDoc({});
           } else {
-            await addDoc({
-              items: [item],
-              createdAt: timestamp(),
-            });
+            await addDoc({});
           }
         }
       }

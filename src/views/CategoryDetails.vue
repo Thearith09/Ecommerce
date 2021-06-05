@@ -3,11 +3,12 @@
     <div>
       <Navbar />
     </div>
+
     <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div class="mx-5 my-12 h-auto">
         <component
           :is="currentComponent"
-          :id="id"
+          :name="id"
           :key="id"
           :previous="previous"
           :next="next"
@@ -15,11 +16,11 @@
         />
 
         <div
-          v-if="category?.products.length > 0"
+          v-if="products?.length > 0"
           class="flex justify-center items-center mt-10 w-1/4 mx-auto space-x-2"
         >
           <button
-            @click="handlePrevious(category.products.length)"
+            @click="handlePrevious(products.length)"
             :class="{ frozen: previous <= 0 }"
             :disabled="previous <= 0"
             class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-700 items-center"
@@ -39,7 +40,7 @@
           </button>
           <div class="flex items-center">
             <ul
-              v-for="i in Math.ceil(category.products.length / 5)"
+              v-for="i in Math.ceil(products.length / 5)"
               :key="i"
               v-show="i >= start && i <= end"
               class="flex items-center px-2 text-pink-500 font-bold lg:text-lg"
@@ -50,9 +51,9 @@
             </ul>
           </div>
           <button
-            @click="handleNext(category.products.length)"
-            :class="{ frozen: next >= category.products.length }"
-            :disabled="next >= category.products.length"
+            @click="handleNext(products.length)"
+            :class="{ frozen: next >= products.length }"
+            :disabled="next >= products.length"
             class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-700 flex justify-center items-center"
           >
             <svg
@@ -71,6 +72,7 @@
         </div>
       </div>
     </div>
+
     <div>
       <Footer />
     </div>
@@ -91,7 +93,7 @@ export default {
     ListProducts,
   },
   setup(props) {
-    const category = ref(null);
+    const products = ref(null);
     const start = ref(1);
     const end = ref(5);
     const previous = ref(0);
@@ -100,8 +102,8 @@ export default {
 
     const currentComponent = ref("ListProducts");
 
-    const handleReceiveBack = (products) => {
-      category.value = products;
+    const handleReceiveBack = (prods) => {
+      products.value = prods;
     };
 
     const handleNext = (limitedIncrement) => {
@@ -133,7 +135,7 @@ export default {
     return {
       currentComponent,
       handleReceiveBack,
-      category,
+      products,
       start,
       end,
       indexActive,

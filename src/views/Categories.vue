@@ -16,10 +16,10 @@
         <div
           class="h-64 hover:shadow bg-white relative transform transition hover:translate-y-2 cursor-pointer rounded"
           v-for="category in categories"
-          :key="category.id"
+          :key="category.name"
         >
           <router-link
-            :to="{ name: 'CategoryDetails', params: { id: category.id } }"
+            :to="{ name: 'CategoryDetails', params: { id: category.name } }"
           >
             <img
               class="h-full w-full object-cover object-center rounded"

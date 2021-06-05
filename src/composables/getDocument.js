@@ -1,30 +1,29 @@
 import { projectFirestore } from "@/firebase/config";
 import { ref, watchEffect } from "@vue/runtime-core";
 
-const getDocument = (collection, id) => {
+const getDocument = (collection, id, subCollection) => {
     const error = ref(null);
-    const document = ref(null);
+    const documents = ref(null);
 
-    let documentRef = projectFirestore.collection(collection).doc(id);
-    const unsubscribe = documentRef.onSnapshot((doc) => {
-        if (doc.data()) {
-            document.value = { ...doc.data(), id: doc.id };
-            error.value = null;
+    const subCollectionRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
+    const unsubscribe = subCollectionRef.onSnapshot((snapshot) => {
+        const results = [];
+        snapshot.docs.forEach((doc) => {
+            results.push({ ...doc.data(), id: doc.id });
+        });
 
-        } else {
-            error.value = `Category with the given ${id} doesn't exist!`;
-            document.value = null;
-        }
+        documents.value = results;
+        error.value = null;
     }, (err) => {
         error.value = err.message;
-        document.value = null;
+        documents.value = null;
     });
 
     watchEffect((onInvalidate) => {
         onInvalidate(() => unsubscribe());
     });
     
-    return { error, document };
+    return { error, documents };
 };
 
 export default getDocument;

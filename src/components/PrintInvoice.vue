@@ -208,8 +208,12 @@ export default {
     const invoiceNumber = ref(props.invoiceNum);
 
     const { user } = getUser();
-    const { updateDoc: updateCart } = useDocument("carts", user.value?.uid);
-    const { document: cart } = getDocument("carts", user.value?.uid);
+    const { updateDoc: updateCart } = useDocument(
+      "carts",
+      user.value?.uid,
+      "items"
+    );
+    const { documents: carts } = getDocument("carts", user.value?.uid, "items");
     const { addDoc } = useCollection("orders");
 
     if (invoiceNumber.value > 0) {
@@ -256,10 +260,10 @@ export default {
 
         emit("close", true);
       } else {
-        let tempItems = cart.value.items.filter((doc) => {
+        let tempItems = cart.value?.filter((doc) => {
           let temp;
           props.orders.items.forEach((item) => {
-            if (item.id == doc.productId && item.qty > 0 && item.size) {
+            if (item.id == doc.id && item.qty > 0 && item.size) {
               temp = item;
             }
           });

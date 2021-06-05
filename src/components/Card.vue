@@ -3,7 +3,7 @@
     class="relative grid grid-cols-1 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full"
   >
     <div
-      :class="{ hideImage: end >= category.products.length - 1 }"
+      :class="{ hideImage: end >= products?.length - 1 }"
       class="absolute -right-5 top-16 z-10"
     >
       <div
@@ -26,7 +26,7 @@
     </div>
 
     <div
-      v-for="(product, index) in category.products"
+      v-for="(product, index) in products"
       :key="product.id"
       class="h-auto hover:translate-y-2 transform transition"
       v-show="index >= start && index <= end"
@@ -37,13 +37,12 @@
             name: 'ProductDetails',
             params: {
               id: product.id,
-              categoryId: category.id,
-              productId: product.id,
+              categoryName: name,
             },
           }"
         >
           <img
-            :src="product.images[0].url"
+            :src="urls[index] ? urls[index] : product.images[0].url"
             class="w-full h-48 object-cover object-center rounded"
           />
         </router-link>
@@ -54,8 +53,58 @@
           {{ product.discount }}% OFF
         </h3>
       </div>
+
       <div>
         <div class="text-gray-100 py-2">
+          <div class="flex space-x-1 items-center">
+            <img
+              @mouseover="handleChangeImage(image.url, index, i)"
+              @mouseleave="handleResetImage"
+              @click="handleAddToCart(product, i)"
+              v-for="(image, i) in product.images"
+              :key="image"
+              v-show="i < 4"
+              :class="{ activeBorder: indexActiveBorder[index] == i }"
+              class="p-px h-5 w-5 rounded-full object-cover object-center cursor-pointer"
+              :src="image.url"
+            />
+            <div
+              v-if="product.images.length >= 5"
+              class="relative group text-gray-500 cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <div
+                class="absolute top-5 right-1 hidden group-hover:block br"
+              ></div>
+              <div
+                class="absolute top-7 -left-24 bg-white p-3 hidden group-hover:grid grid-cols-4 gap-1 rounded rounded-tr-none"
+              >
+                <img
+                  @mouseover="handleChangeImage(image.url, index, i)"
+                  @mouseleave="handleResetImage"
+                  @click="handleAddToCart(product, i)"
+                  v-for="(image, i) in product.images"
+                  :key="image"
+                  v-show="i >= 4"
+                  :class="{ activeBorder: indexActiveBorder[index] == i }"
+                  class="p-px h-5 w-5 rounded-full object-cover object-center cursor-pointer"
+                  :src="image.url"
+                />
+              </div>
+            </div>
+          </div>
+
           <h4 class="text-pink-500 font-semibold uppercase">
             {{ product.productName }}
           </h4>
@@ -66,11 +115,12 @@
             >
           </div>
           <div class="mt-2 flex justify-between items-center">
-            <div v-if="product.discount > 0">
-              <span class="block text-gray-700 font-semibold line-through"
+            <div class="flex space-x-2" v-if="product.discount > 0">
+              <span
+                class="inline-block text-gray-700 font-semibold line-through"
                 >USD {{ Number(product.price).toFixed(2) }}
               </span>
-              <span class="text-red-600 font-semibold">
+              <span class="text-red-600 font-semibold inline-block">
                 USD
                 {{
                   (
@@ -81,24 +131,9 @@
               </span>
             </div>
             <div v-else>
-              <span class="block text-gray-700 font-semibold"
+              <span class="inline-block text-gray-700 font-semibold"
                 >USD {{ Number(product.price).toFixed(2) }}
               </span>
-            </div>
-            <div class="text-gray-500">
-              <svg
-                @click="handleAddToCart(product)"
-                :class="{ added: cartIds.includes(product.id) }"
-                fill="currentColor"
-                viewBox="-2 -3 24 24"
-                class="rounded-full hover:text-pink-700 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                />
-              </svg>
             </div>
           </div>
         </div>
@@ -128,31 +163,43 @@
       </div>
     </div>
   </div>
+  <div>
+    <component
+      :is="currentComponent"
+      :item="item"
+      :index="index"
+      @close="currentComponent = ''"
+    />
+  </div>
 </template>
 
 <script>
-import getUser from "@/composables/getUser";
-import useDocument from "@/composables/useDocument";
+import PopupCard from "@/components/PopupCard";
 import getDocument from "@/composables/getDocument";
-import { timestamp } from "@/firebase/config";
-import { useRouter } from "vue-router";
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
+import getUser from "@/composables/getUser";
+
+import { onMounted, ref, watchEffect } from "vue";
 
 export default {
-  props: ["category"],
+  components: {
+    PopupCard,
+  },
+  props: ["name", "products"],
   setup(props) {
-    const { user } = getUser();
-    const router = useRouter();
-    const cartIds = ref([]);
     const start = ref(0);
     const end = ref(4);
+    const currentComponent = ref("");
+    const item = ref("");
+    const urls = ref([]);
+    const index = ref(null);
+    const indexActiveBorder = ref([]);
     const windowWidth = ref(window.innerWidth);
-    const items = computed(() => cart.value && cart.value.items); //watching items change
 
-    const { document: cart } = getDocument("carts", user.value?.uid);
-    const { addDoc, updateDoc: updateCart } = useDocument(
-      "carts",
-      user.value?.uid
+    const { user } = getUser();
+    const { documents: products } = getDocument(
+      "inventory",
+      props.name,
+      "products"
     );
 
     const onResize = () => {
@@ -179,49 +226,20 @@ export default {
       }
     });
 
-    watch(cart, () => {
-      let temp = [];
-      for (let item of items.value) temp.push(item.productId);
-      cartIds.value = temp;
-    });
+    const handleAddToCart = (product, i) => {
+      currentComponent.value = "PopupCard";
+      index.value = i;
+      item.value = product;
+    };
 
-    const handleAddToCart = async (product) => {
-      if (!user.value) {
-        router.push({ name: "Login" });
-      } else {
-        const item = cart.value?.items.filter(
-          (item) => item.productId == product.id
-        );
-        const items = cart.value?.items.filter(
-          (item) => item.productId != product.id
-        );
+    const handleChangeImage = (imageUrl, index, i) => {
+      urls.value[index] = imageUrl;
+      indexActiveBorder.value[index] = i;
+    };
 
-        if (item?.length > 0) {
-          await updateCart({
-            items: [...items],
-          });
-        } else {
-          const item = {
-            productId: product.id,
-            productName: product.productName,
-            price: product.price,
-            discount: product.discount,
-            sizes: product.sizes,
-            images: product.images,
-          };
-          if (items?.length > 0) {
-            await addDoc({
-              items: [...items, item],
-              createdAt: timestamp(),
-            });
-          } else {
-            await addDoc({
-              items: [item],
-              createdAt: timestamp(),
-            });
-          }
-        }
-      }
+    const handleResetImage = () => {
+      urls.value = [];
+      indexActiveBorder.value = [];
     };
 
     const handlePrevious = () => {
@@ -266,13 +284,26 @@ export default {
       handleAddToCart,
       handleNext,
       handlePrevious,
-      cartIds,
+      handleChangeImage,
+      handleResetImage,
       start,
       end,
+      currentComponent,
+      item,
       windowWidth,
+      urls,
+      indexActiveBorder,
+      index,
+      products,
     };
   },
 };
 </script>
 
-<style></style>
+<style>
+.br {
+  border-left: 10px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid white;
+}
+</style>

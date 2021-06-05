@@ -5,7 +5,7 @@
         v-for="(slide, index) in slides"
         :key="index"
         :image="slide.link"
-        @click="handleNavigation(slide.categoryId)"
+        @click="handleNavigation(slide.id)"
       >
       </vueper-slide>
     </vueper-slides>
@@ -34,6 +34,7 @@ import { onMounted, ref, watch } from "vue";
 import { VueperSlides, VueperSlide } from "vueperslides";
 import { useRouter } from "vue-router";
 import getCollection from "@/composables/getCollection";
+import getDocument from "@/composables/getDocument";
 import "vueperslides/dist/vueperslides.css";
 
 export default {
@@ -47,12 +48,17 @@ export default {
 
     watch(categories, () => {
       categories.value?.forEach((category) => {
-        category.products.forEach((product) => {
+        const { documents: products } = getDocument(
+          "inventory",
+          category.name,
+          "products"
+        );
+        products.forEach((product) => {
           if (product.discount >= 10) {
             product.images.forEach((image) => {
               slides.value.push({
-                categoryId: category.id,
-                title: product.productName,
+                id: product.id,
+                title: product.name,
                 content: product.description,
                 link: image.url,
               });

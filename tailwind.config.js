@@ -5,7 +5,6 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    
     extend: {
       backgroundImage: theme => ({
        }),
@@ -33,14 +32,16 @@ module.exports = {
       },
       screens: {
         // for small phone screen
-        '2sm': '420px',
-        // => @media (min-width: 640px) { ... }
-  
-        // 'laptop': '1024px',
-        // => @media (min-width: 1024px) { ... }
-  
-        // 'desktop': '1280px',
-        // => @media (min-width: 1280px) { ... }
+        '3sm': '450px',
+        '2sm': '600px',
+        'sm': '640px',
+        'asm': '680px',
+        'md': '768px',
+        'amd': '850px',
+        'lg': '1024px',
+        'alg': '1120px',
+        'xl': '1280px',
+        '2xl': '1536px',
       },
     },
   },

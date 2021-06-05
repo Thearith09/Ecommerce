@@ -298,10 +298,10 @@
               />
             </svg>
             <div
-              v-if="cart && cart.items.length > 0"
+              v-if="carts?.length > 0"
               class="absolute -top-1 left-4 border-2 border-white bg-red-600 w-6 h-6 rounded-full text-white flex justify-center items-center text-xs"
             >
-              {{ cart.items.length }}
+              {{ carts.length }}
             </div>
           </router-link>
         </div>
@@ -493,10 +493,10 @@
               />
             </svg>
             <div
-              v-if="cart && cart.items.length > 0"
+              v-if="carts?.length > 0"
               class="absolute -top-2 left-3 border-2 border-white bg-red-600 w-6 h-6 rounded-full text-white flex justify-center items-center text-xs"
             >
-              {{ cart.items.length }}
+              {{ carts.length }}
             </div>
           </router-link>
         </div>
@@ -713,12 +713,6 @@
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            <div
-              v-if="cart && cart.items.length > 0"
-              class="absolute top-0 left-4 border-2 border-white bg-red-600 w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
-            >
-              {{ cart.items.length }}
-            </div>
           </router-link>
         </div>
 
@@ -785,7 +779,7 @@
   </div>
 
   <!--sub navbar for admin-->
-  <!-- <div
+  <div
     v-if="user?.admin"
     class="flex justify-center items-center space-x-10 bg-white text-gray-500 shadow border-t-2 border-gray-100"
   >
@@ -934,7 +928,7 @@
         <span class="text-center">{{ $t("Reports") }}</span>
       </router-link>
     </div>
-  </div> -->
+  </div>
   <!--end sub navbar for admin-->
 
   <div
@@ -979,7 +973,11 @@ export default {
     const { user } = getUser();
     const { documents: categories } = getCollection("inventory");
     const { documents: orders } = getCollection("orders");
-    const { document: cart } = getDocument("carts", user.value?.uid);
+    const { documents: carts } = getDocument(
+      "carts",
+      user.value?.displayName,
+      "items"
+    );
     const { _user: myProfile } = getUserDoc("users");
     const { addDoc, isPending, error } = useCollection("inventory");
     const { url, uploadImage } = useStorage();
@@ -1073,9 +1071,8 @@ export default {
         await uploadImage(file.value);
 
         await addDoc({
-          categoryName: categoryName.value,
+          name: categoryName.value,
           url: url.value,
-          products: [],
           createdAt: timestamp(),
         });
 
@@ -1103,7 +1100,7 @@ export default {
       categoryName,
       categories,
       fileError,
-      cart,
+      carts,
       isPending,
       error,
       search,

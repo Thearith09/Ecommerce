@@ -94,6 +94,7 @@ const getCollection = (collection, limited, date) => {
     },
     (err) => {
       error.value = err.message;
+      documents.value = null;
     }
   );
 

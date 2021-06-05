@@ -8,7 +8,7 @@
       >
         <p>
           Once you remove this
-          <span class="text-pink-500">[{{ category.categoryName }}]</span>
+          <span class="text-pink-500">[{{ category.name }}]</span>
           category, all items in this category will be gone as well. Are you
           sure to removing it?
         </p>
@@ -36,7 +36,8 @@
 <script>
 import useStorage from "@/composables/useStorage";
 import useDocument from "@/composables/useDocument";
-import getCollection from "@/composables/getCollection";
+import getDocument from "@/composables/getDocument";
+import useCollection from "@/composables/useCollection";
 import getUser from "@/composables/getUser";
 
 export default {
@@ -45,42 +46,67 @@ export default {
   setup(props, { emit }) {
     const { user } = getUser();
     const { deleteImage } = useStorage();
-    const { document: carts } = getCollection("carts");
-    const { updateDoc: updateCart } = useDocument("carts", user.value?.uid);
-    const { deleteDoc } = useDocument("inventory", props.category?.id);
+    const { documents: carts } = getDocument(
+      "carts",
+      user.value?.displayName,
+      "items"
+    );
+    const { deleteDoc: deleteCart } = useDocument(
+      "carts",
+      user.value?.displayName,
+      "items"
+    );
+    const { documents: products } = getDocument(
+      "inventory",
+      props.category.name,
+      "products"
+    );
+    const { deleteDoc: deleteProduct } = useDocument(
+      "inventory",
+      props.category.name,
+      "products"
+    );
+    const { deleteDoc: deleteCategory } = useCollection("inventory");
 
     const handleCancel = () => {
       emit("close");
     };
 
     const handleRemove = async () => {
-      const category = props.category;
-      const itemIds = [];
+      const productIds = [];
+      const cartIds = [];
 
-      category.products.forEach(async (product) => {
-        carts?.value.forEach((cart) => {
-          cart.items.forEach((item) => {
-            if (item.productId == product.id) {
-              itemIds.push(item.productId);
-            }
-          });
+      products.value.forEach(async (product) => {
+        carts.value.forEach(async (cart) => {
+          if (cart.id == product.id) {
+            cartIds.push(cart.id);
+          }
         });
 
+        productIds.push(product.id);
+
+        //delete image of each products
         for (let image of product.images) {
           await deleteImage(image.url);
         }
       });
 
-      carts?.value.forEach(async (cart) => {
-        const items = cart.items.filter(
-          (item) => !itemIds.includes(item.productId)
-        );
+      if (cartIds.length > 0) {
+        //delete carts first
+        for (let id of cartIds) {
+          await deleteCart(id);
+        }
+      }
 
-        await updateCart({ items });
-      });
+      if (productIds.length > 0) {
+        //then delete products
+        for (let id of productIds) {
+          await deleteProduct(id);
+        }
+      }
 
-      await deleteImage(category.url);
-      await deleteDoc(category.id);
+      await deleteImage(props.category.url);
+      await deleteCategory(props.category.id);
 
       emit("close");
     };

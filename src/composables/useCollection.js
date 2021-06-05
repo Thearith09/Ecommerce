@@ -4,6 +4,7 @@ import { ref } from "@vue/reactivity";
 const useCollection = (collection) => {
     const error = ref(null);
     const isPending = ref(false);
+    let documentRef = projectFirestore.collection(collection);
 
     const addUser = async (id, userInfo) => {
         error.value = null;
@@ -22,7 +23,7 @@ const useCollection = (collection) => {
         isPending.value = true;
 
         try {
-            const response = await projectFirestore.collection(collection).add(category);
+            const response = await projectFirestore.collection(collection).doc(category.name).set(category);
             isPending.value = false;
             return response;
 
@@ -32,7 +33,20 @@ const useCollection = (collection) => {
         }
     };
 
-    return { error, addUser, addDoc, isPending };
+    const deleteDoc = async (docId) => {
+        error.value = null;
+        documentRef = documentRef.doc(docId);
+
+        try {
+            const res = await documentRef.delete();
+            return res;
+
+        } catch (err) {
+            error.value = err.message;
+        }
+    };
+
+    return { error, addUser, addDoc, deleteDoc, isPending };
 };
 
 export default useCollection;

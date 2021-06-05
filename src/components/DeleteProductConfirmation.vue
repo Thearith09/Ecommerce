@@ -6,8 +6,7 @@
       <div class="font-bold text-gray-700 pb-5 flex items-center">
         <p>
           Are you seriously wanting to remove this
-          <span class="text-pink-500">[{{ product.productName }}]</span> product
-          ?
+          <span class="text-pink-500">[{{ product.name }}]</span> product ?
         </p>
       </div>
       <div class="flex justify-start">
@@ -37,13 +36,30 @@ import getDocument from "@/composables/getDocument";
 import getUser from "@/composables/getUser";
 
 export default {
-  props: ["product", "category"],
+  props: ["product", "name"],
   setup(props, { emit }) {
     const { user } = getUser();
     const { deleteImage } = useStorage();
-    const { document: cart } = getDocument("carts", user.value?.uid);
-    const { updateDoc: updateCart } = useDocument("carts", user.value?.uid);
-    const { updateDoc } = useDocument("inventory", props.category.id);
+    const { documents: carts } = getDocument(
+      "carts",
+      user.value?.displayName,
+      "items"
+    );
+    const { deleteDoc: deleteCart } = useDocument(
+      "carts",
+      user.value?.displayName,
+      "items"
+    );
+    const { deleteDoc: deleteProduct } = useDocument(
+      "inventory",
+      props.name,
+      "products"
+    );
+    const { documents: products } = getDocument(
+      "inventory",
+      props.name,
+      "products"
+    );
 
     const handleCancel = () => {
       emit("close");
@@ -52,18 +68,23 @@ export default {
     const handleRemove = async () => {
       const images = props.product.images;
       const id = props.product.id;
-      const category = props.category;
 
       for (let image of images) {
         await deleteImage(image.url);
       }
 
-      const products = category.products.filter((product) => product.id != id);
-      await updateDoc({ products });
+      products.value?.forEach(async (product) => {
+        if (product.id == id) {
+          await deleteProduct(product.id);
+        }
+      });
 
       //once remove product, remove from cart as well.
-      const items = cart.value?.items.filter((item) => item.productId != id);
-      await updateCart({ items });
+      carts.value?.forEach(async (item) => {
+        if (item.id == id) {
+          await deleteCart(item.id);
+        }
+      });
 
       emit("close");
     };

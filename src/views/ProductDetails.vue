@@ -5,18 +5,14 @@
     </div>
 
     <div class="mb-auto my-5 2xl:w-3/4 2xl:mx-auto">
-      <div v-if="category">
-        <div
-          class="h-auto"
-          v-for="product in category.products"
-          :key="product.id"
-        >
-          <div v-if="product.id == productId">
+      <div v-if="products">
+        <div class="h-auto" v-for="product in products" :key="product.id">
+          <div v-if="product.id == id">
             <component
               :is="currentComponent"
               :item="product"
               @order="emitOrder"
-              :key="category"
+              :key="id"
             />
           </div>
         </div>
@@ -42,12 +38,16 @@ export default {
     Footer,
     Product,
   },
-  props: ["categoryId", "productId"],
+  props: ["categoryName", "id"],
   setup(props) {
     const currentComponent = ref("Product");
-    const { document: category } = getDocument("inventory", props.categoryId);
+    const { documents: products } = getDocument(
+      "inventory",
+      props.categoryName,
+      "products"
+    );
 
-    return { category, currentComponent };
+    return { products, currentComponent };
   },
 };
 </script>
