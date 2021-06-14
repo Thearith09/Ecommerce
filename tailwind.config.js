@@ -32,16 +32,8 @@ module.exports = {
       },
       screens: {
         // for small phone screen
-        '3sm': '450px',
-        '2sm': '600px',
-        'sm': '640px',
-        'asm': '680px',
-        'md': '768px',
-        'amd': '850px',
-        'lg': '1024px',
-        'alg': '1120px',
-        'xl': '1280px',
-        '2xl': '1536px',
+        'iphone': '500px',
+        'tablet': '640px'
       },
     },
   },

@@ -4,13 +4,61 @@
       <Navbar />
     </div>
 
-    <div class="mb-auto my-5 2xl:w-3/4 2xl:mx-auto">
+    <div class="2xl:w-3/4 2xl:mx-auto">
       <div
-        class="bg-white 3sm:p-5 3sm:space-y-2 rounded min-w-max 3sm:min-w-0 "
-        v-if="carts"
+        v-if="carts?.length > 0"
+        class="flex flex-col-reverse lg:flex-row lg:space-x-2 lg:w-11/12 mb-auto my-5 lg:mx-auto"
       >
-        <div v-for="item in carts" :key="item.id">
-          <Cart :item="item" @order="emitOrder" />
+        <div class="flex flex-col bg-white rounded" v-if="carts">
+          <div v-for="item in carts" :key="item.id">
+            <Cart :item="item" @updateQty="handleUpdateQty" />
+          </div>
+        </div>
+
+        <div class="space-y-5 w-full lg:w-2/4 xl:w-1/3 p-5 h-72">
+          <div
+            v-if="!discount"
+            class="text-right space-x-10 items-center font-medium text-gray-700"
+          >
+            <span class="underline"> {{ pieces }} pieces </span>
+            <span>${{ subTotal.toFixed(2) }} </span>
+          </div>
+
+          <div v-else class="text-right font-medium text-gray-700 space-y-3">
+            <div class="space-x-10 items-center">
+              <span class="underline"> {{ pieces }} pieces </span>
+              <span>${{ subTotal.toFixed(2) }} </span>
+            </div>
+            <div
+              class="bg-red-600 text-white space-x-10 items-center p-2 rounded"
+            >
+              <span> Discount </span>
+              <span>- ${{ discount.toFixed(2) }} </span>
+            </div>
+          </div>
+
+          <div
+            class="text-right space-x-10 items-center font-medium text-gray-700 border-b-2 border-gray-200 pb-3"
+          >
+            <span class="underline"> Shipping </span>
+            <span>${{ shipping.toFixed(2) }}</span>
+          </div>
+
+          <div>
+            <div class="text-right space-x-10 text-gray-700 font-bold">
+              <span>Total Price</span>
+              <span class="text-red-600">${{ total.toFixed(2) }}</span>
+            </div>
+          </div>
+
+          <div class="pb-5 border-b-2 border-gray-200">
+            <button
+              @click="handleCheckout"
+              class="focus:outline-none w-full p-3 uppercase flex rounded justify-center items-center cursor-pointer text-white bg-pink-500 hover:bg-pink-700 font-medium shadow"
+            >
+              Checkout
+            </button>
+          </div>
         </div>
       </div>
 
@@ -52,139 +100,101 @@
       <Footer />
     </div>
   </div>
-  <component
-    :is="currentComponent"
-    :orders="orders"
-    @close="handleClose"
-    :invoiceNum="ordersCollection?.length || 0"
-  />
 </template>
 
 <script>
 import getDocument from "@/composables/getDocument";
-import getUserDoc from "@/composables/getUserDoc";
-import getCollection from "@/composables/getCollection";
+import useDocument from "@/composables/useDocument";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import getUser from "@/composables/getUser";
 import Cart from "@/components/Cart.vue";
-import PrintInvoice from "@/components/PrintInvoice";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
-import { watch } from "vue";
+import { watchEffect } from "vue";
+import { functions } from "@/firebase/config";
+import { loadStripe } from "@stripe/stripe-js";
 
 export default {
   components: {
     Navbar,
     Footer,
     Cart,
-    PrintInvoice,
   },
   setup() {
     const total = ref(null);
-    const items = ref([]);
+    const subTotal = ref(null);
     const pieces = ref(0);
     const shipping = ref(2);
-    const orders = ref(null);
-    const currentComponent = ref("");
+    const discount = ref(null);
 
     const router = useRouter();
     const { user } = getUser();
-    const { _user } = getUserDoc("users");
     const { documents: carts } = getDocument(
       "carts",
       user.value?.displayName,
       "items"
     );
-    const { documents: ordersCollection } = getCollection("orders");
+    const { updateDoc: updateCart } = useDocument(
+      "carts",
+      user.value?.displayName,
+      "items"
+    );
 
-    watch(pieces, () => {
-      if (pieces.value >= 3) shipping.value = 0;
-      else shipping.value = 2;
+    watchEffect(() => {
+      //reset once carts collection has been updated
+      subTotal.value = null;
+      total.value = null;
+      pieces.value = 0;
+      discount.value = null;
+
+      carts.value?.forEach((cart) => {
+        if (cart.discount > 0) {
+          discount.value += (cart.price * cart.qty * cart.discount) / 100;
+        }
+
+        subTotal.value += parseFloat(cart.price * cart.qty);
+        pieces.value += parseInt(cart.qty);
+      });
+      total.value = parseFloat(
+        subTotal.value + shipping.value - discount.value
+      );
     });
 
     const handleNavigation = () => {
       router.push({ name: "Home" });
     };
 
-    const handleClose = (completed) => {
-      if (completed) {
-        total.value = null;
-        items.value = [];
-        pieces.value = 0;
-        shipping.value = 2;
-        orders.value = null;
-      }
-      currentComponent.value = "";
+    const handleUpdateQty = async (e) => {
+      await updateCart(e);
     };
 
-    const emitOrder = (e) => {
-      for (let doc of e) {
-        if (doc) {
-          const index = items.value.findIndex(
-            (item) => item.id == doc.id && item.color == doc.color
-          );
-          if (index != -1) {
-            items.value[index] = doc;
-          } else {
-            items.value.push(doc);
-          }
-        }
-      }
-      handleTotal();
-    };
+    const handleCheckout = async () => {
+      const createStripeCheckout = functions.httpsCallable(
+        "createStripeCheckout"
+      );
 
-    const handleTotal = () => {
-      //total price for each cart
-      let totalTemp = 0;
-      let piecesTemp = 0;
-      for (let item of items.value) {
-        if (item && item.qty > 0 && item.size) {
-          piecesTemp += parseFloat(item.qty);
-          totalTemp +=
-            item.price * item.qty -
-            (item.discount * item.price * item.qty) / 100;
-        } else {
-          piecesTemp = piecesTemp;
-          totalTemp = totalTemp;
-        }
-      }
-      pieces.value = piecesTemp;
-      total.value = totalTemp;
-    };
+      const stripe = await loadStripe(
+        "pk_test_51Is77NBVuXsuKaUY6WAFvG0YNecHXxnU0XPN3yKSZeC49BkY5AUAXpVjTx45zx0HCHKr654nlUHKD9zsqb5X55nz00NN802AgG"
+      );
 
-    const handleOrder = async () => {
-      //insert into orders if the item.size and item.qty exist
-      const orderedItems = items.value.filter((item) => item.size && item.qty);
-      const order = {
-        name: user.value.displayName,
-        tel: _user.value.telephone,
-        facebook: _user.value.facebook,
-        telegram: _user.value.telegram,
-        items: orderedItems,
-        shipping: shipping.value,
-      };
-
-      orders.value = order;
-      if (order.items.length > 0) {
-        currentComponent.value = "PrintInvoice";
-      }
+      const res = await createStripeCheckout({
+        name: user.value?.displayName,
+      });
+      const sessionId = await res.data.id;
+      stripe.redirectToCheckout({ sessionId });
     };
 
     return {
-      handleOrder,
-      handleClose,
+      handleCheckout,
+      handleUpdateQty,
       handleNavigation,
-      emitOrder,
       carts,
       total,
-      items,
+      subTotal,
+      discount,
       pieces,
       shipping,
-      _user,
-      currentComponent,
-      orders,
-      ordersCollection,
     };
   },
 };

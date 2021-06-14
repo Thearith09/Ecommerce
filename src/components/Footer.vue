@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-10 py-5 sm:py-10 flex flex-col sm:flex-row-reverse sm:space-y-0 bg-white shadow-lg h-auto min-w-max sm:min-w-0"
+    class="px-10 py-5 sm:py-10 flex flex-col sm:flex-row-reverse sm:space-y-0 bg-white shadow-lg h-auto min-w-max sm:min-w-0 border-t-2 border-gray-200"
   >
     <div class="pb-5 sm:pb-0 w-full sm:w-3/4 md:w-2/4 lg:w-3/4 xl:w-full">
       <div

@@ -61,7 +61,7 @@
         <div class="flex w-80 space-x-5 my-5">
           <div class="w-full space-y-3">
             <h3 class="text-gray-700 font-semibold uppercase">
-              {{ item.productName }}
+              {{ item.name }}
             </h3>
             <h5 class="text-gray-500 leading-none">
               {{ item.description }}
@@ -284,7 +284,7 @@
         <div class="flex justify-between my-2 sm:my-0 w-80">
           <div class="w-full sm:space-y-2">
             <h3 class="text-gray-700 font-semibold uppercase">
-              {{ item.productName }}
+              {{ item.name }}
             </h3>
             <h5 class="text-gray-500 leading-none">
               {{ item.description }}
@@ -503,17 +503,18 @@ import { computed, onMounted, watch } from "vue";
 import getCollection from "@/composables/getCollection";
 import getDocument from "@/composables/getDocument";
 import useDocument from "@/composables/useDocument";
-import { timestamp } from "@/firebase/config";
+import { timestamp, functions } from "@/firebase/config";
 import getUser from "@/composables/getUser";
 import getUserDoc from "@/composables/getUserDoc";
 import PrintInvoice from "@/components/PrintInvoice";
+import { loadStripe } from "@stripe/stripe-js";
 
 export default {
   components: {
     PrintInvoice,
   },
   emits: ["order"],
-  props: ["item"],
+  props: ["item", "categoryName"],
   setup(props, { emit }) {
     const url = ref(null); // image url
     const qtys = ref([]); //store each qty in qtys
@@ -580,25 +581,32 @@ export default {
     };
 
     const handleCheckout = async () => {
-      //insert into orders if the item.size and item.qty exist
       if (!user.value) {
         return router.push({ name: "Login" });
       }
 
-      const orderedItems = items.value.filter((item) => item.size && item.qty);
-      const order = {
+      const checkoutItem = items.value.filter((item) => item.size && item.qty);
+      const checkouts = {
         name: user.value.displayName,
         tel: _user.value.telephone,
         facebook: _user.value.facebook,
         telegram: _user.value.telegram,
-        items: orderedItems,
-        shipping: shipping.value,
+        items: checkoutItem,
       };
-      orders.value = order;
+      const createStripeCheckout = functions.httpsCallable(
+        "createStripeCheckout"
+      );
 
-      if (order.items?.length > 0) {
-        currentComponent.value = "PrintInvoice";
-      }
+      const stripe = await loadStripe(
+        "pk_test_51Is77NBVuXsuKaUY6WAFvG0YNecHXxnU0XPN3yKSZeC49BkY5AUAXpVjTx45zx0HCHKr654nlUHKD9zsqb5X55nz00NN802AgG"
+      );
+
+      const res = await createStripeCheckout({
+        checkoutItem: checkoutItem,
+        categoryName: props.categoryName,
+      });
+      const sessionId = await res.data.id;
+      stripe.redirectToCheckout({ sessionId });
     };
 
     const handleAddToCart = async (product) => {
@@ -613,7 +621,7 @@ export default {
         } else {
           const item = {
             id: product.id,
-            productName: product.productName,
+            name: product.name,
             price: product.price,
             discount: product.discount,
             sizes: product.sizes,
@@ -676,7 +684,7 @@ export default {
         const doc = {};
         doc.size = size;
 
-        doc.name = props.item.productName;
+        doc.name = props.item.name;
         doc.id = props.item.id;
         doc.price = props.item.price;
         doc.discount = props.item.discount;
@@ -741,7 +749,7 @@ export default {
         items.value[i].qty = qtys.value[i];
       } else {
         const doc = {};
-        doc.name = item.productName;
+        doc.name = item.name;
         doc.id = item.id;
         doc.price = item.price;
         doc.discount = item.discount;

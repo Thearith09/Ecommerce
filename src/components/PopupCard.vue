@@ -1,9 +1,11 @@
 <template>
   <div
-    class="flex justify-center items-start md:items-center inset-0 fixed w-full h-screen bg-gray-900 bg-opacity-50 z-40"
+    class="flex justify-center items-center inset-0 fixed w-full h-screen bg-gray-900 bg-opacity-50 z-40"
   >
-    <div class="relative bg-white flex h-auto rounded p-5">
-      <div class="absolute top-0 right-0">
+    <div
+      class="relative px-5 py-5 bg-white flex flex-col md:flex-row md:space-x-5 md:pl-0 md:pr-5 h-auto rounded"
+    >
+      <div class="absolute top-0 right-0 z-40">
         <svg
           @click="handleClose"
           xmlns="http://www.w3.org/2000/svg"
@@ -19,49 +21,55 @@
         </svg>
       </div>
 
-      <div class="flex space-x-5 pr-5">
+      <div class="flex w-80 sm:w-96 md:w-80">
         <div class="relative">
           <img
-            class="w-64 h-52 rounded object-cover object-center"
+            class="flex-none w-full h-60 md:h-full rounded object-cover object-center"
             :src="item.images[index].url"
           />
           <h3
             v-if="item.discount > 0"
-            class="absolute top-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
+            class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
           >
             {{ item.discount }}% OFF
           </h3>
         </div>
       </div>
 
-      <div>
+      <div class="w-80 sm:w-96">
         <div class="space-y-2">
-          <h2 class="text-gray-700 font-semibold uppercase">
-            {{ item.productName }}
+          <h2 class="text-gray-700 font-semibold uppercase text-xl">
+            {{ item.name }}
           </h2>
-          <h4 class="text-gray-500 leading-none">{{ item.description }}</h4>
-          <div class="flex space-x-1">
+          <h4 class="text-gray-500 leading-none">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+            numquam magni obcaecati doloribus commodi neque animi!
+          </h4>
+          <div v-if="item.discount > 0" class="flex space-x-1">
             <span class="font-medium text-gray-700 line-through block"
               >USD {{ Number(item.price).toFixed(2) }}</span
             >
-            <span
-              v-if="item.discount > 0"
-              class="font-medium block text-red-600"
+            <span class="font-medium block text-red-600"
               >USD
               {{
                 (item.price - (item.price * item.discount) / 100).toFixed(2)
               }}</span
             >
           </div>
+          <div v-else class="flex space-x-1">
+            <span class="font-medium text-gray-700 block"
+              >USD {{ Number(item.price).toFixed(2) }}</span
+            >
+          </div>
           <div>
             <p class="text-gray-700">sizes:</p>
-            <div class="grid grid-cols-4 gap-1 text-gray-500">
+            <div class="flex space-x-1 text-gray-500">
               <span
                 @click="handleActiveSize(i)"
                 :class="{ activeBorder: indexSize == i }"
                 v-for="(size, i) in item.sizes"
                 :key="size"
-                class="flex rounded items-center justify-center px-10 font-semibold uppercase border-2 h-10 w-24 cursor-pointer"
+                class="flex rounded items-center justify-center font-semibold uppercase border-2 py-1 px-3 cursor-pointer"
               >
                 {{ size }}
               </span>
@@ -123,7 +131,7 @@
                     item.sizes[indexSize]
                   )
                 "
-                class="rounded focus:outline-none w-full shadow font-medium text-pink-500 hover:text-pink-700"
+                class="rounded focus:outline-none w-full shadow font-medium text-pink-500 hover:text-pink-700 p-2"
               >
                 ADD TO CART
               </button>

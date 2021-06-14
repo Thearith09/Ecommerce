@@ -5,7 +5,7 @@
     </div>
     <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div>
-        <!-- <Slideshow /> -->
+        <Slideshow />
       </div>
       <div v-for="(category, index) in categories" :key="category.id">
         <div class="my-5 mx-10 2xl:mx-0 space-y-3">

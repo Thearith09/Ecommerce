@@ -18,7 +18,9 @@ const useDocument = (collection, id, subCollection) => {
 
         } catch (err) {
             error.value = err.message;
-        }  
+        }
+
+        documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
     };
 
     const addDoc = async (doc) => {
@@ -45,12 +47,16 @@ const useDocument = (collection, id, subCollection) => {
         try {
             const res = await documentRef.update(updates);
             isPending.value = false;
+            documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
             return res;
 
         } catch (err) {
             isPending.value = false;
             error.value = err.message;
         }
+
+        documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
+
     };
 
     return { error, deleteDoc, updateDoc, addDoc, isPending };

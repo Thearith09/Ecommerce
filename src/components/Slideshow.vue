@@ -5,7 +5,7 @@
         v-for="(slide, index) in slides"
         :key="index"
         :image="slide.link"
-        @click="handleNavigation(slide.id)"
+        @click="handleNavigation(slide)"
       >
       </vueper-slide>
     </vueper-slides>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import { VueperSlides, VueperSlide } from "vueperslides";
 import { useRouter } from "vue-router";
 import getCollection from "@/composables/getCollection";
@@ -44,33 +44,37 @@ export default {
     const slides = ref([]);
     const router = useRouter();
 
-    const { documents: categories } = getCollection("inventory");
+    onMounted(() => {
+      const { documents } = getCollection("inventory");
 
-    watch(categories, () => {
-      categories.value?.forEach((category) => {
-        const { documents: products } = getDocument(
-          "inventory",
-          category.name,
-          "products"
-        );
-        products.forEach((product) => {
-          if (product.discount >= 10) {
-            product.images.forEach((image) => {
-              slides.value.push({
-                id: product.id,
-                title: product.name,
-                content: product.description,
-                link: image.url,
-              });
+      watch(documents, () => {
+        for (let category of documents.value) {
+          const { documents: products } = getDocument(
+            "inventory",
+            category.name,
+            "products"
+          );
+          watch(products, () => {
+            products.value.forEach((product) => {
+              if (product.discount > 0) {
+                product.images.forEach((image) => {
+                  slides.value.push({
+                    id: product.id,
+                    productName: product.name,
+                    categoryName: category.name,
+                    content: product.description,
+                    link: image.url,
+                  });
+                });
+              }
             });
-          }
-        });
+          });
+        }
       });
     });
-
-    const handleNavigation = (id) => {
+    const handleNavigation = (slide) => {
       router.push({
-        path: `/categories/${id}`,
+        path: `/categories/${slide.categoryName}`,
       });
     };
 

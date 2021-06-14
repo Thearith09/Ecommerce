@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 bg-white min-w-max sm:min-w-0">
+  <div class="p-5 bg-white min-w-max sm:min-w-0 border-b-2 border-gray-200">
     <!--screen less than 640 without user-->
     <div v-if="!user && windowWidth < 640" class="flex justify-between">
       <div class="w-full">

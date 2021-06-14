@@ -11,6 +11,7 @@
             <component
               :is="currentComponent"
               :item="product"
+              :categoryName="categoryName"
               @order="emitOrder"
               :key="id"
             />
