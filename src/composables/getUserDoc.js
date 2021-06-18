@@ -11,7 +11,6 @@ const getUserDoc = (collection) => {
     const error = ref(null);
     const _user = ref(null);
     if (user.value) {
-        console.log(user.value);
         const documentRef = projectFirestore.collection(collection).doc(user.value.uid);
 
         const unsubscribe = documentRef.onSnapshot((doc) => {

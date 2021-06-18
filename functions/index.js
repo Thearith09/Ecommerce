@@ -1,6 +1,5 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const stripe = require('stripe')(functions.config().stripe.secret);
 admin.initializeApp();
 
 exports.addAdminRole = functions.https.onCall((data, context) => {
@@ -14,26 +13,26 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
 });
 
 exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
+    const stripe = require('stripe')(functions.config().stripe.secret);
     const results = [];
     // let coupon;
 
     if (data.checkoutItem) {
       const documentRef = admin.firestore().doc(`inventory/${data.categoryName}`);
-      const product = await documentRef.collection('products').doc(data.checkoutItem[0].name).get();
-
-      data.checkoutItem.forEach(async (item) => {
-        const price = product.data().price - (product.data().price * product.data().discount) / 100;
-        results.push({
-          quantity: item.qty,
-          price_data: {
-            currency: 'usd',
-            unit_amount: parseFloat((100 * price).toFixed(2)),
-            product_data: {
-              images: [ item.color ],
-              name: item.name
-            }
+      const product = await documentRef.collection('products').doc(data.checkoutItem.name).get();
+      const item = data.checkoutItem;
+      
+      const price = product.data().price - (product.data().price * product.data().discount) / 100;
+      results.push({
+        quantity: item.qty,
+        price_data: {
+          currency: 'usd',
+          unit_amount: parseFloat((100 * price).toFixed(2)),
+          product_data: {
+            images: [ item.color ],
+            name: item.name
           }
-        });
+        }
       });
 
       // if (product.data().discount > 0) {
@@ -75,13 +74,14 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
     }
 
     const session = await stripe.checkout.sessions.create({
-      success_url: 'http://localhost:8080',
-      cancel_url: 'http://localhost:8080',
+      success_url: 'http://localhost:3001/success',
+      cancel_url: 'http://localhost:3001',
       payment_method_types: ['card'],
       shipping_rates: ['shr_1J15yPBVuXsuKaUYaBcvgYRe'],
       shipping_address_collection: {
         allowed_countries: ['KH'],
       },
+      billing_address_collection: "required",
       mode: 'payment',
       line_items: results,
       // discounts: [{
@@ -91,5 +91,34 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
 
     return {
       id: session.id
-    }
+    };
+});
+
+exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
+  const stripe = require('stripe')(functions.config().stripe.token);
+  let event;
+
+  try {
+    const webhookSecret = functions.config().stripe.payments_webhook_secret;
+    event = stripe.webhooks.constructEvent(
+      req.rawBody,
+      req.headers["stripe-signature"],
+      webhookSecret
+    )
+
+  } catch (err) {
+    console.error("Webhook signature verification failed!");
+    return res.sendStatus(400);
+  }
+
+  console.log("Event: ", event);
+  const dataObject = event.data.object;
+  console.log("Data Object: ", dataObject);
+
+  await admin.firestore().collection("orders").doc().set({
+    checkoutSessionId: dataObject.id,
+    paymentStatus: dataObject.payment_status,
+    shippingInfo: dataObject.shipping,
+    amountTotal: dataObject.amount_total
+  });
 });

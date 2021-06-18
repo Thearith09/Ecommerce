@@ -4,13 +4,19 @@
       <Navbar />
     </div>
 
-    <div class="2xl:w-3/4 2xl:mx-auto">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div
-        v-if="carts?.length > 0"
+        v-if="cart?.length > 0 || tempCart.length > 0"
         class="flex flex-col-reverse lg:flex-row lg:space-x-2 lg:w-11/12 mb-auto my-5 lg:mx-auto"
       >
-        <div class="flex flex-col bg-white rounded" v-if="carts">
-          <div v-for="item in carts" :key="item.id">
+        <div v-if="cart" class="flex flex-col bg-white rounded">
+          <div v-for="item in cart" :key="item.id">
+            <Cart :item="item" @updateQty="handleUpdateQty" />
+          </div>
+        </div>
+
+        <div v-if="tempCart" class="flex flex-col bg-white rounded">
+          <div v-for="item in tempCart" :key="item.id">
             <Cart :item="item" @updateQty="handleUpdateQty" />
           </div>
         </div>
@@ -63,7 +69,7 @@
       </div>
 
       <div
-        v-if="carts?.length <= 0"
+        v-if="cart?.length <= 0 && tempCart.length <= 0"
         class="relative rounded w-full h-auto my-10 p-5 md:w-3/4 xl:w-1/2 md:mx-auto lg:my-20 border-2 border-gray-200 bg-white"
       >
         <div class="flex justify-center mt-12">
@@ -114,6 +120,7 @@ import { ref } from "@vue/reactivity";
 import { watchEffect } from "vue";
 import { functions } from "@/firebase/config";
 import { loadStripe } from "@stripe/stripe-js";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -122,15 +129,18 @@ export default {
     Cart,
   },
   setup() {
-    const total = ref(null);
-    const subTotal = ref(null);
+    const total = ref(0);
+    const subTotal = ref(0);
     const pieces = ref(0);
     const shipping = ref(2);
-    const discount = ref(null);
+    const discount = ref(0);
+
+    const store = useStore();
+    const tempCart = ref(store.state.cart);
 
     const router = useRouter();
     const { user } = getUser();
-    const { documents: carts } = getDocument(
+    const { documents: cart } = getDocument(
       "carts",
       user.value?.displayName,
       "items"
@@ -143,22 +153,38 @@ export default {
 
     watchEffect(() => {
       //reset once carts collection has been updated
-      subTotal.value = null;
-      total.value = null;
+      subTotal.value = 0;
+      total.value = 0;
       pieces.value = 0;
-      discount.value = null;
+      discount.value = 0;
 
-      carts.value?.forEach((cart) => {
-        if (cart.discount > 0) {
-          discount.value += (cart.price * cart.qty * cart.discount) / 100;
-        }
+      if (cart.value?.length > 0) {
+        cart.value.forEach((item) => {
+          if (item.discount > 0) {
+            discount.value += (item.price * item.qty * item.discount) / 100;
+          }
 
-        subTotal.value += parseFloat(cart.price * cart.qty);
-        pieces.value += parseInt(cart.qty);
-      });
-      total.value = parseFloat(
-        subTotal.value + shipping.value - discount.value
-      );
+          subTotal.value += parseFloat(item.price * item.qty);
+          pieces.value += parseInt(item.qty);
+        });
+
+        total.value = parseFloat(
+          subTotal.value + shipping.value - discount.value
+        );
+      } else {
+        tempCart.value.forEach((item) => {
+          if (item.discount > 0) {
+            discount.value += (item.price * item.qty * item.discount) / 100;
+          }
+
+          subTotal.value += parseFloat(item.price * item.qty);
+          pieces.value += parseInt(item.qty);
+        });
+
+        total.value = parseFloat(
+          subTotal.value + shipping.value - discount.value
+        );
+      }
     });
 
     const handleNavigation = () => {
@@ -166,30 +192,39 @@ export default {
     };
 
     const handleUpdateQty = async (e) => {
-      await updateCart(e);
+      if (user.value) {
+        await updateCart(e);
+      } else {
+        store.commit("updateToCart", e);
+      }
     };
 
     const handleCheckout = async () => {
-      const createStripeCheckout = functions.httpsCallable(
-        "createStripeCheckout"
-      );
+      if (!user.value) {
+        router.push({ name: "Login" });
+      } else {
+        const createStripeCheckout = functions.httpsCallable(
+          "createStripeCheckout"
+        );
 
-      const stripe = await loadStripe(
-        "pk_test_51Is77NBVuXsuKaUY6WAFvG0YNecHXxnU0XPN3yKSZeC49BkY5AUAXpVjTx45zx0HCHKr654nlUHKD9zsqb5X55nz00NN802AgG"
-      );
+        const stripe = await loadStripe(
+          "pk_test_51Is77NBVuXsuKaUY6WAFvG0YNecHXxnU0XPN3yKSZeC49BkY5AUAXpVjTx45zx0HCHKr654nlUHKD9zsqb5X55nz00NN802AgG"
+        );
 
-      const res = await createStripeCheckout({
-        name: user.value?.displayName,
-      });
-      const sessionId = await res.data.id;
-      stripe.redirectToCheckout({ sessionId });
+        const res = await createStripeCheckout({
+          name: user.value?.displayName,
+        });
+        const sessionId = await res.data.id;
+        stripe.redirectToCheckout({ sessionId });
+      }
     };
 
     return {
       handleCheckout,
       handleUpdateQty,
       handleNavigation,
-      carts,
+      cart,
+      tempCart,
       total,
       subTotal,
       discount,

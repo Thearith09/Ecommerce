@@ -4,12 +4,12 @@ import { ref } from "@vue/reactivity";
 const error = ref(null);
 const isPending = ref(false);
 
-const login = async (email, password) => {
+const resetPassword = async (email) => {
     error.value = null;
     isPending.value = true;
     
     try {
-        const res = await projectAuth.signInWithEmailAndPassword(email, password);
+        const res = await projectAuth.sendPasswordResetEmail(email);
         isPending.value = false;
 
         return res;
@@ -20,8 +20,8 @@ const login = async (email, password) => {
     }
 };
 
-const useLogin = () => {
-    return { error, login, isPending };
+const useResetPassword = () => {
+    return { error, resetPassword, isPending };
 };
 
-export default useLogin;
+export default useResetPassword;

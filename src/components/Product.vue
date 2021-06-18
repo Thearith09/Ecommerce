@@ -1,54 +1,67 @@
 <template>
-  <div class="bg-white w-full rounded">
-    {{ windowWidth }}
-    <div
-      v-if="total"
-      class="h-auto w-full border-b-2 border-gray-200 bg-white min-w-max xl:min-w-0"
-    >
-      <div
-        class="w-full sm:w-2/4 lg:w-1/3 xl:w-1/4 ml-auto py-10 text-gray-700 font-bold space-x-10"
-      >
-        <div class="px-5 text-gray-500">
-          <div class="flex justify-between pb-2">
-            <p class="underline">{{ pieces }}pieces</p>
-            <span>{{ total.toFixed(2) }}</span>
-          </div>
-          <div v-if="pieces < 3" class="flex justify-between mb-2">
-            <p>Shipping</p>
-            <p>{{ shipping.toFixed(2) }}</p>
-          </div>
-          <div v-else class="flex justify-between mb-2">
-            <p>Free Shipping</p>
-            <p>0.00</p>
-          </div>
-          <hr class="border-white" />
-          <div class="flex justify-between my-5 space-x-5">
-            <span class="font-semibold">Order Amount </span
-            ><span v-if="pieces < 3" class="font-semibold"
-              >USD {{ (total + shipping)?.toFixed(2) }}</span
-            >
-            <span v-else class="font-semibold">
-              USD
-              {{ total?.toFixed(2) }}
-            </span>
-          </div>
-          <div
-            @click="handleCheckout"
-            class="text-pink-500 hover:text-pink-700 cursor-pointer flex justify-center bg-white py-2 shadow"
+  <div
+    class="flex flex-col space-y-10 md:space-y-0 md:flex-row-reverse p-5 lg:w-10/12 xl:w-8/12 mx-auto"
+  >
+    <div class="h-60 w-full md:w-3/4">
+      <div class="md:pl-10 text-gray-500 font-semibold space-y-3">
+        <div class="flex justify-end space-x-10">
+          <p class="underline">{{ pieces }}pieces</p>
+          <span>${{ item.price }}</span>
+        </div>
+
+        <div
+          class="bg-red-600 text-white space-x-10 flex justify-end p-2 rounded"
+        >
+          <span> Discount </span>
+          <span>- ${{ discount }} </span>
+        </div>
+
+        <div
+          class="flex justify-end space-x-10 pb-3 border-b-2 border-gray-200"
+        >
+          <p>Shipping</p>
+          <p>${{ shipping }}</p>
+        </div>
+
+        <div class="flex text-gray-700 justify-end space-x-10">
+          <span>Total Amount</span>
+          <span class="text-red-600 font-bold">${{ total }}</span>
+        </div>
+
+        <div class="border-b-2 border-gray-200 pb-5">
+          <button
+            :disabled="indexSize == null"
+            :class="{ frozen: indexSize == null }"
+            @click="handleCheckout(item.name)"
+            class="rounded focus:outline-none w-full shadow font-semibold text-white bg-pink-500 hover:bg-pink-700 p-2"
           >
-            Checkout
-          </div>
+            CHECKOUT
+          </button>
         </div>
       </div>
     </div>
 
     <!--start screen greater than or equal 1024px-->
-    <div v-if="windowWidth >= 1024" class="flex px-5">
-      <div class="h-full w-96 py-5">
-        <div class="relative w-80">
+    <div class="md:w-3/4 flex space-x-5 sm:space-x-10">
+      <div>
+        <div
+          class="flex flex-col w-12 py-1"
+          v-for="(image, index) in item.images"
+          :key="index"
+        >
           <img
-            class="h-52 w-96 object-center object-cover rounded"
-            :src="url ? url : item.images[0].url"
+            @click="handleChangeImage(image.url)"
+            class="h-12 w-12 rounded-full object-cover object-center block cursor-move"
+            :src="image.url"
+          />
+        </div>
+      </div>
+
+      <div>
+        <div class="relative w-full sm:w-96 h-52">
+          <img
+            class="flex-none w-full h-full object-center object-cover rounded"
+            :src="url"
           />
           <h3
             v-if="item.discount > 0"
@@ -58,117 +71,61 @@
           </h3>
         </div>
 
-        <div class="flex w-80 space-x-5 my-5">
-          <div class="w-full space-y-3">
-            <h3 class="text-gray-700 font-semibold uppercase">
-              {{ item.name }}
-            </h3>
-            <h5 class="text-gray-500 leading-none">
-              {{ item.description }}
-            </h5>
-          </div>
-
-          <div class="text-gray-500 w-1/4 flex justify-end">
-            <svg
-              @click="handleAddToCart(item)"
-              :class="{ added: cartIds.includes(item.id) }"
-              fill="currentColor"
-              viewBox="-2 -3 24 24"
-              class="rounded-full hover:text-pink-700 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full py-7">
-        <div class="relative">
-          <div
-            :class="{ invisiblePreAndNext: start == 0 }"
-            @click="handlePreviousImage"
-            class="absolute -top-3 left-12 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-
-          <div
-            class="flex space-x-3 space-y-1 items-center px-5"
-            v-for="(image, index) in item.images"
-            :key="index"
-            v-show="index >= start && index <= end"
-          >
-            <div class="w-24">
-              <img
-                @click="handleChangeImage(image.url)"
-                class="col-span-1 h-10 w-full object-cover object-center cursor-pointer inline-block rounded"
-                :src="image.url"
-              />
+        <div class="w-full sm:w-96 space-y-3">
+          <div class="space-y-1 lg:space-y-3">
+            <div>
+              <h3 class="text-gray-700 font-semibold uppercase">
+                {{ item.name }}
+              </h3>
+              <h5 class="text-gray-500 leading-none">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
+                ipsam minima quasi ducimus aperiam repudiandae et ex consectetur
+                ipsum facilis? Id, unde!
+              </h5>
             </div>
 
-            <div class="w-44 flex space-x-1">
-              <span class="w-full text-gray-700 text-sm line-through block"
+            <div class="w-44 flex pt-2 space-x-1 font-semibold">
+              <span class="text-gray-700 line-through block"
                 >USD {{ Number(item.price).toFixed(2) }}</span
               >
-              <span
-                v-if="item.discount > 0"
-                class="w-full block text-red-600 text-sm"
+              <span v-if="item.discount > 0" class="block text-red-600"
                 >USD
                 {{
                   (item.price - (item.price * item.discount) / 100).toFixed(2)
                 }}</span
               >
             </div>
+          </div>
 
-            <div class="w-40 flex items-center">
-              <button
-                :class="{ frozen: qtys[index] <= 1 }"
-                :disabled="qtys[index] <= 1"
-                @click="handleDecrement(index, item)"
-                class="border-2 h-10 p-1 focus:outline-none border-gray-200 inline-block text-gray-500 hover:bg-gray-100"
+          <div>
+            <p class="text-gray-700">Size:</p>
+            <div class="flex space-x-2 text-gray-500">
+              <span
+                v-for="(size, i) in item.sizes"
+                :key="i"
+                :class="{ activeBorder: indexSize == i }"
+                @click="handleActiveSize(i)"
+                class="flex items-center justify-center font-semibold uppercase border-2 py-1 px-3 h-10 cursor-pointer"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
+                {{ size }}
+              </span>
+            </div>
+          </div>
 
+          <div>
+            <p class="text-gray-700">Qty:</p>
+            <div class="relative text-gray-500">
               <input
-                @keydown="handleInput"
-                @change="handleChanges($event, index, item)"
-                class="inline-block focus:outline-none border-2 border-b-2 border-l-0 border-r-0 border-gray-200 w-24 h-10 text-center text-sm text-gray-700"
+                @keydown="handleInput($event, item.name)"
+                @input="handleChangeQty($event, item.name)"
+                class="inline-block focus:outline-none border-2 border-gray-200 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
                 type="text"
-                :value="qtys[index]"
+                v-model="qty"
               />
 
-              <button
-                @click="handleIncrement(index, item)"
-                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-500 cursor-pointer hover:bg-gray-100"
-              >
+              <div class="absolute top-2 left-20 cursor-pointer">
                 <svg
+                  @click="qty++"
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-5 w-5"
                   viewBox="0 0 20 20"
@@ -180,61 +137,19 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-              </button>
-            </div>
+              </div>
 
-            <div class="w-96 flex items-center">
-              <div
-                :class="{
-                  invisiblePreAndNext: starts[index] == 0,
-                }"
-                class="border-2 h-10 flex items-center border-gray-200 text-gray-500 hover:bg-gray-100 cursor-pointer"
-              >
+              <div v-if="qty > 1" class="absolute top-2 left-3 cursor-pointer">
                 <svg
-                  @click="handlePreviousSize(index)"
-                  class="h-7 w-7 inline-block"
+                  @click="qty--"
                   xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
                   <path
                     fill-rule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-
-              <div v-for="(size, i) in item.sizes" :key="i">
-                <span
-                  @click="handleActiveSize(index, i, size)"
-                  :class="{
-                    activeSize: i == indexSizes[index],
-                  }"
-                  v-if="i >= starts[index] && i <= ends[index]"
-                  class="px-10 mx-px font-semibold text-gray-500 uppercase border-2 border-gray-200 h-10 w-10 flex items-center justify-center cursor-pointer"
-                >
-                  {{ size }}
-                </span>
-              </div>
-
-              <div
-                :class="{
-                  invisiblePreAndNext: item.sizes.length - 1 <= ends[index],
-                }"
-                class="border-2 h-10 flex items-center border-gray-200 hover:bg-gray-100 cursor-pointer"
-              >
-                <svg
-                  @click="handleNextSize(index)"
-                  class="h-7 w-7 inline-block text-gray-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
                     clip-rule="evenodd"
                   />
                 </svg>
@@ -242,357 +157,85 @@
             </div>
           </div>
 
-          <div
-            :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
-            @click="handleNextImage"
-            class="absolute -bottom-3 left-12 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
-          >
-            <svg
-              class="h-6 w-6 inline-block"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+          <div>
+            <button
+              :disabled="indexSize == null"
+              :class="{ frozen: indexSize == null }"
+              @click="handleAddToCart(item, item.sizes[indexSize])"
+              class="rounded focus:outline-none w-full shadow font-semibold text-white bg-pink-500 hover:bg-pink-700 p-2"
             >
-              <path
-                fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              />
-            </svg>
+              ADD TO CART
+            </button>
           </div>
         </div>
       </div>
     </div>
     <!--end screen greater than or equal 1024pxx-->
-
-    <!--start screen less than 1024px-->
-    <div v-if="windowWidth < 1024" class="flex flex-col h-auto pb-5">
-      <div class="flex sflex-row space-x-5 h-full w-full p-5 pb-0">
-        <div class="relative w-80">
-          <img
-            class="h-52 w-full object-cover object-center rounded"
-            :src="url ? url : item.images[0].url"
-          />
-          <h3
-            v-if="item.discount > 0"
-            class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
-          >
-            {{ item.discount }}% OFF
-          </h3>
-        </div>
-
-        <div class="flex justify-between my-2 sm:my-0 w-80">
-          <div class="w-full sm:space-y-2">
-            <h3 class="text-gray-700 font-semibold uppercase">
-              {{ item.name }}
-            </h3>
-            <h5 class="text-gray-500 leading-none">
-              {{ item.description }}
-            </h5>
-            <div class="w-full pt-3 space-x-3">
-              <span class="w-full text-gray-700 font-semibold line-through"
-                >USD {{ Number(item.price).toFixed(2) }}</span
-              >
-              <span
-                v-if="item.discount > 0"
-                class="w-full text-red-600 font-semibold"
-                >USD
-                {{
-                  (item.price - (item.price * item.discount) / 100).toFixed(2)
-                }}</span
-              >
-            </div>
-          </div>
-
-          <div class="text-gray-500 w-1/4 flex justify-end">
-            <svg
-              @click="handleAddToCart(item)"
-              :class="{ added: cartIds.includes(item.id) }"
-              fill="currentColor"
-              viewBox="-2 -3 24 24"
-              class="rounded-full hover:text-pink-700 h-10 w-10 border-2 border-gray-200 inline-block p-1 cursor-pointer"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <div class="py-1 sm:py-3 w-full">
-        <div class="relative space-y-3 w-full">
-          <div
-            :class="{ invisiblePreAndNext: start == 0 }"
-            @click="handlePreviousImage"
-            class="absolute -top-4 left-12 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-
-          <div
-            class="flex items-center px-5 space-x-2 sm:space-x-5 md:space-x-8"
-            v-for="(image, index) in item.images"
-            :key="index"
-            v-show="index >= start && index <= end"
-          >
-            <div class="w-24 bg-green-300">
-              <img
-                @click="handleChangeImage(image.url)"
-                class="w-full h-10 object-cover object-center cursor-pointer inline-block rounded"
-                :src="image.url"
-              />
-            </div>
-
-            <div class="w-40 flex items-center">
-              <button
-                :class="{ frozen: qtys[index] <= 1 }"
-                :disabled="qtys[index] <= 1"
-                @click="handleDecrement(index, item)"
-                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-500 hover:bg-gray-100"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-
-              <input
-                @keydown="handleInput"
-                @change="handleChanges($event, index, item)"
-                class="inline-block focus:outline-none border-2 border-r-0 border-l-0 border-gray-200 h-10 w-full text-center text-sm text-gray-700"
-                type="text"
-                :value="qtys[index]"
-              />
-
-              <button
-                @click="handleIncrement(index, item)"
-                class="border-2 p-1 h-10 focus:outline-none border-gray-200 inline-block text-gray-500 cursor-pointer hover:bg-gray-100"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div class="w-96 flex items-center justify-center">
-              <div
-                :class="{
-                  invisiblePreAndNext: starts[index] == 0,
-                }"
-                class="border-2 h-10 flex items-center border-gray-200 text-gray-500 hover:bg-gray-100 cursor-pointer"
-              >
-                <svg
-                  @click="handlePreviousSize(index)"
-                  class="h-7 w-7 inline-block"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-
-              <div v-for="(size, i) in item.sizes" :key="i">
-                <span
-                  @click="handleActiveSize(index, i, size)"
-                  :class="{
-                    activeSize: i == indexSizes[index],
-                  }"
-                  v-if="i >= starts[index] && i <= ends[index]"
-                  class="mx-px px-8 font-semibold text-gray-500 uppercase border-2 border-gray-200 h-10 w-10 flex items-center justify-center cursor-pointer"
-                >
-                  {{ size }}
-                </span>
-              </div>
-
-              <div
-                :class="{
-                  invisiblePreAndNext: item.sizes.length - 1 <= ends[index],
-                }"
-                class="border-2 h-10 flex items-center border-gray-200 hover:bg-gray-100 cursor-pointer"
-              >
-                <svg
-                  @click="handleNextSize(index)"
-                  class="h-7 w-7 inline-block text-gray-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div
-            :class="{ invisiblePreAndNext: end >= item.images.length - 1 }"
-            @click="handleNextImage"
-            class="absolute -bottom-3 left-12 w-8 h-8 hover:text-pink-700 bg-white shadow rounded-full flex justify-center items-center cursor-pointer text-pink-500"
-          >
-            <svg
-              class="h-6 w-6 inline-block"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--end screen less than 1024px-->
   </div>
-
-  <component
-    :is="currentComponent"
-    :orders="orders"
-    @close="handleClose"
-    :invoiceNum="ordersCollection?.length || 0"
-  />
 </template>
 
 <script>
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
-import { computed, onMounted, watch } from "vue";
-import getCollection from "@/composables/getCollection";
 import getDocument from "@/composables/getDocument";
 import useDocument from "@/composables/useDocument";
-import { timestamp, functions } from "@/firebase/config";
 import getUser from "@/composables/getUser";
-import getUserDoc from "@/composables/getUserDoc";
-import PrintInvoice from "@/components/PrintInvoice";
 import { loadStripe } from "@stripe/stripe-js";
+import { timestamp, functions } from "@/firebase/config";
+import { watch } from "@vue/runtime-core";
+import { useStore } from "vuex";
 
 export default {
-  components: {
-    PrintInvoice,
-  },
   emits: ["order"],
   props: ["item", "categoryName"],
   setup(props, { emit }) {
-    const url = ref(null); // image url
-    const qtys = ref([]); //store each qty in qtys
-    const start = ref(0); // limit image shows
-    const end = ref(3); //limit image shows
-    const starts = ref([]); //limit size shows
-    const ends = ref([]); //limit size shows
-    const total = ref(null); //total price
-    const items = ref([]);
-    const indexSizes = ref([]); //for active size (chosen size)
-    const cartIds = ref([]);
+    const url = ref(props.item?.images[0].url); // image url
+    const qty = ref(1);
     const shipping = ref(2);
-    const orders = ref(null);
-    const pieces = ref(0);
-    const windowWidth = ref(window.innerWidth);
-    const currentComponent = ref("");
+    const total = ref(
+      Number(props.item.price) +
+        shipping.value -
+        (props.item.price * props.item.discount) / 100
+    );
+    const pieces = ref(1);
+    const indexSize = ref(null);
+    const discount = ref((props.item.price * props.item.discount) / 100);
 
     const router = useRouter();
-    const docs = computed(() => cart.value); //watching items change
+    const store = useStore();
 
-    const { _user } = getUserDoc("users");
     const { user } = getUser();
-    const { documents: ordersCollection } = getCollection("orders");
-    const { documents: cart } = getDocument("carts", user.value?.uid, "items");
+    const { documents: cart } = getDocument(
+      "carts",
+      user.value?.displayName,
+      "items"
+    );
     const { addDoc, updateDoc: updateCart } = useDocument(
       "carts",
-      user.value?.uid,
+      user.value?.displayName,
       "items"
     );
 
-    onMounted(() => {
-      //listening for resizing
-      window.addEventListener("resize", onResize);
-
-      //explicitly assign value to each element in array once the component mount
-      for (let index in props.item?.images) {
-        starts.value[index] = 0;
-        ends.value[index] = 3;
-        qtys.value[index] = 1;
-      }
+    watch(qty, () => {
+      const item = props.item;
+      discount.value = (item.price * item.discount * qty.value) / 100;
+      total.value =
+        item.price * qty.value +
+        shipping.value -
+        (item.price * qty.value * item.discount) / 100;
     });
 
-    watch(cart, () => {
-      let temp = [];
-      for (let item of docs.value) temp.push(item.id);
-      cartIds.value = temp;
-    });
-
-    watch(pieces, () => {
-      if (pieces.value >= 3) shipping.value = 0;
-      else shipping.value = 2;
-    });
-
-    const onResize = () => {
-      windowWidth.value = window.innerWidth;
-    };
-
-    const handleClose = (completed) => {
-      if (completed) {
-        router.push({ name: "Home" });
-      } else {
-        currentComponent.value = "";
-      }
-    };
-
-    const handleCheckout = async () => {
+    const handleCheckout = async (name) => {
       if (!user.value) {
         return router.push({ name: "Login" });
       }
 
-      const checkoutItem = items.value.filter((item) => item.size && item.qty);
-      const checkouts = {
-        name: user.value.displayName,
-        tel: _user.value.telephone,
-        facebook: _user.value.facebook,
-        telegram: _user.value.telegram,
-        items: checkoutItem,
+      const checkoutItem = {
+        color: url.value,
+        name: name,
+        qty: qty.value,
       };
+
       const createStripeCheckout = functions.httpsCallable(
         "createStripeCheckout"
       );
@@ -609,46 +252,39 @@ export default {
       stripe.redirectToCheckout({ sessionId });
     };
 
-    const handleAddToCart = async (product) => {
+    const handleAddToCart = async (item, size) => {
       if (!user.value) {
-        router.push({ name: "Login" });
-      } else {
-        const item = cart.value?.filter((item) => item.id == product.id);
-        const items = cart.value?.filter((item) => item.id != product.id);
+        item.color = item.images[0].url;
+        item.createdAt = timestamp();
+        item.size = size;
+        item.qty = qty.value;
+        delete item.sizes;
+        delete item.images;
 
-        if (item?.length > 0) {
-          await updateCart({});
-        } else {
-          const item = {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            discount: product.discount,
-            sizes: product.sizes,
-            images: product.images,
-          };
-          if (items?.length > 0) {
-            await addDoc({});
-          } else {
-            await addDoc({});
-          }
-        }
+        store.commit("addToCart", item);
+        router.push({ name: "CartDetails" });
+      } else {
+        cart.value?.forEach((cart) => {
+          if (cart.name == item.name) qty.value += cart.qty;
+        });
+
+        await addDoc({
+          name: item.name,
+          description: item.description,
+          price: Number(item.price).toFixed(2),
+          discount: item.discount,
+          size: size,
+          color: url.value,
+          qty: qty.value,
+          createdAt: timestamp(),
+        });
+
+        router.push({ name: "CartDetails" });
       }
     };
 
-    const handleChangeImage = (imageUrl) => {
-      //change Big image by selecting small image
-      url.value = imageUrl;
-    };
-
-    const handlePreviousImage = () => {
-      end.value--;
-      start.value--;
-    };
-
-    const handleNextImage = () => {
-      end.value++;
-      start.value++;
+    const handleActiveSize = (i) => {
+      indexSize.value = i;
     };
 
     const handleInput = (e) => {
@@ -660,136 +296,34 @@ export default {
       }
     };
 
-    const handleNextSize = (i) => {
-      //create next function for sizes
-      ends.value[i]++;
-      starts.value[i]++;
-    };
-
-    const handlePreviousSize = (i) => {
-      //create previous function for sizes
-      ends.value[i]--;
-      starts.value[i]--;
-    };
-
-    const handleActiveSize = (index, i, size) => {
-      //active size (chosen size)
-      indexSizes.value[index] = i;
-
-      if (items.value[index]) {
-        //input qty first
-        items.value[index].size = size;
-      } else {
-        //select size first
-        const doc = {};
-        doc.size = size;
-
-        doc.name = props.item.name;
-        doc.id = props.item.id;
-        doc.price = props.item.price;
-        doc.discount = props.item.discount;
-        doc.qty = qtys.value[index];
-        doc.color = props.item.images[index].url;
-        items.value[index] = doc;
-      }
-      handleTotal();
-    };
-
-    const handleTotal = () => {
-      //total price for each cart
-      let temp = 0;
-      let piecesTemp = 0;
-      for (let item of items.value) {
-        if (item && item.qty > 0 && item.size) {
-          piecesTemp += parseFloat(item.qty);
-          temp +=
-            item.price * item.qty -
-            (item.discount * item.price * item.qty) / 100;
-        } else {
-          piecesTemp = piecesTemp;
-          temp = temp;
-        }
-      }
-
-      pieces.value = piecesTemp;
-      total.value = temp;
-      emit("order", items.value);
-    };
-
-    const handleChanges = (e, i, item) => {
+    const handleChangeQty = (e) => {
       //handle input by listen to the changes
-      if (e.target.value[0] == 1) {
-        qtys.value[i] = 1;
-
-        handleOrder(i, item);
+      if (e.target.value[0] < 1 || e.target.value[0] == undefined) {
+        qty.value = 1;
       } else {
-        qtys.value[i] = e.target.value;
-
-        handleOrder(i, item);
+        qty.value = e.target.value;
       }
     };
 
-    const handleIncrement = (i, item) => {
-      //handle input by clicking the button +
-      qtys.value[i]++;
-
-      handleOrder(i, item);
-    };
-
-    const handleDecrement = (i, item) => {
-      //handle input by clicking the button -
-      qtys.value[i]--;
-
-      handleOrder(i, item);
-    };
-
-    const handleOrder = (i, item) => {
-      const exist = items.value[i] && items.value[i].id == item.id;
-      if (exist) {
-        items.value[i].qty = qtys.value[i];
-      } else {
-        const doc = {};
-        doc.name = item.name;
-        doc.id = item.id;
-        doc.price = item.price;
-        doc.discount = item.discount;
-        doc.qty = qtys.value[i];
-        doc.color = item.images[i].url;
-        items.value[i] = doc;
-      }
-      handleTotal();
+    const handleChangeImage = (imageUrl) => {
+      //change Big image by selecting small image
+      url.value = imageUrl;
     };
 
     return {
-      handleChangeImage,
-      handlePreviousImage,
-      handleNextImage,
-      handleInput,
-      handleChanges,
-      handleNextSize,
-      handlePreviousSize,
       handleActiveSize,
-      handleIncrement,
-      handleDecrement,
+      handleChangeQty,
+      handleChangeImage,
       handleAddToCart,
       handleCheckout,
-      handleClose,
-      ordersCollection,
-      items,
-      cartIds,
-      orders,
+      handleInput,
       url,
-      currentComponent,
-      qtys,
-      starts,
-      ends,
-      start,
-      end,
-      indexSizes,
+      qty,
       total,
+      discount,
       pieces,
       shipping,
-      windowWidth,
+      indexSize,
     };
   },
 };

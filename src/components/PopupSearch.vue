@@ -1,9 +1,9 @@
 <template>
   <div
     v-if="windowWidth < 640"
-    class="inset-0 z-30 bg-white fixed h-screen w-full px-3"
+    class="inset-0 z-30 bg-white fixed h-screen w-full"
   >
-    <div class="relative">
+    <div class="relative pr-3">
       <input
         autofocus
         v-model="search"

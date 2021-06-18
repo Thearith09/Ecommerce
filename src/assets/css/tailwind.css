@@ -11,6 +11,9 @@
   .invisiblePreAndNext {
     @apply invisible;
   }
+  .activeProfile {
+    @apply border-b-4 border-pink-700;
+  }
   /* for addtocart color button */
   .activeSize,
   .added {

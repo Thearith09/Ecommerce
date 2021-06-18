@@ -46,7 +46,7 @@ export default {
   setup(props, { emit }) {
     const { user } = getUser();
     const { deleteImage } = useStorage();
-    const { documents: carts } = getDocument(
+    const { documents: cart } = getDocument(
       "carts",
       user.value?.displayName,
       "items"
@@ -77,7 +77,7 @@ export default {
       const cartIds = [];
 
       products.value.forEach(async (product) => {
-        carts.value.forEach(async (cart) => {
+        cart.value.forEach(async (cart) => {
           if (cart.id == product.id) {
             cartIds.push(cart.id);
           }

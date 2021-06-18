@@ -168,7 +168,7 @@ export default {
       props.name,
       "products"
     );
-    const { documents: carts } = getDocument("carts", user.value?.uid, "items");
+    const { documents: cart } = getDocument("carts", user.value?.uid, "items");
 
     const onResize = () => {
       windowWidth.value = window.innerWidth;
@@ -202,7 +202,7 @@ export default {
     };
 
     return {
-      carts,
+      cart,
       error,
       product,
       products,

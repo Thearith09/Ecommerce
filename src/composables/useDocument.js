@@ -8,22 +8,22 @@ const useDocument = (collection, id, subCollection) => {
     let documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
 
     const deleteDoc = async (docId) => {
+        documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
         documentRef = documentRef.doc(docId);
         error.value = null;
 
         try {
             const res = await documentRef.delete();
-            documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
             return res;
 
         } catch (err) {
             error.value = err.message;
         }
 
-        documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
     };
 
     const addDoc = async (doc) => {
+        documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
         documentRef = documentRef.doc(doc.name);
         error.value = null; 
         isPending.value = true;
@@ -37,9 +37,11 @@ const useDocument = (collection, id, subCollection) => {
             error.value = err.message;
             isPending.value = false;
         }
+
     };
 
     const updateDoc = async (updates) => {
+        documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
         documentRef = documentRef.doc(updates.name);
         error.value = null;
         isPending.value = true;
@@ -47,16 +49,12 @@ const useDocument = (collection, id, subCollection) => {
         try {
             const res = await documentRef.update(updates);
             isPending.value = false;
-            documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
             return res;
 
         } catch (err) {
             isPending.value = false;
             error.value = err.message;
         }
-
-        documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
-
     };
 
     return { error, deleteDoc, updateDoc, addDoc, isPending };

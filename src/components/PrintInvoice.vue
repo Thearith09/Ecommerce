@@ -213,7 +213,7 @@ export default {
       user.value?.uid,
       "items"
     );
-    const { documents: carts } = getDocument("carts", user.value?.uid, "items");
+    const { documents: cart } = getDocument("carts", user.value?.uid, "items");
     const { addDoc } = useCollection("orders");
 
     if (invoiceNumber.value > 0) {

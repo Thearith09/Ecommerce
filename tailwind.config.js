@@ -12,6 +12,9 @@ module.exports = {
         'portrait': {'raw': '(orientation: portrait)'},
         // => @media (orientation: portrait) { ... }
       },
+      minWidth: {
+        'iphone': '550px'
+      },
       gridTemplateColumns: {
         // Simple 16 column grid
        '16': 'repeat(16, minmax(0, 1fr))',

@@ -31,34 +31,6 @@
             required
           />
           <input
-            v-model="telephone"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
-            type="text"
-            placeholder="telephone"
-            required
-          />
-          <input
-            v-model="telegram"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
-            type="text"
-            placeholder="telegram name"
-            required
-          />
-          <input
-            v-model="facebook"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
-            type="text"
-            placeholder="facebook name"
-            required
-          />
-          <input
-            v-model="location"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
-            type="text"
-            placeholder="location"
-            required
-          />
-          <input
             v-model="password"
             class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
             type="password"
@@ -122,10 +94,6 @@ export default {
   setup() {
     const username = ref("");
     const email = ref("");
-    const telephone = ref("");
-    const telegram = ref("");
-    const facebook = ref("");
-    const location = ref("");
     const password = ref("");
     const confirmPassword = ref("");
     const windowWidth = ref(window.innerWidth);
@@ -153,16 +121,16 @@ export default {
 
       const res = await signup(email.value, password.value, username.value);
 
+      await res.user.sendEmailVerification();
+
       if (res.user.uid) {
         await addUser(res.user.uid, {
-          telephone: telephone.value,
-          facebook: facebook.value,
-          telegram: telegram.value,
-          location: location.value,
+          name: res.user.displayName,
+          email: res.user.email,
         });
 
         if (!error.value) {
-          router.push({ name: "Home" });
+          router.push({ name: "Login" });
         }
       }
     };
@@ -175,10 +143,6 @@ export default {
       handleNavigation,
       error,
       handleSignup,
-      telephone,
-      telegram,
-      facebook,
-      location,
       isPending,
       windowWidth,
     };

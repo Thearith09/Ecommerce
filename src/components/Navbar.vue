@@ -28,7 +28,7 @@
                 :key="category.id"
                 @click="handleNavigation(category.id)"
               >
-                {{ category.categoryName }}
+                {{ category.name }}
               </h4>
               <h4
                 class="border-b-2 border-gray-100 hover:border-white hover:shadow-md hover:bg-white hover:text-pink-700 px-5 py-3"
@@ -54,6 +54,34 @@
             >
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
+          </div>
+
+          <div class="flex justify-end">
+            <router-link
+              class="relative cursor-pointer items-center"
+              :to="{ name: 'CartDetails' }"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-10 inline-block p-2 text-pink-500 hover:text-pink-700"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+              <div
+                v-if="tempCart.length > 0"
+                class="absolute -top-1 left-4 border-2 border-white bg-red-600 w-6 h-6 rounded-full text-white flex justify-center items-center text-xs"
+              >
+                {{ tempCart.length }}
+              </div>
+            </router-link>
           </div>
 
           <div class="flex justify-end">
@@ -85,7 +113,7 @@
     <!-- screen greater than 640px without user-->
     <div
       v-if="!user && windowWidth >= 640"
-      class="grid sm:grid-cols-6 sm:space-x-5 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 2xl:grid-cols-12 items-center mr-3"
+      class="grid sm:grid-cols-6 sm:space-x-5 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 items-center mr-3"
     >
       <div class="col-span-1">
         <router-link :to="{ name: 'Home' }">
@@ -111,7 +139,7 @@
             :key="category.id"
             @click="handleNavigation(category.id)"
           >
-            {{ category.categoryName }}
+            {{ category.name }}
           </h4>
           <h4
             class="border-b-2 border-gray-100 hover:border-white hover:shadow-md hover:bg-white hover:text-pink-700 px-5 py-3"
@@ -146,6 +174,34 @@
           type="search"
           placeholder="searching..."
         />
+      </div>
+
+      <div class="flex justify-end">
+        <router-link
+          class="relative cursor-pointer items-center"
+          :to="{ name: 'CartDetails' }"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-10 inline-block p-2 text-pink-500 hover:text-pink-700"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+          <div
+            v-if="tempCart.length > 0"
+            class="absolute -top-1 left-4 border-2 border-white bg-red-600 w-6 h-6 rounded-full text-white flex justify-center items-center text-xs"
+          >
+            {{ tempCart.length }}
+          </div>
+        </router-link>
       </div>
 
       <div class="col-span-1 flex justify-end items-center w-full">
@@ -298,10 +354,10 @@
               />
             </svg>
             <div
-              v-if="carts?.length > 0"
+              v-if="cart?.length > 0"
               class="absolute -top-1 left-4 border-2 border-white bg-red-600 w-6 h-6 rounded-full text-white flex justify-center items-center text-xs"
             >
-              {{ carts.length }}
+              {{ cart.length }}
             </div>
           </router-link>
         </div>
@@ -337,7 +393,7 @@
                 <p
                   class="text-gray-700 hover:text-pink-700 cursor-pointer"
                 >
-                  Account Settings
+                  Profile Settings
                 </p>
                 <p
                   class="text-gray-700 hover:text-pink-700 cursor-pointer"
@@ -371,7 +427,7 @@
     <!--screen greater than 640px within user-->
     <div
       v-if="user && windowWidth >= 640"
-      class="grid sm:grid-cols-6 sm:space-x-5 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 2xl:grid-cols-12 items-center mr-3"
+      class="grid sm:grid-cols-6 sm:space-x-1 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 2xl:grid-cols-12 items-center mr-3"
     >
       <div class="col-span-1">
         <router-link :to="{ name: 'Home' }">
@@ -397,7 +453,7 @@
             :key="category.id"
             @click="handleNavigation(category.id)"
           >
-            {{ category.categoryName }}
+            {{ category.name }}
           </h4>
           <h4
             class="border-b-2 border-gray-100 hover:border-white hover:shadow-md hover:bg-white hover:text-pink-700 px-5 py-3"
@@ -434,16 +490,9 @@
         />
       </div>
 
-      <div class="col-span-1 flex justify-between items-center w-full">
-        <div v-if="!user.admin">
-          <img
-            @click="handleSwitchLanguage"
-            class="w-9 cursor-pointer"
-            src="@/assets/images/kh-flag-256.png"
-            alt="combodia flag icon"
-          />
-        </div>
-
+      <div
+        class="col-span-1 flex justify-end space-x-1 lg:space-x-3 items-center w-full"
+      >
         <div v-if="user?.admin" class="flex">
           <router-link
             class="relative cursor-pointer items-center"
@@ -493,132 +542,281 @@
               />
             </svg>
             <div
-              v-if="carts?.length > 0"
+              v-if="cart?.length > 0"
               class="absolute -top-2 left-3 border-2 border-white bg-red-600 w-6 h-6 rounded-full text-white flex justify-center items-center text-xs"
             >
-              {{ carts.length }}
+              {{ cart.length }}
             </div>
           </router-link>
         </div>
 
         <div
-          class="group relative h-7 w-7 bg-pink-500 hover:bg-pink-600 text-white rounded-full font-semibold flex justify-center items-center"
+          class="group relative text-white rounded-full w-7 h-7 bg-pink-500 hover:bg-pink-700 font-semibold flex justify-center items-center"
         >
-          <span class="uppercase">{{ user.displayName[0] }}</span>
+          <div v-if="user.photoURL">
+            <img
+              class="w-7 h-7 rounded-full object-cover object-center"
+              :src="user.photoURL"
+            />
+          </div>
+
+          <div v-else>
+            <span class="uppercase">{{ user.displayName[0] }}</span>
+          </div>
           <!--Dropdown profile-->
           <div
             class="group absolute -bottom-9 -left-4 h-10 w-16 bg-transparent z-20"
           ></div>
           <div
-            v-if="myProfile"
-            class="absolute top-14 xl:top-16 -right-5 w-96 z-20 shadow-lg hidden group-hover:block"
+            class="absolute bg-white h-screen top-14 xl:top-16 -right-5 w-96 z-20 shadow-lg hidden group-hover:block"
           >
+            <div v-if="subDropdown">
+              <div
+                class="flex items-center py-3 px-5 shadow-lg border-b-2 border-gray-200"
+              >
+                <div>
+                  <div v-if="user.photoURL">
+                    <img
+                      class="w-8 h-8 rounded-full object-cover object-center"
+                      :src="user.photoURL"
+                    />
+                  </div>
+                  <div v-else>
+                    <h1
+                      class="h-8 w-8 lg:h-9 lg:w-9 flex items-center justify-center bg-pink-500 hover:bg-pink-600 text-center font-semibold uppercase text-white rounded-full"
+                    >
+                      {{ user.displayName[0] }}
+                    </h1>
+                  </div>
+                </div>
+
+                <div class="ml-2 leading-none text-gray-700">
+                  <p class="font-bold">{{ user.displayName }}</p>
+                  <span class="text-sm text-gray-500">{{ user.email }}</span>
+                </div>
+              </div>
+
+              <div
+                v-if="!user.admin"
+                class="px-7 py-5 space-y-3 bg-white text-sm"
+              >
+                <div>
+                  <router-link
+                    class="text-gray-700 hover:text-pink-700 cursor-pointer"
+                    :to="{
+                      name: 'Profile',
+                      params: { info: 'base-information' },
+                    }"
+                  >
+                    Profile Settings
+                  </router-link>
+                </div>
+
+                <div>
+                  <p
+                    class="text-gray-700 hover:text-pink-700 cursor-pointer inline-block"
+                  >
+                    Order History
+                  </p>
+                </div>
+
+                <div>
+                  <p
+                    class="text-gray-700 hover:text-pink-700 cursor-pointer inline-block"
+                  >
+                    Purchase History
+                  </p>
+                </div>
+              </div>
+
+              <div v-else class="text-sm px-7 py-5 space-y-3 bg-white">
+                <div
+                  @click="handleShowCategoryForm"
+                  class="flex justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
+                >
+                  <p>
+                    Add Category
+                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+
+                <div
+                  @click="handleShowPromoteForm"
+                  class="flex justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
+                >
+                  <p>
+                    Promote as Admin
+                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+
+                <div>
+                  <router-link
+                    class="text-gray-700 hover:text-pink-700 cursor-pointer"
+                    :to="{
+                      name: 'Profile',
+                      params: { info: 'base-information' },
+                    }"
+                  >
+                    Profile Settings
+                  </router-link>
+                </div>
+
+                <div>
+                  <router-link
+                    class="text-gray-700 hover:text-pink-700 cursor-pointer"
+                    :to="{ name: 'Reports' }"
+                  >
+                    <span class="text-center">{{ $t("Reports") }}</span>
+                  </router-link>
+                </div>
+              </div>
+
+              <div
+                class="flex justify-between items-center px-5 py-3 bg-white border-t-2 border-gray-200"
+              >
+                <span
+                  @click="handleSwitchLanguage"
+                  class="text-gray-700 cursor-pointer hover:text-pink-700 flex items-center space-x-1"
+                  >Language</span
+                >
+                <div
+                  class="flex justify-center space-x-2 items-center text-gray-700"
+                >
+                  <span>English</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="px-5 py-3 bg-white border-t-2 border-gray-200">
+                <span
+                  @click="handleLogout"
+                  class="text-gray-700
+                  cursor-pointer
+                  hover:text-pink-700"
+                  >sign out</span
+                >
+              </div>
+            </div>
             <div
-              class="flex items-center bg-white py-3 px-5 shadow-lg border-b-2 border-gray-200"
+              v-else
+              id="sub-dropdown"
+              class="animate__animated animate__fadeInRight animate__faster bg-white"
             >
-              <div>
-                <h1
-                  class="h-8 w-8 lg:h-9 lg:w-9 flex items-center justify-center bg-pink-500 hover:bg-pink-600 text-center font-semibold uppercase text-white rounded-full"
-                >
-                  {{ user.displayName[0] }}
-                </h1>
-              </div>
-
-              <div class="ml-2 leading-none text-gray-700">
-                <p class="font-bold">{{ user.displayName }}</p>
-                <span class="text-sm text-gray-500">{{ user.email }}</span>
-              </div>
-            </div>
-
-            <div v-if="!user.admin" class="px-7 py-5 space-y-3 bg-white">
-              <p class="text-gray-700 hover:text-pink-700 cursor-pointer">
-                Account Settings
-              </p>
-              <p class="text-gray-700 hover:text-pink-700 cursor-pointer">
-                Order History
-              </p>
-              <p class="text-gray-700 hover:text-pink-700 cursor-pointer">
-                Purchase History
-              </p>
-            </div>
-
-            <div v-else class="px-7 py-5 space-y-3 bg-white">
               <div
-                class="flex text-sm justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
+                @click="handleCloseSubDropdown"
+                class="bg-gray-100 p-2 text-gray-500 hover:text-gray-700"
               >
-                <p>
-                  Account Settings
-                </p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+                <div
+                  class="flex justify-end font-mono w-20 ml-auto items-center transform transition hover:translate-x-1 space-x-1 cursor-pointer"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
+                  <span>Back</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <!--show category form-->
+              <form
+                v-show="!showCategoryForm"
+                @submit.prevent="handleAddCategory"
+              >
+                <div class="w-full h-full space-y-3 p-5">
+                  <h3 class="text-gray-700 font-mono">Add a New Category</h3>
+                  <input
+                    v-model="categoryName"
+                    class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 w-full shadow p-2"
+                    type="text"
+                    placeholder="category name"
+                    required
                   />
-                </svg>
-              </div>
-
-              <div
-                class="flex text-sm justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
-              >
-                <p>
-                  Add Category
-                </p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
+                  <input
+                    @change="handleChanges"
+                    class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 text-gray-700 w-full shadow p-2"
+                    type="file"
+                    required
                   />
-                </svg>
-              </div>
+                  <h4 v-if="fileError" class="text-red-500 text-sm">
+                    {{ fileError }}
+                  </h4>
+                  <h4 v-if="error" class="text-red-500">{{ error }}</h4>
+                  <button
+                    v-if="!isPending"
+                    class="hover:text-pink-700 focus:outline-none font-semibold bg-white shadow w-full p-2 text-pink-500"
+                  >
+                    Add
+                  </button>
+                  <button
+                    v-else
+                    class="hover:text-pink-700 focus:outline-none font-semibold bg-white shadow w-full p-2 text-pink-500"
+                  >
+                    Adding...
+                  </button>
+                </div>
+              </form>
 
-              <div
-                class="flex text-sm justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
-              >
-                <p>
-                  Promote as Admin
-                </p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
+              <!--show promote admin form-->
+              <form v-show="!showPromoteForm" @submit.prevent="handleAddAdmin">
+                <div class="w-full h-full space-y-3 p-5">
+                  <h3 class="text-gray-700 font-mono">
+                    Promote a User as Admin
+                  </h3>
+                  <input
+                    v-model="email"
+                    class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 w-full shadow p-2"
+                    type="email"
+                    placeholder="email"
+                    required
                   />
-                </svg>
-              </div>
-
-              <div
-                class="text-sm text-gray-700 hover:text-pink-700 cursor-pointer"
-              >
-                <router-link :to="{ name: 'Reports' }">
-                  <span class="text-center">{{ $t("Reports") }}</span>
-                </router-link>
-              </div>
-            </div>
-
-            <div class="px-5 py-3 bg-white border-t-2 border-gray-200">
-              <span
-                @click="handleLogout"
-                class="text-gray-700 cursor-pointer hover:text-pink-700 flex items-center space-x-1"
-              >
-                <span>sign out</span></span
-              >
+                  <button
+                    class="hover:text-pink-700 focus:outline-none bg-white font-semibold shadow w-full p-2 text-pink-500"
+                  >
+                    promote
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -779,7 +977,7 @@
   </div>
 
   <!--sub navbar for admin-->
-  <div
+  <!-- <div
     v-if="user?.admin"
     class="flex justify-center items-center space-x-10 bg-white text-gray-500 shadow border-t-2 border-gray-100"
   >
@@ -928,15 +1126,10 @@
         <span class="text-center">{{ $t("Reports") }}</span>
       </router-link>
     </div>
-  </div>
+  </div> -->
   <!--end sub navbar for admin-->
 
-  <div
-    id="menu"
-    class="transform -translate-x-full transition duration-500 fixed inset-0 w-screen h-screen bg-gray-700 bg-opacity-50 z-40"
-  >
-    <component :is="currentComponent" @close="handleClose" />
-  </div>
+  <component :is="currentComponent" @close="handleClose" />
 </template>
 
 <script>
@@ -952,7 +1145,8 @@ import PopupSearch from "@/components/PopupSearch.vue";
 import { projectAuth, timestamp, functions } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
-import { onMounted } from "@vue/runtime-core";
+import { onMounted, watch, watchEffect } from "@vue/runtime-core";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -966,14 +1160,21 @@ export default {
     const search = ref(null);
     const categoryName = ref("");
     const email = ref("");
+    const subDropdown = ref(true);
+    const showCategoryForm = ref(true);
+    const showPromoteForm = ref(true);
     const currentComponent = ref("");
     const windowWidth = ref(window.innerWidth);
+
+    //cart without user signin
+    const store = useStore();
+    const tempCart = ref(store.state.cart);
 
     const router = useRouter();
     const { user } = getUser();
     const { documents: categories } = getCollection("inventory");
     const { documents: orders } = getCollection("orders");
-    const { documents: carts } = getDocument(
+    const { documents: cart } = getDocument(
       "carts",
       user.value?.displayName,
       "items"
@@ -994,22 +1195,18 @@ export default {
 
     const handleSwitchLanguage = () => {
       currentComponent.value = "SwitchLanguage";
-      document.getElementById("menu").classList.remove("-translate-x-full");
     };
 
     const handleMenu = () => {
       currentComponent.value = "Menu";
-      document.getElementById("menu").classList.remove("-translate-x-full");
     };
 
     const handlePopup = () => {
       currentComponent.value = "PopupSearch";
-      document.getElementById("menu").classList.remove("-translate-x-full");
     };
 
     const handleClose = () => {
       currentComponent.value = "";
-      document.getElementById("menu").classList.add("-translate-x-full");
     };
 
     const handleAddAdmin = async () => {
@@ -1083,6 +1280,31 @@ export default {
       }
     };
 
+    const handleShowCategoryForm = () => {
+      subDropdown.value = false;
+      showCategoryForm.value = false;
+      showPromoteForm.value = true;
+    };
+
+    const handleShowPromoteForm = () => {
+      subDropdown.value = false;
+      showPromoteForm.value = false;
+      showCategoryForm.value = true;
+    };
+
+    const handleCloseSubDropdown = () => {
+      document
+        .getElementById("sub-dropdown")
+        .classList.remove("animate__fadeInRightBig");
+      document
+        .getElementById("sub-dropdown")
+        .classList.add("animate__fadeOutRight");
+
+      setTimeout(() => {
+        subDropdown.value = true;
+      }, 200);
+    };
+
     return {
       handleChanges,
       handleAddCategory,
@@ -1095,18 +1317,25 @@ export default {
       handleClose,
       currentComponent,
       handleSwitchLanguage,
+      handleShowCategoryForm,
+      handleShowPromoteForm,
+      handleCloseSubDropdown,
       user,
       myProfile,
       categoryName,
       categories,
       fileError,
-      carts,
+      cart,
+      tempCart,
       isPending,
       error,
       search,
       email,
       orders,
       windowWidth,
+      subDropdown,
+      showCategoryForm,
+      showPromoteForm,
     };
   },
 };

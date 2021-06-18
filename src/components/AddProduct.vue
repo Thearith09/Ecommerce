@@ -158,7 +158,6 @@
 </template>
 <script>
 import { ref } from "@vue/reactivity";
-import { v4 as uuidv4 } from "uuid";
 import useStorage from "@/composables/useStorage";
 import useDocument from "@/composables/useDocument";
 

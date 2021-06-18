@@ -2,9 +2,7 @@
   <div
     class="flex justify-center items-center inset-0 fixed w-full h-screen bg-gray-900 bg-opacity-50 z-40"
   >
-    <div
-      class="relative px-5 py-5 bg-white flex flex-col md:flex-row md:space-x-5 md:pl-0 md:pr-5 h-auto rounded"
-    >
+    <div class="relative p-5 bg-white flex flex-col md:flex-row h-auto rounded">
       <div class="absolute top-0 right-0 z-40">
         <svg
           @click="handleClose"
@@ -36,7 +34,7 @@
         </div>
       </div>
 
-      <div class="w-80 sm:w-96">
+      <div class="w-80 sm:w-96 md:pl-5">
         <div class="space-y-2">
           <h2 class="text-gray-700 font-semibold uppercase text-xl">
             {{ item.name }}
@@ -131,7 +129,7 @@
                     item.sizes[indexSize]
                   )
                 "
-                class="rounded focus:outline-none w-full shadow font-medium text-pink-500 hover:text-pink-700 p-2"
+                class="rounded focus:outline-none w-full shadow font-semibold text-white bg-pink-500 hover:bg-pink-700 p-2"
               >
                 ADD TO CART
               </button>
@@ -150,13 +148,16 @@ import { useRouter } from "vue-router";
 import useDocument from "@/composables/useDocument";
 import getDocument from "@/composables/getDocument";
 import getUser from "@/composables/getUser";
+import { useStore } from "vuex";
 
 export default {
   props: ["item", "index"],
   setup(props, { emit }) {
     const indexSize = ref(null);
     const qty = ref(1);
+
     const router = useRouter();
+    const store = useStore();
 
     const { user } = getUser();
     const { addDoc, updateDoc } = useDocument(
@@ -164,7 +165,7 @@ export default {
       user.value?.displayName,
       "items"
     );
-    const { documents: carts } = getDocument(
+    const { documents: cart } = getDocument(
       "carts",
       user.value?.displayName,
       "items"
@@ -198,7 +199,6 @@ export default {
 
     const handleAddToCart = async (item, image, size) => {
       const addedItem = {
-        id: item.id,
         name: item.name,
         description: item.description,
         price: Number(item.price).toFixed(2),
@@ -206,32 +206,14 @@ export default {
         size: size,
         color: image,
         qty: qty.value,
+        createdAt: timestamp(),
       };
 
       if (!user.value) {
-        router.push({ name: "Login" });
+        store.commit("addToCart", addedItem);
+        router.push({ name: "CartDetails" });
       } else {
-        // const items = [];
-        // carts.value?.forEach((item) => {
-        //   if (
-        //     item.id == addedItem.id &&
-        //     item.size == addedItem.size &&
-        //     item.color == addedItem.color
-        //   ) {
-        //     item.qty = Number(item.qty) + Number(addedItem.qty);
-        //   }
-        //   items.push(item);
-        // });
-        // if (items.length > 0) {
-        //   await updateDoc(items);
-        // } else {
-        //   await addDoc({
-        //     name: addedItem.name,
-        //     item: addedItem,
-        //     createdAt: timestamp(),
-        //   });
-        // }
-        carts.value?.forEach((cart) => {
+        cart.value?.forEach((cart) => {
           if (cart.name == item.name) qty.value += cart.qty;
         });
 

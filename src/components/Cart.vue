@@ -2,7 +2,7 @@
   <div>
     <div class="rounded">
       <div
-        class="flex flex-col iphone:flex-row space-x-3 rounded h-auto lg:h-52 lg:my-0 shadow p-3"
+        class="flex flex-col iphone:flex-row iphone:space-x-3 rounded h-auto lg:h-52 lg:my-0 shadow p-3"
       >
         <div class="flex-none">
           <img
@@ -13,7 +13,7 @@
 
         <div class="flex">
           <div class="flex flex-col justify-between">
-            <div class="space-y-3">
+            <div class="space-y-2">
               <h2 class="text-gray-700 font-semibold text-xl uppercase">
                 {{ item.name }}
               </h2>
@@ -28,7 +28,7 @@
 
             <div class="flex space-x-2">
               <div>
-                <p class="text-gray-700">qty:</p>
+                <p class="text-gray-700">Qty:</p>
                 <div class="relative text-gray-500">
                   <input
                     @keydown="handleInput($event, item.name)"
@@ -75,10 +75,10 @@
                 </div>
               </div>
 
-              <div class="text-gray-500">
-                <p class="text-gray-700 inline-block">size:</p>
+              <div>
+                <p class="text-gray-700 inline-block">Size:</p>
                 <span
-                  class="flex rounded items-center justify-center px-10 font-semibold uppercase border-2 h-10 w-24"
+                  class="flex rounded items-center justify-center font-semibold uppercase border-2 h-10 px-3 py-1 border-pink-500 text-pink-500"
                   >{{ item.size }}</span
                 >
               </div>
@@ -86,7 +86,7 @@
           </div>
           <div>
             <span
-              @click="handleRemove(item.id)"
+              @click="handleRemove(item.name)"
               class="text-gray-700 hover:text-pink-700 cursor-pointer"
               >Remove</span
             >
@@ -102,12 +102,15 @@ import useDocument from "@/composables/useDocument";
 import getUser from "@/composables/getUser";
 import { ref } from "@vue/reactivity";
 import { watch, watchEffect } from "@vue/runtime-core";
+import { useStore } from "vuex";
 
 export default {
   props: ["item"],
   setup(props, { emit }) {
     const qty = ref(props.item?.qty);
     const name = ref(null);
+
+    const store = useStore();
 
     const { user } = getUser();
     const { deleteDoc } = useDocument(
@@ -157,8 +160,12 @@ export default {
       qty.value--;
     };
 
-    const handleRemove = async (docId) => {
-      await deleteDoc(docId);
+    const handleRemove = async (name) => {
+      if (user.value) {
+        await deleteDoc(name);
+      } else {
+        store.commit("removeFromCart", name);
+      }
     };
 
     return {

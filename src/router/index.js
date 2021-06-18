@@ -9,6 +9,8 @@ import ProductSearching from "../views/ProductSearching.vue";
 import CheckoutOrder from "../views/CheckoutOrder.vue";
 import ProductDetails from "../views/ProductDetails.vue";
 import Reports from "../views/Reports.vue";
+import Success from "../views/Success.vue";
+import Profile from "../views/Profile.vue";
 
 import { projectAuth } from "@/firebase/config";
 
@@ -78,6 +80,17 @@ const routes = [
     name: 'Reports',
     component: Reports,
     beforeEnter: requireAuth,
+  },
+  {
+    path: '/profile/:info',
+    name: 'Profile',
+    component: Profile,
+    props: true,
+  },
+  {
+    path: '/success',
+    name: 'Success',
+    component: Success
   }
 ]
 

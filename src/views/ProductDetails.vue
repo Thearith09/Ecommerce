@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col h-screen min-w-min xl:min-w-0">
+  <div class="flex flex-col h-screen">
     <div>
       <Navbar />
     </div>
 
-    <div class="mb-auto my-5 2xl:w-3/4 2xl:mx-auto">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div v-if="products">
         <div class="h-auto" v-for="product in products" :key="product.id">
           <div v-if="product.id == id">

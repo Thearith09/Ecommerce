@@ -1,9 +1,9 @@
 <template>
-  <div class="flex h-screen min-w-max">
-    <div
-      id="main-menu"
-      class="bg-white w-64 transform -translate-x-full transition duration-500"
-    >
+  <div
+    id="menu"
+    class="animate__animated animate__faster flex h-screen fixed inset-0 w-screen bg-gray-700 bg-opacity-50 z-40 min-w-max"
+  >
+    <div v-if="subMenu" id="main-menu" class="bg-white w-80">
       <div class="flex px-2 py-3 border-b-2 border-gray-200">
         <span
           class="uppercase bg-pink-500 rounded-full w-8 h-8 flex justify-center items-center text-white"
@@ -21,7 +21,7 @@
           class="font-light px-2 py-3 space-y-3 bg-white border-b-2 border-gray-200"
         >
           <div
-            @click="handleSubMenu"
+            @click="handleShowCategory"
             class="flex justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
           >
             <p>
@@ -76,6 +76,7 @@
           </div>
 
           <div
+            @click="handleShowCategoryForm"
             class="flex justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
           >
             <p>
@@ -96,6 +97,7 @@
           </div>
 
           <div
+            @click="handleShowPromoteForm"
             class="flex justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
           >
             <p>
@@ -116,7 +118,7 @@
           </div>
 
           <div
-            @click="handleSubMenu"
+            @click="handleShowCategory"
             class="flex justify-between text-gray-700 hover:text-pink-700 cursor-pointer"
           >
             <p>
@@ -187,10 +189,11 @@
       </div>
     </div>
 
+    <!--start show category-->
     <div
+      v-else
       id="sub-menu"
-      v-show="!show"
-      class="font-light bg-white w-64 h-screen transform transition duration-500"
+      class="animate__animated animate__fadeInRight animate__faster font-light bg-white w-80 h-screen"
     >
       <div
         @click="handleCloseSubMenu"
@@ -211,16 +214,70 @@
         <span>Menu</span>
       </div>
 
-      <div class="px-2 py-3 cursor-pointer">
+      <!--show category-->
+      <div v-show="!showCategory" class="px-2 py-3 cursor-pointer">
         <p
           class="py-2 hover:text-pink-700 text-gray-700"
           v-for="category in categories"
           :key="category.id"
           @click="handleNavigation(category.id)"
         >
-          {{ category.categoryName }}
+          {{ category.name }}
         </p>
       </div>
+
+      <!--show category form-->
+      <form v-show="!showCategoryForm" @submit.prevent="handleAddCategory">
+        <div class="w-full h-full space-y-3 p-5">
+          <input
+            v-model="categoryName"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 w-full shadow p-2"
+            type="text"
+            placeholder="category name"
+            required
+          />
+          <input
+            @change="handleChanges"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 text-gray-700 w-full shadow p-2"
+            type="file"
+            required
+          />
+          <h4 v-if="fileError" class="text-red-500 text-sm">
+            {{ fileError }}
+          </h4>
+          <h4 v-if="error" class="text-red-500">{{ error }}</h4>
+          <button
+            v-if="!isPending"
+            class="hover:text-pink-700 focus:outline-none font-semibold bg-white shadow w-full p-2 text-pink-500"
+          >
+            Add
+          </button>
+          <button
+            v-else
+            class="hover:text-pink-700 focus:outline-none font-semibold bg-white shadow w-full p-2 text-pink-500"
+          >
+            Adding...
+          </button>
+        </div>
+      </form>
+
+      <!--show promote admin form-->
+      <form v-show="!showPromoteForm" @submit.prevent="handleAddAdmin">
+        <div class="w-full h-full space-y-3 p-5">
+          <input
+            v-model="email"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500 w-full shadow p-2"
+            type="email"
+            placeholder="email"
+            required
+          />
+          <button
+            class="hover:text-pink-700 focus:outline-none bg-white font-semibold shadow w-full p-2 text-pink-500"
+          >
+            promote
+          </button>
+        </div>
+      </form>
     </div>
 
     <div
@@ -249,10 +306,13 @@ import getUser from "@/composables/getUser";
 import getUserDoc from "@/composables/getUserDoc";
 import SwitchLanguage from "@/components/SwitchLanguage.vue";
 import getCollection from "@/composables/getCollection";
-import { projectAuth } from "@/firebase/config";
+import useCollection from "@/composables/useCollection";
+import { projectAuth, functions, timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
+import useStorage from "@/composables/useStorage";
+const { url, uploadImage } = useStorage();
 
 export default {
   components: {
@@ -260,39 +320,67 @@ export default {
   },
   setup(props, { emit }) {
     const currentComponent = ref("");
-    const show = ref(true);
+    const subMenu = ref(true);
+    const email = ref(null);
+    const file = ref(null);
+    const categoryName = ref("");
+    const fileError = ref(null);
+    const showCategory = ref(true);
+    const showPromoteForm = ref(true);
+    const showCategoryForm = ref(true);
 
     const router = useRouter();
     const { user } = getUser();
     const { _user: myProfile } = getUserDoc("users");
     const { documents: categories } = getCollection("inventory");
+    const { addDoc, isPending, error } = useCollection("inventory");
+
+    const types = ["image/png", "image/jpg", "image/jpeg", "image/svg"];
 
     onMounted(() => {
-      setTimeout(() => {
-        document
-          .getElementById("main-menu")
-          .classList.remove("-translate-x-full");
-      }, 200);
+      document.getElementById("menu").classList.add("animate__fadeInLeft");
     });
 
-    const handleSubMenu = () => {
-      show.value = !show.value;
-      setTimeout(() => {
-        document.getElementById("sub-menu").classList.add("-translate-x-full");
-      });
+    const handleShowCategory = () => {
+      subMenu.value = !subMenu.value;
+      showCategory.value = false;
+      showPromoteForm.value = true;
+      showCategoryForm.value = true;
+    };
+
+    const handleShowCategoryForm = () => {
+      subMenu.value = !subMenu.value;
+      showCategoryForm.value = false;
+      showCategory.value = true;
+      showPromoteForm.value = true;
+    };
+
+    const handleShowPromoteForm = () => {
+      subMenu.value = !subMenu.value;
+      showPromoteForm.value = false;
+      showCategoryForm.value = true;
+      showCategory.value = true;
     };
 
     const handleCloseSubMenu = () => {
-      document.getElementById("sub-menu").classList.remove("-translate-x-full");
+      document
+        .getElementById("sub-menu")
+        .classList.remove("animate__fadeInRight");
+      document
+        .getElementById("sub-menu")
+        .classList.add("animate__fadeOutRight");
+
       setTimeout(() => {
-        show.value = !show.value;
+        subMenu.value = true;
       }, 200);
     };
 
     const handleClose = () => {
-      document.getElementById("main-menu").classList.add("-translate-x-full");
+      document.getElementById("menu").classList.remove("animate__fadeInLeft");
+      document.getElementById("menu").classList.add("animate__fadeOutLeft");
       setTimeout(() => {
         emit("close");
+        subMenu.value = true;
       }, 200);
     };
 
@@ -310,25 +398,74 @@ export default {
         path: `/categories/${id}`,
       });
 
-      document.getElementById("sub-menu").classList.remove("-translate-x-full");
-      setTimeout(() => {
-        show.value = !show.value;
-        emit("close");
-      }, 200);
+      showCategory.value = !showCategory.value;
+      emit("close");
+    };
+
+    const handleAddAdmin = async () => {
+      const addAdminRole = functions.httpsCallable("addAdminRole");
+      const result = await addAdminRole({ email: email.value });
+      console.log(result);
+    };
+
+    const handleChanges = (e) => {
+      const selected = e.target.files[0];
+      const limitedMB = 1048576; //1MB
+
+      if (selected.size > limitedMB) {
+        fileError.value = `Size of the image must be less than 1MB.`;
+        file.value = null;
+      } else {
+        if (selected && types.includes(selected.type)) {
+          file.value = selected;
+          fileError.value = null;
+        } else {
+          file.value = null;
+          fileError.value = `Only file of type jpg, jpeg, png, svg are allowed!`;
+        }
+      }
+    };
+
+    const handleAddCategory = async () => {
+      if (file.value) {
+        await uploadImage(file.value);
+
+        await addDoc({
+          name: categoryName.value,
+          url: url.value,
+          createdAt: timestamp(),
+        });
+
+        if (!error.value) {
+          router.push({ name: "Categories" });
+          categoryName.value = "";
+        }
+      }
     };
 
     return {
       handleClose,
       handleLogout,
-      handleSubMenu,
+      handleShowCategory,
+      handleShowCategoryForm,
+      handleShowPromoteForm,
       handleCloseSubMenu,
       handleSwitchLanguage,
       handleNavigation,
+      handleChanges,
+      handleAddCategory,
+      handleAddAdmin,
       categories,
       user,
       myProfile,
       currentComponent,
-      show,
+      showCategory,
+      showPromoteForm,
+      showCategoryForm,
+      subMenu,
+      email,
+      fileError,
+      categoryName,
     };
   },
 };

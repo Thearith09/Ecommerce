@@ -22,4 +22,4 @@ const functions = firebase.functions();
 const convertToTimestamp = firebase.firestore.Timestamp.fromDate;
 const timestamp = firebase.firestore.FieldValue.serverTimestamp;
 
-export { projectAuth, projectFirestore, timestamp, projectStorage, functions, convertToTimestamp };
+export { firebase, projectAuth, projectFirestore, timestamp, projectStorage, functions, convertToTimestamp };

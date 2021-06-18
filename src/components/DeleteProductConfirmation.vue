@@ -40,7 +40,7 @@ export default {
   setup(props, { emit }) {
     const { user } = getUser();
     const { deleteImage } = useStorage();
-    const { documents: carts } = getDocument(
+    const { documents: cart } = getDocument(
       "carts",
       user.value?.displayName,
       "items"
@@ -80,7 +80,7 @@ export default {
       });
 
       //once remove product, remove from cart as well.
-      carts.value?.forEach(async (item) => {
+      cart.value?.forEach(async (item) => {
         if (item.id == id) {
           await deleteCart(item.id);
         }
