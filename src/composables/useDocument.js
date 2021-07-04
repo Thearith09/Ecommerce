@@ -5,18 +5,21 @@ const useDocument = (collection, id, subCollection) => {
     const error = ref(null);
     const isPending = ref(false);
 
-    let documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
+    let documentRef;
 
     const deleteDoc = async (docId) => {
         documentRef = projectFirestore.collection(collection).doc(id).collection(subCollection);
         documentRef = documentRef.doc(docId);
         error.value = null;
+        isPending.value = true;
 
         try {
             const res = await documentRef.delete();
+            isPending.value = false;
             return res;
 
         } catch (err) {
+            isPending.value = false;
             error.value = err.message;
         }
 

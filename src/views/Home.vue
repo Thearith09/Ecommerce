@@ -3,7 +3,7 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto bg-gray-50">
       <div>
         <Slideshow />
       </div>
@@ -30,6 +30,8 @@ import Footer from "@/components/Footer";
 import getUser from "@/composables/getUser";
 import getCollection from "@/composables/getCollection";
 import { ref } from "@vue/reactivity";
+import { onMounted } from "@vue/runtime-core";
+import { useStore } from "vuex";
 
 export default {
   name: "Home",
@@ -48,7 +50,13 @@ export default {
       "Just for you",
       "Recommended for you",
     ]);
+
+    const store = useStore();
     const { documents: categories } = getCollection("inventory");
+
+    onMounted(() => {
+      console.log("Store: ", store.state.items);
+    });
 
     return { user, categories, header };
   },

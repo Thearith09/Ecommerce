@@ -4,8 +4,8 @@
       <vueper-slide
         v-for="(slide, index) in slides"
         :key="index"
-        :image="slide.link"
-        @click="handleNavigation(slide)"
+        :image="slide.image"
+        @click="handleNavigation(slide.cateogryName)"
       >
       </vueper-slide>
     </vueper-slides>
@@ -44,39 +44,115 @@ export default {
     const slides = ref([]);
     const router = useRouter();
 
-    onMounted(() => {
-      const { documents } = getCollection("inventory");
+    // onMounted(() => {
+    //   const { documents } = getCollection("inventory");
 
-      watch(documents, () => {
-        for (let category of documents.value) {
-          const { documents: products } = getDocument(
-            "inventory",
-            category.name,
-            "products"
-          );
-          watch(products, () => {
-            products.value.forEach((product) => {
-              if (product.discount > 0) {
-                product.images.forEach((image) => {
-                  slides.value.push({
-                    id: product.id,
-                    productName: product.name,
-                    categoryName: category.name,
-                    content: product.description,
-                    link: image.url,
-                  });
-                });
-              }
-            });
-          });
-        }
-      });
-    });
-    const handleNavigation = (slide) => {
+    //   watch(documents, () => {
+    //     for (let category of documents.value) {
+    //       const { documents: products } = getDocument(
+    //         "inventory",
+    //         category.name,
+    //         "products"
+    //       );
+    //       watch(products, () => {
+    //         products.value.forEach((product) => {
+    //           if (product.discount > 0) {
+    //             product.images.forEach((image) => {
+    //               slides.value.push({
+    //                 id: product.id,
+    //                 productName: product.name,
+    //                 categoryName: category.name,
+    //                 content: product.description,
+    //                 link: image.url,
+    //               });
+    //             });
+    //           }
+    //         });
+    //       });
+    //     }
+    //   });
+    // });
+    const handleNavigation = (name) => {
+      console.log("slide: ", name);
       router.push({
-        path: `/categories/${slide.categoryName}`,
+        path: `/categories/${name}`,
+        params: { id: name },
       });
     };
+
+    slides.value = [
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner.jpg"),
+        cateogryName: "Sneaker",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner1.jpg"),
+        cateogryName: "clothes",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner2.jpg"),
+        cateogryName: "clothes",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner3.jpg"),
+        cateogryName: "clothes",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner4.jpg"),
+        cateogryName: "clothes",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner5.jpg"),
+        cateogryName: "watch",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner6.jpg"),
+        cateogryName: "clothes",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner7.jpg"),
+        cateogryName: "clothes",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner8.jpg"),
+        cateogryName: "clothes",
+      },
+      {
+        title: "El Teide Volcano, Spain",
+        content: "Photo by Max Rive",
+        // You can also provide a URL for the image.
+        image: require("@/assets/images/Banner9.jpg"),
+        cateogryName: "clothes",
+      },
+      // Other slides.
+    ];
 
     const onResize = () => {
       windowWidth.value = window.innerWidth;
@@ -91,9 +167,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.vueperslides__image {
+  max-height: 400px;
+  max-width: 100%;
+}
 .vueperslides .vueperslide {
-  background-size: 30% 80%;
+  background-size: 100% 100%;
 }
 .vueperslides .vueperslide--titile {
   color: red;
@@ -101,12 +181,12 @@ export default {
 
 .vueperslides__progress {
   background: rgba(0, 0, 0, 0.25);
-  color: #ec4899;
+  color: #1d4ed8;
 }
 .vueperslides__arrow svg {
   stroke-width: 1;
   font-size: 15px;
-  color: #ec4899;
+  color: #1d4ed8;
 }
 @media only screen and (max-width: 768px) {
   .vueperslides__arrow svg {
@@ -115,10 +195,10 @@ export default {
   }
 }
 .vueperslides__arrow:focus {
-  outline: none;
+  /* outline: none; */
 }
 .vueperslides__bullet--active .default {
-  color: #ec4899;
+  /* color: #ec4899; */
 }
 .vueperslides__bullet--active:focus {
   outline: none;

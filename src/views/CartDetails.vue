@@ -44,7 +44,7 @@
           </div>
 
           <div
-            class="text-right space-x-10 items-center font-medium text-gray-700 border-b-2 border-gray-200 pb-3"
+            class="text-right space-x-10 items-center font-medium text-gray-700 border-b-2 border-yellow-200 pb-3"
           >
             <span class="underline"> Shipping </span>
             <span>${{ shipping.toFixed(2) }}</span>
@@ -57,25 +57,39 @@
             </div>
           </div>
 
-          <div class="pb-5 border-b-2 border-gray-200">
+          <div class="pb-5 border-b-2 border-yellow-200">
             <button
+              v-if="!isPending"
               @click="handleCheckout"
-              class="focus:outline-none w-full p-3 uppercase flex rounded justify-center items-center cursor-pointer text-white bg-pink-500 hover:bg-pink-700 font-medium shadow"
+              class="focus:outline-none w-full p-3 flex rounded justify-center items-center cursor-pointer text-white bg-blue-600 hover:bg-blue-700 font-medium shadow"
             >
               Checkout
+            </button>
+            <button
+              v-else
+              class="relative flex justify-center items-center focus:outline-none rounded shadow p-3 tracking-wide bg-blue-600 text-white w-full"
+            >
+              <div>
+                Checking out...
+              </div>
+              <div class="absolute top-4 right-2">
+                <div
+                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-white"
+                ></div>
+              </div>
             </button>
           </div>
         </div>
       </div>
 
       <div
-        v-if="cart?.length <= 0 && tempCart.length <= 0"
-        class="relative rounded w-full h-auto my-10 p-5 md:w-3/4 xl:w-1/2 md:mx-auto lg:my-20 border-2 border-gray-200 bg-white"
+        v-if="userSignin ? cart?.length <= 0 : tempCart.length <= 0"
+        class="relative rounded w-11/12 h-auto my-10 p-5 md:w-6/12 mx-auto lg:my-20 border-2 border-yellow-200 bg-white"
       >
-        <div class="flex justify-center mt-12">
+        <div class="flex justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-24 sm:h-28 inline-block p-5 text-pink-500"
+            class="h-24 sm:h-28 inline-block p-5 text-blue-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -89,13 +103,15 @@
           </svg>
         </div>
 
-        <div class="text-gray-700 text-sm flex justify-center mt-7 mb-5">
+        <div
+          class="text-gray-700 tracking-wide text-center flex justify-center mb-5"
+        >
           <h3>Your cart is empty. Keep shopping for your favorite products.</h3>
         </div>
 
         <div
           @click="handleNavigation"
-          class="text-white p-3 mb-24 flex justify-center bg-pink-500 w-2/4 sm:w-1/4 mx-auto cursor-pointer"
+          class="text-white py-3 w-40 text-center mx-auto mb-5 bg-blue-600 cursor-pointer"
         >
           Keep Shopping
         </div>
@@ -114,11 +130,12 @@ import useDocument from "@/composables/useDocument";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import getUser from "@/composables/getUser";
+import getUserDoc from "@/composables/getUserDoc";
 import Cart from "@/components/Cart.vue";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
-import { watchEffect } from "vue";
-import { functions } from "@/firebase/config";
+import { onMounted, watch, watchEffect } from "vue";
+import { functions, timestamp, projectAuth } from "@/firebase/config";
 import { loadStripe } from "@stripe/stripe-js";
 import { useStore } from "vuex";
 
@@ -134,22 +151,29 @@ export default {
     const pieces = ref(0);
     const shipping = ref(2);
     const discount = ref(0);
+    const isPending = ref(false);
+    const cart = ref(null);
+    const userSignin = ref(projectAuth.currentUser);
 
     const store = useStore();
     const tempCart = ref(store.state.cart);
 
     const router = useRouter();
+    const { _user } = getUserDoc("users");
     const { user } = getUser();
-    const { documents: cart } = getDocument(
-      "carts",
-      user.value?.displayName,
-      "items"
-    );
     const { updateDoc: updateCart } = useDocument(
       "carts",
-      user.value?.displayName,
+      user.value?.uid,
       "items"
     );
+
+    onMounted(() => {
+      const { documents } = getDocument("carts", user.value?.uid, "items");
+
+      watch(documents, () => {
+        cart.value = documents.value;
+      });
+    });
 
     watchEffect(() => {
       //reset once carts collection has been updated
@@ -203,6 +227,7 @@ export default {
       if (!user.value) {
         router.push({ name: "Login" });
       } else {
+        isPending.value = true;
         const createStripeCheckout = functions.httpsCallable(
           "createStripeCheckout"
         );
@@ -212,9 +237,13 @@ export default {
         );
 
         const res = await createStripeCheckout({
-          name: user.value?.displayName,
+          id: user.value?.uid,
+          email: _user.value.email,
+          phone: _user.value.phone,
+          createdAt: Date.now(),
         });
         const sessionId = await res.data.id;
+        store.commit("setSessionId", sessionId);
         stripe.redirectToCheckout({ sessionId });
       }
     };
@@ -230,6 +259,8 @@ export default {
       discount,
       pieces,
       shipping,
+      isPending,
+      userSignin,
     };
   },
 };

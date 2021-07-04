@@ -4,8 +4,8 @@
       <Navbar />
     </div>
 
-    <div class="mb-auto h-auto 2xl:w-3/4 2xl:mx-auto">
-      <div class="bg-white">
+    <div class="my-5 mb-auto h-auto 2xl:w-3/4 2xl:mx-auto">
+      <div>
         <Checkout :orders="orders" />
       </div>
     </div>

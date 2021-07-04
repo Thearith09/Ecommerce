@@ -3,7 +3,7 @@
     v-if="windowWidth < 640"
     class="inset-0 z-30 bg-white fixed h-screen w-full"
   >
-    <div class="relative pr-3">
+    <div class="relative">
       <input
         autofocus
         v-model="search"
@@ -66,9 +66,7 @@ export default {
       } else {
         let categoryId = null;
         categories.value?.forEach((doc) => {
-          if (
-            doc.categoryName.toLowerCase().includes(search.value.toLowerCase())
-          ) {
+          if (doc.name.toLowerCase().includes(search.value.toLowerCase())) {
             categoryId = doc.id;
           }
         });

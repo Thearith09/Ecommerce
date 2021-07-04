@@ -12,7 +12,7 @@
     @apply invisible;
   }
   .activeProfile {
-    @apply border-b-4 border-pink-700;
+    @apply border-b-4 border-purple-700;
   }
   /* for addtocart color button */
   .activeSize,
@@ -29,13 +29,13 @@
     @apply cursor-not-allowed opacity-50;
   }
   .bg-even {
-    @apply bg-gray-100 border-b-2 border-gray-200;
+    @apply bg-gray-50;
   }
   .bg-odd {
-    @apply bg-white border-b-2  border-gray-200;
+    @apply bg-white;
   }
   .activePaginate {
-    @apply border-b-2 border-pink-500;
+    @apply border-b-2 border-blue-600;
   }
   .activeLanguage {
     @apply border-2 border-gray-400;

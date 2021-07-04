@@ -1,69 +1,102 @@
 <template>
-  <div class="flex flex-col h-screen bg-gray-100">
+  <div class="flex flex-col h-screen bg-white">
     <div>
       <Navbar />
     </div>
-    <div class="my-5 mb-auto xl:relative 2xl:w-3/4 2xl:mx-auto">
-      <div v-if="windowWidth >= 1280">
-        <img
-          class="w-full object-cover object-center"
-          src="@/assets/images/bg-signin.png"
-        />
-      </div>
-      <div
-        class="w-full p-3 bg-white sm:px-20 md:px-32 xl:bg-transparent xl:absolute top-0 -right-24 xl:w-2/3"
-      >
-        <h3 class="text-pink-500 font-bold text-center my-5">Sign up Form</h3>
-        <form @submit.prevent="handleSignup" class="space-y-5">
-          <input
-            autofocus
-            v-model="username"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
-            type="text"
-            placeholder="username"
-            required
-          />
-          <input
-            v-model="email"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
-            type="email"
-            placeholder="email"
-            required
-          />
-          <input
-            v-model="password"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
-            type="password"
-            placeholder="password"
-            required
-          />
-          <input
-            v-model="confirmPassword"
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-400 w-full text-gray-800 font-thin p-2 shadow"
-            type="password"
-            placeholder="confirm password"
-            required
-          />
-          <h4 v-if="error" class="text-red-500 text-sm">{{ error }}</h4>
+    <div class="my-5 sm:my-auto mb-auto 2xl:w-3/4 2xl:mx-auto">
+      <div class="w-80 sm:w-96 px-5 py-10 bg-white mx-auto shadow rounded-md">
+        <h3
+          class="font-mono font-bold tracking-wide text-purple-600 text-center mb-5"
+        >
+          Sign up Form
+        </h3>
+        <form @submit.prevent="handleSignup" class="space-y-8">
+          <div class="space-y-8">
+            <div class="relative w-full z-0">
+              <input
+                v-model="username"
+                type="text"
+                placeholder=" "
+                required
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="Username"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Enter username</label
+              >
+            </div>
+            <div class="relative w-full z-0">
+              <input
+                v-model="email"
+                type="email"
+                name="email"
+                placeholder=" "
+                required
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="email"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Enter email</label
+              >
+            </div>
+            <div class="relative w-full text-left z-0">
+              <input
+                v-model="password"
+                type="password"
+                placeholder=" "
+                required
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="password"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Enter password</label
+              >
+            </div>
+            <div class="relative w-full text-left z-0">
+              <input
+                v-model="confirmPassword"
+                type="password"
+                placeholder=" "
+                required
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="password"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Confrim password</label
+              >
+            </div>
+          </div>
+          <label v-if="error" class="text-red-600 text-sm">{{ error }}</label>
           <div class="flex">
             <button
               v-if="!isPending"
-              class="focus:outline-none  hover:text-pink-700 hover:translate-x-2 transition transform p-2 shadow font-mono text-md bg-white text-pink-500"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-600 rounded-full w-full p-2 tracking-wide shadow hover:text-purple-700 bg-white text-purple-600"
             >
               sign up
             </button>
             <button
               v-else
-              class="focus:outline-none p-2 shadow font-mono text-md bg-white text-pink-500"
+              class="relative flex justify-center rounded-full items-center space-x-4 sm:space-x-12 focus:outline-none w-full p-2 tracking-wide shadow bg-white text-purple-600"
             >
-              signing up...
+              <div>
+                signing up...
+              </div>
+              <div class="absolute top-3 right-2">
+                <div
+                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
+                ></div>
+              </div>
             </button>
           </div>
           <div>
-            <p class="text-gray-800 font-thin">
+            <p class="text-gray-800 font-thin text-center">
               already have account?<span
                 @click="handleNavigation"
-                class="ml-2 font-semibold text-pink-500 underline cursor-pointer hover:text-pink-700"
+                class="ml-2 font-semibold text-purple-600 underline cursor-pointer hover:text-purple-700"
                 >signin</span
               >
             </p>
@@ -80,10 +113,11 @@
 <script>
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import useCollection from "@/composables/useCollection";
+import useSignup from "@/composables/useSignup";
+import { timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
-import useSignup from "@/composables/useSignup";
-import useCollection from "@/composables/useCollection";
 import { onMounted } from "@vue/runtime-core";
 
 export default {
@@ -127,6 +161,7 @@ export default {
         await addUser(res.user.uid, {
           name: res.user.displayName,
           email: res.user.email,
+          createdAt: timestamp(),
         });
 
         if (!error.value) {
@@ -150,4 +185,39 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.origin-0 {
+  transform-origin: 0%;
+}
+.-z-1 {
+  z-index: -1;
+}
+
+input:focus ~ label,
+input:not(:placeholder-shown) ~ label,
+textarea:focus ~ label,
+textarea:not(:placeholder-shown) ~ label,
+select:focus ~ label,
+select:not([value=""]):valid ~ label {
+  /* @apply transform; scale-75; -translate-y-6; */
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  --tw-scale-x: 0.75;
+  --tw-scale-y: 0.75;
+  --tw-translate-y: -1.3rem;
+}
+input:focus ~ label,
+select:focus ~ label {
+  /* @apply text-black; left-0; */
+  --tw-text-opacity: 1;
+  color: rgba(124, 58, 237, var(--tw-text-opacity));
+  left: 0px;
+  z-index: 10;
+}
+</style>

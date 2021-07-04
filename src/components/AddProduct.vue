@@ -1,80 +1,123 @@
 <template>
   <div
-    class="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-40"
+    class="h-screen w-full fixed left-0 top-0 bg-gray-900 bg-opacity-50 z-40"
   >
-    <div
-      class="bg-white shadow w-full sm:w-3/4 md:w-3/4 lg:w-1/2 2xl:w-1/3 rounded"
-    >
-      <div class="py-3 px-2 flex justify-between items-end">
-        <span class="font-semibold text-gray-700 text-md">New Product</span>
+    <div class="flex justify-center items-center w-full h-3/4">
+      <div
+        class="bg-white shadow w-full sm:w-3/4 md:w-3/4 lg:w-1/2 2xl:w-1/3 rounded-md"
+      >
+        <div class="py-3 px-2 flex justify-between items-end">
+          <span class="font-semibold text-gray-700 font-mono">New Product</span>
 
-        <svg
-          @click="handleClose"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-gray-500 cursor-pointer"
-          viewBox="0 0 20 20x"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </div>
+          <svg
+            @click="handleClose"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-500 cursor-pointer"
+            viewBox="0 0 20 20x"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
 
-      <div class="bg-white h-auto my-5 px-5">
-        <form @submit.prevent="handleAdd" class="space-y-5">
-          <input
-            v-model="productName"
-            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
-            type="text"
-            placeholder="product name"
-            required
-          />
-
-          <input
-            v-model="description"
-            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
-            type="text"
-            placeholder="description"
-            required
-          />
-
-          <input
-            v-model="price"
-            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
-            type="number"
-            placeholder="price"
-            required
-          />
-
-          <input
-            v-model="discount"
-            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
-            type="number"
-            placeholder="discount"
-            required
-          />
-
-          <input
-            v-model="size"
-            class="p-2 bg-white text-md text-gray-700 shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
-            type="text"
-            placeholder="size"
-            @keypress.space="handleInsertSize"
-          />
-          <label class="text-indigo-600 text-sm">
-            press (space) in order to insert into sizes:[
-            <ur class="p-1" v-for="(size, index) in sizes" :key="index">
-              <li
-                class="relative group cursor-pointer inline-block text-gray-700"
-                @click="handleUpdateSize(size, index)"
+        <div class="bg-white h-auto my-5 px-5">
+          <form @submit.prevent="handleAdd" class="space-y-7">
+            <div class="relative w-full z-0 tracking-wide">
+              <input
+                v-model="productName"
+                type="text"
+                placeholder=" "
+                required
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="Username"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Product name</label
               >
-                {{ size }}
+            </div>
+
+            <div class="relative w-full z-0 tracking-wide">
+              <input
+                v-model="description"
+                type="text"
+                placeholder=" "
+                required
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="Username"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Description</label
+              >
+            </div>
+
+            <div class="relative w-full z-0 tracking-wide">
+              <input
+                v-model="price"
+                type="number"
+                step=".01"
+                placeholder=" "
+                required
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="Username"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Price</label
+              >
+            </div>
+
+            <div class="relative w-full z-0 tracking-wide">
+              <input
+                v-model="discount"
+                type="number"
+                step=".01"
+                placeholder=" "
+                required
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="Username"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Discount</label
+              >
+            </div>
+
+            <div class="relative w-full z-0 tracking-wide">
+              <input
+                @keypress.space="handleInsertSize"
+                v-model="size"
+                type="text"
+                placeholder=" "
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              />
+              <label
+                for="Username"
+                class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
+                >Size(s)</label
+              >
+            </div>
+            <label class="text-purple-600 text-sm tracking-wide">
+              press (space) in order to insert into sizes:[
+              <ur
+                class="p-1 relative group"
+                v-for="(size, index) in sizes"
+                :key="index"
+              >
+                <li
+                  class="inline-block text-gray-700"
+                  @click="handleUpdateSize(size, index)"
+                >
+                  {{ size }}
+                </li>
                 <span
                   @click="handleRemoveSize(index)"
-                  class="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full hidden group-hover:flex justify-center items-center"
+                  class="absolute top-0 right-0 cursor-pointer bg-red-600 w-3 h-3 rounded-full hidden group-hover:flex justify-center items-center"
                 >
                   <svg
                     class="w-2 h-2"
@@ -91,67 +134,81 @@
                     />
                   </svg>
                 </span>
-              </li>
-            </ur>
-            ]
-          </label>
+              </ur>
+              ]
+            </label>
 
-          <input
-            class="p-2 bg-white text-md text-gray-700  shadow w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-pink-500"
-            type="file"
-            placeholder="image"
-            @change="handleInsertImage"
-          />
-          <lable v-if="!fileError" class="text-indigo-600 text-sm">
-            select image in order to insert into images[
-            <ur class="p-1" v-for="(image, index) in images" :key="index">
-              <li
-                class="relative group cursor-pointer inline-block ml-2 text-gray-700"
-              >
-                {{ image.name }}
-                <span
-                  @click="handleRemoveImage(index)"
-                  class="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full hidden group-hover:flex justify-center items-center"
+            <label
+              class="w-full rounded h-16 flex flex-col py-1 items-center bg-white shadow tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150"
+            >
+              <span class="material-icons-outlined">
+                cloud_upload
+              </span>
+              <span class="text-base leading-normal">Select a file</span>
+              <input @change="handleInsertImage" type="file" class="hidden" />
+            </label>
+
+            <lable
+              v-if="!fileError"
+              class="text-purple-600 text-sm tracking-wide"
+            >
+              select image in order to insert into images[
+              <ur class="p-1" v-for="(image, index) in images" :key="index">
+                <li
+                  class="relative group cursor-pointer inline-block ml-2 text-gray-700"
                 >
-                  <svg
-                    class="w-2 h-2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                  {{ image.name }}
+                  <span
+                    @click="handleRemoveImage(index)"
+                    class="absolute -top-1 -right-1 bg-red-600 w-3 h-3 rounded-full hidden group-hover:flex justify-center items-center"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </span>
-              </li>
-            </ur>
-            ]
-          </lable>
-          <h4 v-if="fileError" class="text-red-500 text-sm">
-            {{ fileError }}
-          </h4>
-          <h4 v-if="warning" class="text-red-500 text-sm">
-            {{ warning }}
-          </h4>
-          <h4 v-if="error" class="text-red-500">{{ error }}</h4>
-          <button
-            v-if="!isPending"
-            class="hover:text-pink-700 bg-white font-semibold shadow w-full p-2 text-pink-500 focus:outline-none"
-          >
-            {{ product ? "Edit" : "Add" }}
-          </button>
-          <button
-            v-else
-            class="hover:text-pink-700 bg-white font-semibold shadow w-full p-2 text-pink-500 focus:outline-none"
-          >
-            {{ product ? "Saving..." : "Adding..." }}
-          </button>
-        </form>
+                    <svg
+                      class="w-2 h-2"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </span>
+                </li>
+              </ur>
+              ]
+            </lable>
+            <h4 v-if="fileError" class="text-red-600 text-sm">
+              {{ fileError }}
+            </h4>
+            <h4 v-if="warning" class="text-red-600 text-sm">
+              {{ warning }}
+            </h4>
+            <h4 v-if="error" class="text-red-600">{{ error }}</h4>
+            <button
+              v-if="!isPending"
+              class="bg-white rounded text-purple-600 hover:text-purple-700 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-600 tracking-wide shadow w-full p-2"
+            >
+              {{ product ? "Edit" : "Add" }}
+            </button>
+            <button
+              v-else
+              class="relative flex justify-center items-center bg-white rounded text-purple-600 hover:text-purple-700 focus:ring focus:ring-offset-2 focus:ring-purple-600 tracking-wide shadow w-full p-2 focus:outline-none"
+            >
+              <div>
+                {{ product ? "Editing..." : "Saving..." }}
+              </div>
+              <div class="absolute top-3 right-2">
+                <div
+                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
+                ></div>
+              </div>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -203,6 +260,7 @@ export default {
       if (index !== null) {
         sizes.value[index] = size.value;
         size.value = "";
+        conveyIndex = null;
       } else {
         sizes.value.push(size.value);
         size.value = "";
@@ -244,6 +302,7 @@ export default {
 
     const handleRemoveImage = async (index) => {
       if (images.value[index].url) {
+        console.log(images.value[index].url);
         await deleteImage(images.value[index].url);
         images.value.splice(index, 1);
         files.value.splice(index, 1);
@@ -321,4 +380,39 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.origin-0 {
+  transform-origin: 0%;
+}
+.-z-1 {
+  z-index: -1;
+}
+
+input:focus ~ label,
+input:not(:placeholder-shown) ~ label,
+textarea:focus ~ label,
+textarea:not(:placeholder-shown) ~ label,
+select:focus ~ label,
+select:not([value=""]):valid ~ label {
+  /* @apply transform; scale-75; -translate-y-6; */
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  --tw-scale-x: 0.75;
+  --tw-scale-y: 0.75;
+  --tw-translate-y: -1.3rem;
+}
+input:focus ~ label,
+select:focus ~ label {
+  /* @apply text-black; left-0; */
+  --tw-text-opacity: 1;
+  color: rgba(124, 58, 237, var(--tw-text-opacity));
+  left: 0px;
+  z-index: 10;
+}
+</style>

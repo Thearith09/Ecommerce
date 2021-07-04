@@ -4,8 +4,8 @@
       <Navbar />
     </div>
 
-    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
-      <div class="mx-5 my-12 h-auto">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto bg-gray-50">
+      <div class="mx-5 my-5 h-auto">
         <component
           :is="currentComponent"
           :name="id"
@@ -16,14 +16,14 @@
         />
 
         <div
-          v-if="products?.length > 0"
+          v-if="products && products.length > 0"
           class="flex justify-center items-center mt-10 w-1/4 mx-auto space-x-2"
         >
           <button
             @click="handlePrevious(products.length)"
             :class="{ frozen: previous <= 0 }"
             :disabled="previous <= 0"
-            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 flex justify-center hover:text-pink-700 items-center"
+            class="h-8 w-8 lg:h-9 lg:w-9 rounded-full focus:outline-none border-2 border-blue-600 text-blue-600 flex justify-center hover:text-blue-700 items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@
               v-for="i in Math.ceil(products.length / 5)"
               :key="i"
               v-show="i >= start && i <= end"
-              class="flex items-center px-2 text-pink-500 font-bold lg:text-lg"
+              class="flex items-center px-2 text-blue-600 font-bold lg:text-lg"
             >
               <li class="px-1" :class="{ activePaginate: i == indexActive }">
                 {{ i }}
@@ -54,7 +54,7 @@
             @click="handleNext(products.length)"
             :class="{ frozen: next >= products.length }"
             :disabled="next >= products.length"
-            class="h-8 w-8 lg:h-10 lg:w-10 rounded-full focus:outline-none border-2 border-pink-500 text-pink-500 hover:text-pink-700 flex justify-center items-center"
+            class="h-8 w-8 lg:h-9 lg:w-9 rounded-full focus:outline-none border-2 border-blue-600 text-blue-600 hover:text-blue-700 flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +99,7 @@ export default {
     const previous = ref(0);
     const next = ref(5);
     const indexActive = ref(1);
-
+    console.log(props.id);
     const currentComponent = ref("ListProducts");
 
     const handleReceiveBack = (prods) => {

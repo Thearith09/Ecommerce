@@ -3,69 +3,75 @@
     class="justify-center items-center inset-0 h-screen overflow-scroll w-full fixed bg-gray-700 bg-opacity-50 z-40"
   >
     <div class="md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
-      <div
-        class="relative grid grid-cols-layout-invoice md:grid-cols-none w-full overflow-x-scroll"
-      >
+      <div class="relative">
         <div
           id="print-invoice"
-          class="w-full p-10 space-y-10 bg-white border-2 border-gray-200"
+          class="w-full px-10 bg-white rounded-md shadow-md py-10"
         >
           <div
-            class="flex justify-between items-end border-b-2 border-gray-200 pb-4"
+            class="flex flex-col sm:flex-row items-center  sm:justify-between sm:items-end border-b-2 border-yellow-200 pt-10 pb-20"
           >
             <div>
               <img
-                class="w-28 focus:outline-none"
+                class="w-full focus:outline-none"
                 src="@/assets/images/logo.png"
                 alt="Easy shopping logo"
               />
             </div>
-            <div class="text-gray-700 font-semibold">
-              <p>{{ today }}</p>
-              <p>Invoice #{{ invoiceNumber }}</p>
+            <div class="text-gray-400 font-semibold leading-none">
+              <p>
+                {{
+                  date(purchaseInfo.createdAt.toDate()).format(
+                    "dddd do MMM, YYYY"
+                  )
+                }}
+              </p>
+              <p>
+                Invoice #{{
+                  purchaseInfo.id.substring(
+                    purchaseInfo.id.length - 5,
+                    purchaseInfo.id.length
+                  )
+                }}
+              </p>
             </div>
           </div>
 
-          <div class="grid grid-cols-4 items-start space-x-5 text-gray-700">
+          <div
+            class="grid grid-cols-4 items-start space-x-5 text-gray-700 py-10"
+          >
             <div
-              class="col-span-3 flex justify-between space-x-5 border-b-2 border-gray-200 pb-4"
+              class="col-span-3 flex justify-between space-x-5 border-b-2 border-yellow-200 pb-4"
             >
               <div class="space-y-3 leading-none w-full">
                 <div>
                   <span>Supplier:</span>
                   <span
-                    class="block text-pink-500 text-xl font-semibold uppercase"
+                    class="block text-pink-600 text-xl font-semibold uppercase"
                   >
-                    Master IT Cambodia
+                    Easy4shopping
                   </span>
                 </div>
                 <div class="text-sm">
-                  <h5>Prek Presdach commune,</h5>
+                  <h5>Kammeakar Village, Svay por Commune</h5>
                   <h5>Battambang, Cambodia</h5>
                 </div>
               </div>
               <div class="space-y-3 leading-none w-full">
                 <div>
                   <span>Customer:</span>
-                  <h5 class="text-pink-500 text-xl font-semibold uppercase">
-                    {{ orders.name }}
+                  <h5 class="text-pink-600 text-xl font-semibold uppercase">
+                    {{ purchaseInfo.shippingInfo.name }}
                   </h5>
                 </div>
                 <div class="text-sm">
-                  <h5>Prek Presdach commune,</h5>
-                  <h5>Battambang, Cambodia</h5>
+                  <h5>
+                    {{ purchaseInfo.shippingInfo.address.line1 }},
+                    {{ purchaseInfo.shippingInfo.address.line2 }},
+                    {{ purchaseInfo.shippingInfo.address.city }}
+                  </h5>
                   <div>
-                    <img
-                      class="h-6 w-6 inline-block"
-                      src="@/assets/images/telegram.png"
-                    />
-                    <span>{{ orders.telegram }}</span>
-                    <br />
-                    <img
-                      class="h-6 w-6 inline-block"
-                      src="@/assets/images/phone.png"
-                    />
-                    <span>{{ orders.tel }}</span>
+                    {{ purchaseInfo.userContact.phone }}
                   </div>
                 </div>
               </div>
@@ -73,83 +79,58 @@
           </div>
 
           <div
-            class="bg-pink-500 w-full h-10 grid grid-cols-7 gap-2 text-white font-semibold items-center px-2"
+            class="bg-gray-200 w-full h-10 grid grid-cols-5 sm:grid-cols-6 gap-2 text-gray-400 font-semibold items-center px-2"
           >
-            <p class="col-span-3">Item Description</p>
+            <p class="col-span-2 sm:col-span-3">Item Description</p>
             <p>Price</p>
             <p>Discount</p>
             <p>Quantity</p>
-            <p class="flex justify-end">Total</p>
           </div>
+
           <div>
-            <div v-for="(item, index) in orders.items" :key="index">
+            <div v-for="(item, index) in purchaseInfo.items" :key="index">
               <div
                 :class="{
                   'bg-even': index % 2 == 0,
                   'bg-odd': index % 2 != 0,
                 }"
-                class="grid grid-cols-7 text-gray-700 items-center p-2"
+                class="grid grid-cols-5 sm:grid-cols-6 text-gray-400 items-center p-2"
               >
-                <div class="col-span-3 flex space-x-1 items-center">
-                  <img class="h-12 w-12" :src="item.color" />
-                  <div>
-                    <p
-                      class="text-gray-700 font-semibold leading-none break-normal"
-                    >
-                      {{ item.name }}
-                    </p>
-                  </div>
+                <div class="col-span-2 sm:col-span-3">
+                  <p class="font-semibold leading-none break-normal">
+                    {{ item.name }}
+                  </p>
                 </div>
                 <p>${{ Number(item.price).toFixed(2) }}</p>
                 <p class="flex justify-center">{{ item.discount }}%</p>
                 <p class="flex justify-center">{{ item.qty }}</p>
-                <p class="flex justify-end">
-                  ${{
-                    (
-                      item.price * item.qty -
-                      (item.price * item.discount) / 100
-                    ).toFixed(2)
-                  }}
-                </p>
+                <p class="flex justify-end"></p>
               </div>
             </div>
           </div>
 
-          <div class="space-y-px">
-            <div class="flex justify-between w-1/4 text-gray-700 ml-auto">
-              <span>Sub Total</span>
-              <span>${{ subTotal.toFixed(2) }}</span>
+          <div
+            class="mt-10 w-full h-auto space-y-5 bg-gray-50 text-gray-700 font-semibold p-3"
+          >
+            <div
+              class="w-40 ml-auto flex justify-between items-center space-x-2"
+            >
+              <span>shipping</span>
+              <span>$2</span>
             </div>
-            <div class="flex justify-between w-1/4 text-gray-700 ml-auto">
-              <span>Shipping</span>
-              <span>${{ Number(orders.shipping).toFixed(2) }}</span>
+            <div
+              class="w-40 ml-auto flex justify-between items-center space-x-2"
+            >
+              <span>Total</span>
+              <span>${{ purchaseInfo.amount }}</span>
             </div>
           </div>
 
           <div
-            class="border-2 border-gray-700 w-1/4 flex justify-between text-gray-700 p-1 ml-auto"
-          >
-            <div class="flex justify-end">Total</div>
-            <div>${{ total.toFixed(2) }}</div>
-          </div>
-
-          <div
-            class="flex justify-between lg:space-x-5 border-t-2 border-gray-200"
-          >
-            <div class="flex items-center">
-              <img class="h-8 w-8" src="@/assets/images/fb.png" />
-              <span> Master IT Cambodia </span>
-            </div>
-            <div class="flex items-center">
-              <img class="h-8 w-8" src="@/assets/images/telegram.png" />
-              <span> Master IT Cambodia </span>
-            </div>
-            <div class="flex items-center">
-              <img class="h-8 w-8" src="@/assets/images/phone.png" />
-              <span> 098 866 356 </span>
-            </div>
-          </div>
+            class="w-full h-10 bg-gray-50 border-b-2 border-yellow-200 my-10"
+          ></div>
         </div>
+
         <div
           @click="handlePrint"
           class="absolute top-0 left-7 text-gray-600 hover:text-gray-700 cursor-pointer"
@@ -188,112 +169,34 @@
 </template>
 
 <script>
-import useDocument from "@/composables/useDocument";
-import getDocument from "@/composables/getDocument";
-import useCollection from "@/composables/useCollection";
-import getUser from "@/composables/getUser";
-import { timestamp } from "@/firebase/config";
 import moment from "moment";
 import printJS from "print-js";
 import { ref } from "@vue/reactivity";
 
 export default {
   //invoiceIndex from admin page for printing invoice
-  props: ["orders", "invoiceNum", "invoiceIndex"],
+  props: ["purchaseInfo"],
   emits: ["close"],
   setup(props, { emit }) {
-    const today = moment().format("dddd D, MMMM YYYY");
+    const date = moment;
     const subTotal = ref(0);
     const total = ref(0);
-    const invoiceNumber = ref(props.invoiceNum);
 
-    const { user } = getUser();
-    const { updateDoc: updateCart } = useDocument(
-      "carts",
-      user.value?.uid,
-      "items"
-    );
-    const { documents: cart } = getDocument("carts", user.value?.uid, "items");
-    const { addDoc } = useCollection("orders");
+    const handlePrint = () => {
+      printJS({
+        printable: "print-invoice",
+        type: "html",
+        targetStyles: ["*"],
+      });
 
-    if (invoiceNumber.value > 0) {
-      //from client page
-      invoiceNumber.value++;
-
-      if (invoiceNumber.value < 10)
-        invoiceNumber.value = `000${invoiceNumber.value}`;
-      else if (invoiceNumber.value < 100)
-        invoiceNumber.value = `00${invoiceNumber.value}`;
-      else if (invoiceNumber.value < 1000)
-        invoiceNumber.value = `0${invoiceNumber.value}`;
-      else invoiceNumber.value = invoiceNumber.value;
-    } else if (props.invoiceIndex != null) {
-      //from admin page
-      if (props.invoiceIndex < 10)
-        invoiceNumber.value = `000${props.invoiceIndex}`;
-      else if (props.invoiceIndex < 100)
-        invoiceNumber.value = `00${props.invoiceIndex}`;
-      else if (props.invoiceIndex < 1000)
-        invoiceNumber.value = `0${props.invoiceIndex}`;
-      else invoiceNumber.value = props.invoiceIndex;
-    } else {
-      //from client page
-      invoiceNumber.value = "0001";
-    }
-
-    if (props.orders.items.length > 0) {
-      const items = props.orders.items;
-      for (let item of items) {
-        subTotal.value +=
-          item.price * item.qty - (item.price * item.qty * item.discount) / 100;
-      }
-      total.value += subTotal.value + props.orders.shipping;
-    }
-
-    const handlePrint = async () => {
-      if (user.value?.admin) {
-        printJS({
-          printable: "print-invoice",
-          type: "html",
-          targetStyles: ["*"],
-        });
-
-        emit("close", true);
-      } else {
-        let tempItems = cart.value?.filter((doc) => {
-          let temp;
-          props.orders.items.forEach((item) => {
-            if (item.id == doc.id && item.qty > 0 && item.size) {
-              temp = item;
-            }
-          });
-          if (!temp) return doc;
-        });
-        await updateCart({
-          items: [...tempItems],
-        });
-
-        await addDoc({
-          uid: user.value?.uid,
-          orderedInfo: props.orders,
-          createdAt: timestamp(),
-        });
-
-        printJS({
-          printable: "print-invoice",
-          type: "html",
-          targetStyles: ["*"],
-        });
-
-        emit("close", true);
-      }
+      emit("close", true);
     };
 
     const handleCancel = () => {
       emit("close");
     };
 
-    return { today, subTotal, total, handlePrint, handleCancel, invoiceNumber };
+    return { date, subTotal, total, handlePrint, handleCancel };
   },
 };
 </script>

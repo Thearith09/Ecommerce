@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-screen">
+  <div class="flex flex-col h-screen bg-gray-50">
     <div>
       <Navbar />
     </div>
@@ -14,7 +14,7 @@
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row gap-5 m-5"
       >
         <div
-          class="h-64 hover:shadow bg-white relative transform transition hover:translate-y-2 cursor-pointer rounded"
+          class="h-52 hover:shadow bg-white relative transform transition hover:translate-y-2 cursor-pointer rounded"
           v-for="category in categories"
           :key="category.name"
         >
@@ -28,14 +28,14 @@
           </router-link>
 
           <h4
-            class="absolute top-0 w-1/2 text-center font-semibold text-white py-2 bg-pink-500 bg-opacity-80 rounded"
+            class="absolute top-0 w-1/2 text-center font-semibold text-white py-2 bg-blue-600 bg-opacity-80 rounded"
           >
-            {{ category.categoryName }}
+            {{ category.name }}
           </h4>
           <div
             @click="handleRemoveCategory(category)"
             v-if="user?.admin"
-            class="absolute bottom-0 right-0 text-center font-semibold text-pink-500 hover:text-pink-700"
+            class="absolute bottom-0 right-0 text-center font-semibold text-blue-600 hover:text-blue-700"
           >
             Remove
           </div>

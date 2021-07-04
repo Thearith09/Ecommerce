@@ -4,9 +4,10 @@ import { ref } from "@vue/reactivity";
 const useCollection = (collection) => {
     const error = ref(null);
     const isPending = ref(false);
-    let documentRef = projectFirestore.collection(collection);
+    let documentRef;
 
     const addUser = async (id, userInfo) => {
+        documentRef = projectFirestore.collection(collection);
         error.value = null;
 
         try {
@@ -19,6 +20,7 @@ const useCollection = (collection) => {
     };
 
     const addDoc = async (category) => {
+        documentRef = projectFirestore.collection(collection);
         error.value = null;
         isPending.value = true;
 
@@ -34,6 +36,7 @@ const useCollection = (collection) => {
     };
 
     const deleteDoc = async (docId) => {
+        documentRef = projectFirestore.collection(collection);
         error.value = null;
         documentRef = documentRef.doc(docId);
 

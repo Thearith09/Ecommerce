@@ -8,7 +8,7 @@
     >
       <div
         @click="handleNext"
-        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-700"
+        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-blue-600 cursor-pointer hover:text-blue-700"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@
       class="h-auto hover:translate-y-2 transform transition"
       v-show="index >= start && index <= end"
     >
-      <div class="relative">
+      <div class="relative w-full">
         <router-link
           :to="{
             name: 'ProductDetails',
@@ -43,7 +43,7 @@
         >
           <img
             :src="urls[index] ? urls[index] : product.images[0].url"
-            class="w-full h-48 object-cover object-center rounded"
+            class="h-48 min-w-full  object-cover object-center rounded"
           />
         </router-link>
         <h3
@@ -88,7 +88,7 @@
                 class="absolute top-5 right-1 hidden group-hover:block br"
               ></div>
               <div
-                class="absolute top-7 -left-24 bg-white p-3 hidden group-hover:grid grid-cols-4 gap-1 rounded rounded-tr-none"
+                class="absolute top-7 -left-24 bg-blue-600 p-3 hidden group-hover:grid grid-cols-4 gap-1 rounded rounded-tr-none"
               >
                 <img
                   @mouseover="handleChangeImage(image.url, index, i)"
@@ -105,8 +105,8 @@
             </div>
           </div>
 
-          <h4 class="text-pink-500 font-semibold uppercase">
-            {{ product.productName }}
+          <h4 class="text-pink-600 font-semibold uppercase">
+            {{ product.name }}
           </h4>
 
           <div class="leading-none">
@@ -146,7 +146,7 @@
     >
       <div
         @click="handlePrevious"
-        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-pink-500 cursor-pointer hover:text-pink-700"
+        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-blue-600 cursor-pointer hover:text-blue-700"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -300,10 +300,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .br {
   border-left: 10px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 10px solid white;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid rgba(37, 99, 235, 1);
 }
 </style>

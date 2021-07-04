@@ -7,7 +7,13 @@ projectAuth.onAuthStateChanged(async (_user) => {
     if (_user) {
         const idTokenResult = await _user.getIdTokenResult();
         user.value = _user;
-        user.value.admin = idTokenResult.claims.admin;
+        console.log(idTokenResult.claims)
+        if (idTokenResult.claims.admin)
+            user.value.admin = idTokenResult.claims.admin;
+        if (idTokenResult.claims.packer)
+            user.value.packer = idTokenResult.claims.packer;
+        if (idTokenResult.claims.delivery)
+            user.value.delivery = idTokenResult.claims.delivery;
     } else {
         user.value = null;
     }

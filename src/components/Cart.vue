@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="rounded">
+    <div>
       <div
-        class="flex flex-col iphone:flex-row iphone:space-x-3 rounded h-auto lg:h-52 lg:my-0 shadow p-3"
+        class="rounded-md flex flex-col iphone:flex-row iphone:space-x-3 h-auto lg:h-52 lg:my-0 shadow p-3"
       >
         <div class="flex-none">
           <img
@@ -14,16 +14,16 @@
         <div class="flex">
           <div class="flex flex-col justify-between">
             <div class="space-y-2">
-              <h2 class="text-gray-700 font-semibold text-xl uppercase">
+              <h2 class="text-pink-600 font-semibold uppercase tracking-wide">
                 {{ item.name }}
               </h2>
 
-              <h4 class="text-gray-500 leading-none">
+              <h4 class="text-gray-500 leading-none tracking-wide">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
                 corrupti laudantium in
               </h4>
 
-              <h4 class="text-gray-700 font-bold">USD {{ item.price }}</h4>
+              <h4 class="text-gray-700 font-semibold">USD {{ item.price }}</h4>
             </div>
 
             <div class="flex space-x-2">
@@ -33,7 +33,7 @@
                   <input
                     @keydown="handleInput($event, item.name)"
                     @input="handleChangeQty($event, item.name)"
-                    class="inline-block focus:outline-none border-2 border-gray-200 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
+                    class="inline-block focus:outline-none border-2 border-yellow-200 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
                     type="text"
                     v-model="qty"
                   />
@@ -87,7 +87,7 @@
           <div>
             <span
               @click="handleRemove(item.name)"
-              class="text-gray-700 hover:text-pink-700 cursor-pointer"
+              class="text-gray-700 hover:text-blue-700 cursor-pointer"
               >Remove</span
             >
           </div>
@@ -101,7 +101,7 @@
 import useDocument from "@/composables/useDocument";
 import getUser from "@/composables/getUser";
 import { ref } from "@vue/reactivity";
-import { watch, watchEffect } from "@vue/runtime-core";
+import { onMounted, watch, watchEffect } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 export default {
@@ -113,11 +113,7 @@ export default {
     const store = useStore();
 
     const { user } = getUser();
-    const { deleteDoc } = useDocument(
-      "carts",
-      user.value?.displayName,
-      "items"
-    );
+    const { deleteDoc } = useDocument("carts", user.value?.uid, "items");
 
     watch(qty, () => {
       emit("updateQty", {

@@ -1,138 +1,140 @@
 <template>
-  <div
-    class="flex justify-center items-center inset-0 fixed w-full h-screen bg-gray-900 bg-opacity-50 z-40"
-  >
-    <div class="relative p-5 bg-white flex flex-col md:flex-row h-auto rounded">
-      <div class="absolute top-0 right-0 z-40">
-        <svg
-          @click="handleClose"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-gray-500 cursor-pointer"
-          viewBox="0 0 20 20x"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </div>
-
-      <div class="flex w-80 sm:w-96 md:w-80">
-        <div class="relative">
-          <img
-            class="flex-none w-full h-60 md:h-full rounded object-cover object-center"
-            :src="item.images[index].url"
-          />
-          <h3
-            v-if="item.discount > 0"
-            class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
+  <div class="inset-0 fixed w-full h-screen bg-gray-900 bg-opacity-50 z-40">
+    <div class="flex justify-center items-center h-3/4">
+      <div
+        class="relative p-5 bg-white flex flex-col md:flex-row h-auto rounded-md"
+      >
+        <div class="absolute top-1 right-1 z-40">
+          <svg
+            @click="handleClose"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-500 cursor-pointer"
+            viewBox="0 0 20 20x"
+            fill="currentColor"
           >
-            {{ item.discount }}% OFF
-          </h3>
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
         </div>
-      </div>
 
-      <div class="w-80 sm:w-96 md:pl-5">
-        <div class="space-y-2">
-          <h2 class="text-gray-700 font-semibold uppercase text-xl">
-            {{ item.name }}
-          </h2>
-          <h4 class="text-gray-500 leading-none">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
-            numquam magni obcaecati doloribus commodi neque animi!
-          </h4>
-          <div v-if="item.discount > 0" class="flex space-x-1">
-            <span class="font-medium text-gray-700 line-through block"
-              >USD {{ Number(item.price).toFixed(2) }}</span
+        <div class="flex w-80 sm:w-96 md:w-80">
+          <div class="relative h-52">
+            <img
+              class="flex-none w-full h-full rounded object-cover object-center"
+              :src="item.images[index].url"
+            />
+            <h3
+              v-if="item.discount > 0"
+              class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
             >
-            <span class="font-medium block text-red-600"
-              >USD
-              {{
-                (item.price - (item.price * item.discount) / 100).toFixed(2)
-              }}</span
-            >
+              {{ item.discount }}% OFF
+            </h3>
           </div>
-          <div v-else class="flex space-x-1">
-            <span class="font-medium text-gray-700 block"
-              >USD {{ Number(item.price).toFixed(2) }}</span
-            >
-          </div>
-          <div>
-            <p class="text-gray-700">sizes:</p>
-            <div class="flex space-x-1 text-gray-500">
-              <span
-                @click="handleActiveSize(i)"
-                :class="{ activeBorder: indexSize == i }"
-                v-for="(size, i) in item.sizes"
-                :key="size"
-                class="flex rounded items-center justify-center font-semibold uppercase border-2 py-1 px-3 cursor-pointer"
+        </div>
+
+        <div class="w-80 sm:w-96 md:pl-5">
+          <div class="space-y-2">
+            <h2 class="text-pink-600 font-semibold uppercase">
+              {{ item.name }}
+            </h2>
+            <h4 class="text-gray-500 leading-none">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Blanditiis numquam magni obcaecati doloribus commodi neque animi!
+            </h4>
+            <div v-if="item.discount > 0" class="flex space-x-1">
+              <span class="font-medium text-gray-700 line-through block"
+                >USD {{ Number(item.price).toFixed(2) }}</span
               >
-                {{ size }}
-              </span>
+              <span class="font-medium block text-red-600"
+                >USD
+                {{
+                  (item.price - (item.price * item.discount) / 100).toFixed(2)
+                }}</span
+              >
             </div>
-          </div>
-          <div class="text-gray-500">
-            <p class="text-gray-700">qty:</p>
-            <div class="flex space-x-5">
-              <div class="relative">
-                <input
-                  @keydown="handleInput"
-                  @input="handleChangeQty($event)"
-                  class="inline-block focus:outline-none border-2 border-gray-200 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
-                  type="text"
-                  v-model="qty"
-                />
-                <div class="absolute top-2 left-20 cursor-pointer">
-                  <svg
-                    @click="qty++"
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div
-                  v-if="qty > 1"
-                  class="absolute top-2 left-3 cursor-pointer"
-                >
-                  <svg
-                    @click="qty--"
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </div>
-
-              <button
-                :disabled="indexSize == null"
-                :class="{ frozen: indexSize == null }"
-                @click="
-                  handleAddToCart(
-                    item,
-                    item.images[index].url,
-                    item.sizes[indexSize]
-                  )
-                "
-                class="rounded focus:outline-none w-full shadow font-semibold text-white bg-pink-500 hover:bg-pink-700 p-2"
+            <div v-else class="flex space-x-1">
+              <span class="font-medium text-gray-700 block"
+                >USD {{ Number(item.price).toFixed(2) }}</span
               >
-                ADD TO CART
-              </button>
+            </div>
+            <div>
+              <p class="text-gray-700">sizes:</p>
+              <div class="flex space-x-1 text-gray-500">
+                <span
+                  @click="handleActiveSize(i)"
+                  :class="{ activeBorder: indexSize == i }"
+                  v-for="(size, i) in item.sizes"
+                  :key="size"
+                  class="flex rounded items-center justify-center font-semibold uppercase border-2 py-1 px-3 cursor-pointer"
+                >
+                  {{ size }}
+                </span>
+              </div>
+            </div>
+            <div class="text-gray-500">
+              <p class="text-gray-700">qty:</p>
+              <div class="flex space-x-5">
+                <div class="relative">
+                  <input
+                    @keydown="handleInput"
+                    @input="handleChangeQty($event)"
+                    class="inline-block focus:outline-none border-2 border-yellow-200 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
+                    type="text"
+                    v-model="qty"
+                  />
+                  <div class="absolute top-2 left-20 cursor-pointer">
+                    <svg
+                      @click="qty++"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    v-if="qty > 1"
+                    class="absolute top-2 left-3 cursor-pointer"
+                  >
+                    <svg
+                      @click="qty--"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+
+                <button
+                  :disabled="indexSize == null"
+                  :class="{ frozen: indexSize == null }"
+                  @click="
+                    handleAddToCart(
+                      item,
+                      item.images[index].url,
+                      item.sizes[indexSize]
+                    )
+                  "
+                  class="rounded focus:outline-none w-full shadow font-semibold text-white bg-pink-600 hover:bg-pink-700 p-2"
+                >
+                  ADD TO CART
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -162,14 +164,10 @@ export default {
     const { user } = getUser();
     const { addDoc, updateDoc } = useDocument(
       "carts",
-      user.value?.displayName,
+      user.value?.uid,
       "items"
     );
-    const { documents: cart } = getDocument(
-      "carts",
-      user.value?.displayName,
-      "items"
-    );
+    const { documents: cart } = getDocument("carts", user.value?.uid, "items");
 
     const handleClose = () => {
       emit("close");

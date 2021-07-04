@@ -1,32 +1,53 @@
 <template>
-  <div
-    class="flex justify-center fixed items-center w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20"
-  >
-    <div class="bg-white p-5 w-full sm:w-1/2 2xl:w-1/3 h-auto shadow rounded">
+  <div class="fixed w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20">
+    <div class="flex justify-center items-center h-3/4 px-5 sm:px-0">
       <div
-        class="pb-5 font-bold text-gray-700 flex justify-center items-center"
+        class="bg-white p-5 w-full sm:w-3/4 md:w-2/4 2xl:w-1/3 h-auto shadow rounded"
       >
-        <p>
-          Once you remove this
-          <span class="text-pink-500">[{{ category.name }}]</span>
-          category, all items in this category will be gone as well. Are you
-          sure to removing it?
-        </p>
-      </div>
-      <div class="flex justify-start">
-        <div class="flex justify-between">
-          <button
-            class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 focus:outline-none rounded-l"
-            @click="handleCancel"
-          >
-            NO
-          </button>
-          <button
-            class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 focus:outline-none rounded-r"
-            @click="handleRemove"
-          >
-            YES
-          </button>
+        <div class="flex justify-center">
+          <img src="@/assets/images/removeIcon.png" alt="remove icon" />
+        </div>
+        <div
+          class="font-bold text-gray-500 pb-5 flex items-center w-3/4 mx-auto"
+        >
+          <p>
+            Are you seriously want to remove this
+            <span class="text-blue-600">[{{ category.name }}]</span>
+            collection? Once you remove you won't be able to recover it.
+          </p>
+        </div>
+
+        <div class="w-3/4 mx-auto">
+          <div class="flex justify-center">
+            <button
+              v-if="!pending"
+              class="py-2 px-10 rounded tracking-wide bg-red-600 hover:bg-red-700 text-white focus:outline-none"
+              @click="handleRemove"
+            >
+              Remove
+            </button>
+            <button
+              v-else
+              class="relative flex item-center justify-center rounded py-2 px-10 items-center bg-red-600 hover:bg-red-700 text-white tracking-wide focus:outline-none"
+            >
+              <div>
+                Removing...
+              </div>
+              <div class="absolute top-3 right-1">
+                <div
+                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-white"
+                ></div>
+              </div>
+            </button>
+          </div>
+          <div class="flex justify-center">
+            <button
+              class="py-2 px-10 rounded text-gray-500 hover:text-gray-700 tracking-wide font-semibold focus:outline-none"
+              @click="handleCancel"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -39,21 +60,19 @@ import useDocument from "@/composables/useDocument";
 import getDocument from "@/composables/getDocument";
 import useCollection from "@/composables/useCollection";
 import getUser from "@/composables/getUser";
+import { ref } from "@vue/reactivity";
 
 export default {
   emits: ["close"],
   props: ["category"],
   setup(props, { emit }) {
+    const pending = ref(false);
     const { user } = getUser();
     const { deleteImage } = useStorage();
-    const { documents: cart } = getDocument(
-      "carts",
-      user.value?.displayName,
-      "items"
-    );
+    const { documents: cart } = getDocument("carts", user.value?.uid, "items");
     const { deleteDoc: deleteCart } = useDocument(
       "carts",
-      user.value?.displayName,
+      user.value?.uid,
       "items"
     );
     const { documents: products } = getDocument(
@@ -73,6 +92,7 @@ export default {
     };
 
     const handleRemove = async () => {
+      pending.value = true;
       const productIds = [];
       const cartIds = [];
 
@@ -108,10 +128,11 @@ export default {
       await deleteImage(props.category.url);
       await deleteCategory(props.category.id);
 
+      pending.value = false;
       emit("close");
     };
 
-    return { handleCancel, handleRemove };
+    return { handleCancel, handleRemove, pending };
   },
 };
 </script>
