@@ -8,9 +8,9 @@
         <Slideshow />
       </div>
       <div v-for="(category, index) in categories" :key="category.id">
-        <div class="my-5 mx-10 2xl:mx-0 space-y-3">
+        <div v-if="index < 5" class="my-5 mx-10 2xl:mx-0 space-y-3">
           <div class="font-bold text-xl text-gray-700 uppercase mt-8">
-            {{ $t(`${header[index].toUpperCase()}`) }}
+            {{ $t(`${header[index]?.toUpperCase()}`) }}
           </div>
           <Card :name="category.name" />
         </div>
