@@ -71,7 +71,7 @@
                 class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg"
                 src="@/assets/images/ms.png"
               />
-              <span class=" pl-2">masteritcambodia2018@outlook.com</span>
+              <span class=" pl-2">easy4shopping@gmail.com</span>
             </div>
             <div class="flex items-center">
               <img
@@ -79,7 +79,7 @@
                 src="@/assets/images/phone.png"
               />
               <a :href="`tel:+${mobile}`">
-                <span class="pl-2">098 866 396</span>
+                <span class="pl-2">077 628 480</span>
               </a>
             </div>
           </div>

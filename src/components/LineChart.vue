@@ -36,14 +36,18 @@
               <div
                 :style="{
                   width:
-                    monthlyIncomes[i - 1] == 0 || monthlyIncomes[i] == 0
+                    monthlyIncomes[i - 1] == 0 ||
+                    monthlyIncomes[i] == 0 ||
+                    (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                       ? 100 + '%'
                       : (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 + '%',
                 }"
                 class="absolute bottom-1 left-0 text-xs text-right"
               >
                 {{
-                  monthlyIncomes[i - 1] == 0 || monthlyIncomes[i] == 0
+                  monthlyIncomes[i - 1] == 0 ||
+                  monthlyIncomes[i] == 0 ||
+                  (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                     ? 100
                     : Math.round(
                         (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100
@@ -53,7 +57,9 @@
               <div
                 :style="{
                   width:
-                    monthlyIncomes[i - 1] == 0 || monthlyIncomes[i] == 0
+                    monthlyIncomes[i - 1] == 0 ||
+                    monthlyIncomes[i] == 0 ||
+                    (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                       ? 100 + '%'
                       : (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 + '%',
                 }"
@@ -80,14 +86,18 @@
               <div
                 :style="{
                   width:
-                    monthlyIncomes[i - 1] == 0 || monthlyIncomes[i] == 0
+                    monthlyIncomes[i - 1] == 0 ||
+                    monthlyIncomes[i] == 0 ||
+                    (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                       ? 100 + '%'
                       : (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 + '%',
                 }"
                 class="absolute bottom-1 left-0 text-xs text-right"
               >
                 {{
-                  monthlyIncomes[i - 1] == 0 || monthlyIncomes[i] == 0
+                  monthlyIncomes[i - 1] == 0 ||
+                  monthlyIncomes[i] == 0 ||
+                  (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                     ? 100
                     : Math.round(
                         (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100
@@ -97,7 +107,9 @@
               <div
                 :style="{
                   width:
-                    monthlyIncomes[i - 1] == 0 || monthlyIncomes[i] == 0
+                    monthlyIncomes[i - 1] == 0 ||
+                    monthlyIncomes[i] == 0 ||
+                    (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                       ? 100 + '%'
                       : (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 + '%',
                 }"
@@ -119,14 +131,18 @@
               <div
                 :style="{
                   width:
-                    monthlyIncomes[i - 1] == 0
+                    monthlyIncomes[i - 1] == 0 ||
+                    monthlyIncomes[i] == 0 ||
+                    (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                       ? 100 + '%'
                       : (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 + '%',
                 }"
                 class="absolute bottom-1 left-0 text-xs text-right"
               >
                 {{
-                  monthlyIncomes[i - 1] == 0
+                  monthlyIncomes[i - 1] == 0 ||
+                  monthlyIncomes[i] == 0 ||
+                  (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                     ? 100
                     : Math.round(
                         (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100
@@ -136,7 +152,9 @@
               <div
                 :style="{
                   width:
-                    monthlyIncomes[i - 1] == 0
+                    monthlyIncomes[i - 1] == 0 ||
+                    monthlyIncomes[i] == 0 ||
+                    (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 >= 100
                       ? 100 + '%'
                       : (monthlyIncomes[i] / monthlyIncomes[i - 1]) * 100 + '%',
                 }"

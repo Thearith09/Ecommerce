@@ -325,7 +325,7 @@
           {{ category.name }}
         </p>
         <router-link
-          class="py-2 hover:text-blue-700 tracking-wide text-gray-700"
+          class="py-2 hover:text-blue-700 tracking-wide text-gray-700 block"
           :to="{ name: 'Categories' }"
           >All Categories</router-link
         >
@@ -690,6 +690,8 @@ export default {
       showCategoryForm.value = true;
       showUserInfoForm.value = true;
       showUserOrderForm.value = true;
+      orderInfo.value = null;
+      userInfo.value = null;
 
       document
         .getElementById("sub-menu")

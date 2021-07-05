@@ -223,7 +223,7 @@
                       src="@/assets/images/visa128.png"
                       alt=""
                     />
-                    <p>****{{ order.paymentMethod.last4 }}</p>
+                    <p>****{{ order.paymentMethod?.last4 }}</p>
                   </div>
                 </fieldset>
               </div>
@@ -736,15 +736,15 @@ export default {
       const order = ordered.value;
       const checkoutOrder = {
         admin: user.value?.displayName,
-        name: order.id,
+        name: order?.id,
         userContact: {
           phone: order?.phone,
           email: order.email,
         },
-        amount: order.amountTotal / 100,
-        paymentMethod: order.paymentMethod,
-        items: order.items,
-        shippingInfo: order.shippingInfo,
+        amount: order?.amountTotal / 100,
+        paymentMethod: order?.paymentMethod,
+        items: order?.items,
+        shippingInfo: order?.shippingInfo,
         createdAt: timestamp(),
       };
       await addDoc(checkoutOrder);
