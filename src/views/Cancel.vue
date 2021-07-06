@@ -1,16 +1,13 @@
 <template>
-  <div class="bg-gradient-to-bl from-red-300 to-red-400 h-screen w-full">
+  <div class="bg-cancel bg-center bg-cover h-screen w-full">
     <div class="flex justify-center items-center h-3/4">
       <div
-        class="relative w-full mx-5 sm:w-6/12 h-56 px-10 space-y-3 flex flex-col justify-center items-center bg-white shadow rounded-md"
+        class="relative w-full mx-5 sm:w-8/12 md:w-6/12 lg:w-5/12 h-56 px-10 space-y-3 flex flex-col justify-center items-center bg-white shadow-lg rounded-md"
       >
-        <div
-          id="tick"
-          class="animate__animated animate__bounceIn absolute -top-10"
-        >
+        <div id="tick" class="absolute -top-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-20 w-20 text-red-500"
+            class="animate__animated animate__bounceIn h-20 w-20 text-yellow-300"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -32,7 +29,7 @@
         <div>
           <button
             @click="handleNavigation"
-            class="py-1 focus:outline-none border-red-600 border-2 text-gray-500 rounded-full w-60 font-semibold hover:border-red-700 hover:text-gray-700"
+            class="py-1 focus:outline-none border-yellow-300 border-2 text-gray-500 rounded-full w-60 font-semibold hover:border-yellow-500 hover:text-gray-700"
           >
             BACK TO STORE
           </button>

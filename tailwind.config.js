@@ -4,8 +4,9 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: (theme) => ({
-        // 'page-404': "url('/images/404image.jpg')"
-        // successful: "url('/images/succeed.jpg')",
+        'page-404': "url('/images/page404.jpg')",
+        cancel: "url('/images/cancel.jpg')",
+        successful: "url('/images/successful.jpg')",
       }),
       screens: {
         portrait: { raw: "(orientation: portrait)" },

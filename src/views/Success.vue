@@ -1,10 +1,12 @@
 <template>
-  <div class="flex justify-center items-center h-screen w-full">
-    <img
+  <div
+    class="bg-successful bg-cover bg-center flex justify-center items-center h-screen w-full"
+  >
+    <!-- <img
       class="object-cover object-center min-w-full min-h-full"
-      src="@/assets/images/succeed.jpg"
+      src="@/assets/images/successful.jpg"
       alt=""
-    />
+    /> -->
     <div class="fixed top-0 flex justify-center items-center h-3/4">
       <div
         class="relative w-full mx-5 sm:w-8/12 h-56 px-10 space-y-3 rounded-md flex flex-col justify-center items-center bg-white shadow"
@@ -15,7 +17,7 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-20 w-20 text-green-500"
+            class="h-20 w-20 text-purple-600"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -44,7 +46,7 @@
         <div>
           <button
             @click="handleNavigation"
-            class="py-1 focus:outline-none border-green-500 border-2 text-gray-500 rounded-full w-60 font-semibold hover:border-green-700 hover:text-gray-700"
+            class="py-1 focus:outline-none border-purple-500 border-2 text-gray-500 rounded-full w-60 font-semibold hover:border-purple-700 hover:text-gray-700"
           >
             BACK TO STORE
           </button>
