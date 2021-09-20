@@ -1,119 +1,15 @@
 <template>
   <div class="relative flex flex-col h-screen">
+    <div>
+      <Navbar />
+    </div>
+
     <div
-      class="border-b-2 border-yellow-200 h-20 p-5 flex justify-between items-center"
+      class="mb-auto h-auto px-10 lg:px-0 w-full lg:w-3/4 2xl:w-7/12 mx-auto"
     >
       <div
-        @click="handleNavigation"
-        class="w-full transform transition-all duration-150 hover:-translate-x-2 cursor-pointer text-blue-600 hover:text-blue-700"
+        class="bg-yellow-300 px-2 py-3 text-xl my-10 lg:text-4xl lg:my-16 text-gray-700 font-bold font-serif tracking-wider"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-8 h-8 sm:h-9 sm:w-9"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </div>
-
-      <div class="flex justify-center w-full">
-        <router-link :to="{ name: 'Home' }">
-          <img
-            class="w-full sm:w-10/12"
-            src="@/assets/images/logo.png"
-            alt="logo icon"
-          />
-        </router-link>
-      </div>
-
-      <div class="flex justify-end w-full">
-        <div v-if="user.photoURL">
-          <img
-            class="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover object-center"
-            :src="user.photoURL"
-          />
-        </div>
-        <div
-          v-else
-          class="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover object-center text-white bg-blue-600 flex justify-center items-center"
-        >
-          <span class="uppercase font-bold text-lg">{{
-            user.displayName[0]
-          }}</span>
-          <div
-            v-if="_user && !_user.phone"
-            class="absolute top-0 right-0 w-3 h-3 rounded-full bg-red-600"
-          ></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="absolute left-1/2 flex flex-col h-screen items-center">
-      <div
-        v-if="successful"
-        class="animate_animated animate__zoomIn animate_faster flex items-center justify-center fixed top-20 w-80"
-      >
-        <div
-          class="flex w-full max-w-sm mx-auto overflow-hidden h-20 bg-white rounded shadow-md"
-        >
-          <div class="flex items-center justify-center w-12 bg-green-500">
-            <svg
-              class="animate_animated animate__bounceIn w-6 h-6 text-white fill-current"
-              viewBox="0 0 40 40"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z"
-              />
-            </svg>
-          </div>
-
-          <div class="flex justify-center items-center">
-            <div class="mx-5">
-              <span class="font-semibold text-green-500">
-                Update successful!</span
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        v-if="errorChangePassword"
-        class="animate_animated animate__zoomIn animate_faster flex items-center justify-center fixed top-20 w-80"
-      >
-        <div
-          class="flex w-full max-w-sm mx-auto overflow-hidden h-20 bg-white rounded shadow-md"
-        >
-          <div class="flex items-center justify-center w-12 bg-red-500">
-            <svg
-              class="animate_animated animate__bounceIn w-6 h-6 text-white fill-current"
-              viewBox="0 0 40 40"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z"
-              />
-            </svg>
-          </div>
-
-          <div class="flex justify-center items-center">
-            <div class="mx-5">
-              <p class="text-red-500">
-                {{ errorChangePassword }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="p-5 mb-auto h-auto w-full md:w-3/4 lg:w-2/4 2xl:w-1/3 mx-auto">
-      <div class="text-4xl my-16 text-gray-700 font-bold font-serif">
         <h1>
           Profile and Settings
         </h1>
@@ -206,28 +102,55 @@
             </div>
           </div>
 
-          <div class="pt-5">
+          <div class="pt-3">
             <button
               v-if="!pending"
               :class="{ frozen: nothingToAddMore }"
               :disabled="nothingToAddMore"
-              class="focus:outline-none py-2 px-8 shadow rounded bg-white text-purple-600 hover:bg-purple-600 hover:text-white"
+              class="focus:outline-none py-2 px-12 shadow rounded bg-white text-purple-700 hover:bg-purple-700 hover:text-white"
             >
               Save
             </button>
             <button
               v-else
-              class="relative flex justify-center items-center py-2 px-10 shadow focus:outline-none rounded tracking-wide bg-white text-purple-600"
+              class="relative flex justify-center items-center py-2 px-12 shadow focus:outline-none rounded tracking-wide bg-white text-purple-700"
             >
               <div>
                 Saving...
               </div>
               <div class="absolute top-3 right-1">
                 <div
-                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
+                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-700"
                 ></div>
               </div>
             </button>
+          </div>
+
+          <div
+            v-if="successful"
+            class="animate_animated animate__zoomIn animate__delay-1s flex items-center justify-center w-96 shadow-lg mt-3"
+          >
+            <div
+              class="flex w-full max-w-sm mx-auto overflow-hidden h-20 bg-white rounded"
+            >
+              <div class="flex items-center justify-center w-16 bg-green-500">
+                <svg
+                  class="animate_animated animate__bounceIn w-6 h-6 text-white fill-current"
+                  viewBox="0 0 40 40"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z"
+                  />
+                </svg>
+              </div>
+
+              <div class="flex justify-center items-center w-full">
+                <span class="font-semibold text-green-500">
+                  Update successful!</span
+                >
+              </div>
+            </div>
           </div>
         </form>
       </div>
@@ -237,11 +160,11 @@
           <label class="block">Upload Profile</label>
           <div
             id="img"
-            class="w-full h-60 border-2 boder-gray-500 p-2 rounded"
+            class="w-96 h-96 border-2 boder-gray-500 p-2 rounded"
           ></div>
           <div class="w-full">
             <label
-              class="w-52 rounded h-20 flex flex-col items-center px-4 py-3 bg-white shadow tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150"
+              class="w-96 rounded h-20 flex flex-col items-center px-4 py-3 bg-white shadow tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150"
             >
               <span class="material-icons-outlined">
                 cloud_upload
@@ -249,7 +172,7 @@
               <span class="mt-2 text-base leading-normal">Select a file</span>
               <input @change="handleInsertImage" type="file" class="hidden" />
             </label>
-            <div v-if="fileError" class="text-red-500">{{ fileError }}</div>
+            <div v-if="fileError" class="text-red-600">{{ fileError }}</div>
           </div>
 
           <div class="w-full">
@@ -324,18 +247,18 @@
             />
           </div>
 
-          <div class="pt-5">
+          <div class="pt-3">
             <button
               v-if="!isPending"
               :class="{ frozen: nothingToUpdate }"
               :disabled="nothingToUpdate"
-              class="focus:outline-none py-2 px-8 shadow rounded bg-white text-purple-600 hover:bg-purple-600 hover:text-white"
+              class="focus:outline-none py-2 px-12 shadow rounded bg-white text-purple-600 hover:bg-purple-600 hover:text-white"
             >
               Save
             </button>
             <button
               v-else
-              class="relative flex justify-center items-center py-2 px-10 shadow focus:outline-none rounded tracking-wide bg-white text-purple-600"
+              class="relative flex justify-center items-center py-2 px-12 shadow focus:outline-none rounded tracking-wide bg-white text-purple-600"
             >
               <div>
                 Saving...
@@ -346,6 +269,35 @@
                 ></div>
               </div>
             </button>
+          </div>
+
+          <div
+            v-if="errorChangePassword"
+            class="animate_animated animate__zoomIn animate__delay-1s flex items-center justify-center w-96 pt-3 shadow-lg"
+          >
+            <div
+              class="flex w-full max-w-sm mx-auto overflow-hidden h-20 bg-white rounded"
+            >
+              <div class="flex items-center justify-center w-16 bg-red-600">
+                <svg
+                  class="animate_animated animate__bounceIn w-6 h-6 text-white fill-current"
+                  viewBox="0 0 40 40"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z"
+                  />
+                </svg>
+              </div>
+
+              <div
+                class="flex justify-center items-center w-full leading-none px-2"
+              >
+                <p class="text-red-600">
+                  {{ errorChangePassword }}
+                </p>
+              </div>
+            </div>
           </div>
         </form>
       </div>
@@ -358,6 +310,7 @@
 
 <script>
 import Footer from "@/components/Footer.vue";
+import Navbar from "@/components/Navbar.vue";
 import { ref } from "@vue/reactivity";
 import getUserDoc from "@/composables/getUserDoc";
 import useUserDoc from "@/composables/useUserDoc";
@@ -366,10 +319,10 @@ import { useRouter } from "vue-router";
 import { watch, watchEffect } from "@vue/runtime-core";
 import useStorage from "@/composables/useStorage";
 import { projectAuth, firebase } from "@/firebase/config";
-
 export default {
   components: {
     Footer,
+    Navbar,
   },
   setup() {
     const firstname = ref("");
@@ -401,9 +354,10 @@ export default {
     const { url, uploadImage } = useStorage();
 
     watch(_user, () => {
+      console.log(user.value.displayName);
       firstname.value = _user.value.firstname;
       lastname.value = _user.value.lastname;
-      username.value = user.value.displayName;
+      username.value = user.value.displayName.split(" ")[0];
       email.value = _user.value.email;
       phone.value = _user.value.phone;
       password.value = user.value.providerId;
@@ -448,10 +402,6 @@ export default {
       setTimeout(() => {
         successful.value = false;
       }, 3000);
-    };
-
-    const handleNavigation = () => {
-      router.push({ name: "Home" });
     };
 
     const handleInsertImage = (e) => {
@@ -582,7 +532,6 @@ export default {
       successful,
       passwordChanges,
       handleAddProfileInfo,
-      handleNavigation,
       handleInsertImage,
       handleUpdateProfile,
     };

@@ -6,15 +6,15 @@
       <div class="relative">
         <div
           id="print-invoice"
-          class="w-full px-10 bg-white rounded-md shadow-md py-10"
+          class="w-full px-10 bg-white rounded-md shadow py-10"
         >
           <div
-            class="flex flex-col sm:flex-row items-center  sm:justify-between sm:items-end border-b-2 border-yellow-200 pt-10 pb-20"
+            class="flex flex-col sm:flex-row items-center  sm:justify-between sm:items-end border-b-2 border-purple-100 pt-10 pb-20"
           >
             <div>
               <img
                 class="w-full focus:outline-none"
-                src="@/assets/images/logo.png"
+                src="@/assets/images/logo1.png"
                 alt="Easy shopping logo"
               />
             </div>
@@ -41,13 +41,13 @@
             class="grid grid-cols-4 items-start space-x-5 text-gray-700 py-10"
           >
             <div
-              class="col-span-3 flex justify-between space-x-5 border-b-2 border-yellow-200 pb-4"
+              class="col-span-4 md:col-span-3 flex justify-between space-x-5 border-b-2 border-purple-100 pb-4"
             >
               <div class="space-y-3 leading-none w-full">
                 <div>
                   <span>Supplier:</span>
                   <span
-                    class="block text-pink-600 text-xl font-semibold uppercase"
+                    class="block text-purple-700 text-xl font-semibold uppercase"
                   >
                     Easy4shopping
                   </span>
@@ -60,7 +60,7 @@
               <div class="space-y-3 leading-none w-full">
                 <div>
                   <span>Customer:</span>
-                  <h5 class="text-pink-600 text-xl font-semibold uppercase">
+                  <h5 class="text-purple-700 text-xl font-semibold uppercase">
                     {{ purchaseInfo.shippingInfo.name }}
                   </h5>
                 </div>
@@ -79,7 +79,7 @@
           </div>
 
           <div
-            class="bg-gray-200 w-full h-10 grid grid-cols-5 sm:grid-cols-6 gap-2 text-gray-400 font-semibold items-center px-2"
+            class="bg-gray-200 w-full h-10 grid grid-cols-5 sm:grid-cols-6 gap-2 text-purple-700 font-semibold items-center px-2"
           >
             <p class="col-span-2 sm:col-span-3">Item Description</p>
             <p>Price</p>
@@ -94,7 +94,7 @@
                   'bg-even': index % 2 == 0,
                   'bg-odd': index % 2 != 0,
                 }"
-                class="grid grid-cols-5 sm:grid-cols-6 text-gray-400 items-center p-2"
+                class="grid grid-cols-5 sm:grid-cols-6 text-gray-700 items-center p-2"
               >
                 <div class="col-span-2 sm:col-span-3">
                   <p class="font-semibold leading-none break-normal">
@@ -110,16 +110,16 @@
           </div>
 
           <div
-            class="mt-10 w-full h-auto space-y-5 bg-gray-50 text-gray-700 font-semibold p-3"
+            class="mt-10 w-full h-auto space-y-5 bg-gray-50 text-gray-700 font-semibold py-3 px-5 border-2 border-purple-100"
           >
             <div
-              class="w-40 ml-auto flex justify-between items-center space-x-2"
+              class="w-40 ml-auto flex justify-between items-center uppercase space-x-2"
             >
               <span>shipping</span>
               <span>$2</span>
             </div>
             <div
-              class="w-40 ml-auto flex justify-between items-center space-x-2"
+              class="w-40 ml-auto flex justify-between items-center space-x-2 text-2xl uppercase"
             >
               <span>Total</span>
               <span>${{ purchaseInfo.amount }}</span>
@@ -127,7 +127,7 @@
           </div>
 
           <div
-            class="w-full h-10 bg-gray-50 border-b-2 border-yellow-200 my-10"
+            class="w-full h-10 bg-gray-50 border-b-2 border-purple-100 my-10"
           ></div>
         </div>
 

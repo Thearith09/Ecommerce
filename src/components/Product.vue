@@ -3,44 +3,44 @@
     class="flex flex-col space-y-10 md:space-y-0 md:flex-row-reverse p-5 lg:w-10/12 xl:w-8/12 mx-auto"
   >
     <div class="h-60 w-full md:w-3/4">
-      <div class="md:pl-10 text-gray-500 font-semibold space-y-3">
+      <div class="md:pl-10 text-gray-700 font-semibold space-y-3">
         <div class="flex justify-end space-x-10">
           <p class="underline">{{ pieces }}pieces</p>
           <span>${{ item.price }}</span>
         </div>
 
         <div
-          class="bg-red-600 text-white space-x-10 flex justify-end p-2 rounded"
+          class="bg-yellow-300 text-purple-700 space-x-10 flex justify-end p-2 rounded"
         >
           <span> Discount </span>
           <span>- ${{ discount }} </span>
         </div>
 
         <div
-          class="flex justify-end space-x-10 pb-3 border-b-2 border-yellow-200"
+          class="flex justify-end space-x-10 pb-3 border-b-2 border-purple-100"
         >
           <p>Shipping</p>
           <p>${{ shipping }}</p>
         </div>
 
-        <div class="flex text-gray-700 justify-end space-x-10">
+        <div class="flex uppercase justify-end space-x-10">
           <span>Total Amount</span>
-          <span class="text-red-600 font-bold">${{ total.toFixed(2) }}</span>
+          <span class="text-purple-700 text-xl font-mono font-bold"
+            >${{ total.toFixed(2) }}</span
+          >
         </div>
 
-        <div class="border-b-2 border-yellow-200 pb-5">
+        <div class="border-b-2 border-purple-100 pb-5">
           <button
             v-if="!isPending"
-            :disabled="indexSize == null"
-            :class="{ frozen: indexSize == null }"
             @click="handleCheckout(item.name)"
-            class="rounded focus:outline-none w-full shadow font-semibold text-white bg-blue-600 hover:bg-blue-700 p-2"
+            class="rounded focus:outline-none w-full shadow font-bold text-purple-700 bg-yellow-300 hover:translate-y-1 transform transition-all duration-150 p-2"
           >
             Checkout
           </button>
           <button
             v-else
-            class="relative flex justify-center items-center focus:outline-none rounded shadow p-2 tracking-wide bg-blue-600 text-white w-full"
+            class="relative flex justify-center items-center focus:outline-none rounded shadow p-2 tracking-wide bg-yellow-300 text-purple-700 font-bold w-full"
           >
             <div>
               Checking out...
@@ -65,7 +65,7 @@
         >
           <img
             @click="handleChangeImage(image.url)"
-            class="h-12 w-12 rounded-full object-cover object-center block cursor-move"
+            class="h-12 w-12 rounded-full object-cover object-center block cursor-move border-2 border-purple-700 p-px"
             :src="image.url"
           />
         </div>
@@ -77,12 +77,6 @@
             class="flex-none w-full object-cover object-center rounded"
             :src="url"
           />
-          <h3
-            v-if="item.discount > 0"
-            class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
-          >
-            {{ item.discount }}% OFF
-          </h3>
         </div>
 
         <div class="flex" v-if="windowWidth < 435">
@@ -102,7 +96,9 @@
         <div class="w-full sm:w-96 space-y-3">
           <div class="space-y-1 lg:space-y-3">
             <div>
-              <h3 class="text-pink-600 font-semibold uppercase py-1">
+              <h3
+                class="text-purple-700 font-semibold font-mono text-lg tracking-wide uppercase py-1"
+              >
                 {{ item.name }}
               </h3>
               <h5 class="text-gray-500 leading-none">
@@ -112,15 +108,23 @@
               </h5>
             </div>
 
-            <div class="w-full flex pt-2 space-x-1 font-semibold">
+            <div
+              v-if="item.discount > 0"
+              class="w-full flex pt-2 space-x-1 font-semibold"
+            >
               <span class="text-gray-700 line-through block"
                 >USD {{ Number(item.price).toFixed(2) }}</span
               >
-              <span v-if="item.discount > 0" class="block text-red-600"
+              <span class="block text-red-600"
                 >USD
                 {{
                   (item.price - (item.price * item.discount) / 100).toFixed(2)
                 }}</span
+              >
+            </div>
+            <div v-else class="w-full flex pt-2 space-x-1 font-semibold">
+              <span class="text-gray-700 block"
+                >USD {{ Number(item.price).toFixed(2) }}</span
               >
             </div>
           </div>
@@ -131,7 +135,7 @@
               <span
                 v-for="(size, i) in item.sizes"
                 :key="i"
-                :class="{ activeBorder: indexSize == size }"
+                :class="{ activeSize: indexSize == size }"
                 @click="handleActiveSize(size)"
                 class="flex items-center justify-center rounded font-semibold uppercase border-2 py-1 px-3 h-10 cursor-pointer"
               >
@@ -146,7 +150,7 @@
               <input
                 @keydown="handleInput($event, item.name)"
                 @input="handleChangeQty($event, item.name)"
-                class="inline-block focus:outline-none border-2 border-yellow-200 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
+                class="inline-block focus:outline-none border-2 border-purple-100 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
                 type="text"
                 v-model="qty"
               />
@@ -185,12 +189,17 @@
             </div>
           </div>
 
-          <div>
+          <div
+            v-if="alerting"
+            class="bg-red-100 border-2 border-red-200 h-16 rounded flex justify-center items-center"
+          >
+            <p class="text-red-600 font-mono font-semibold">{{ alerting }}</p>
+          </div>
+
+          <div class="py-2">
             <button
-              :disabled="indexSize == null"
-              :class="{ frozen: indexSize == null }"
               @click="handleAddToCart(item, indexSize)"
-              class="rounded focus:outline-none w-full shadow font-semibold text-white bg-pink-600 hover:bg-pink-700 p-2"
+              class="rounded focus:outline-none w-full shadow font-bold text-purple-700 bg-yellow-300 hover:translate-y-1 transform transition-all duration-150 p-2"
             >
               ADD TO CART
             </button>
@@ -223,6 +232,7 @@ export default {
     const isPending = ref(false);
     const shipping = ref(2);
     const windowWidth = ref(window.innerWidth);
+    const alerting = ref(null);
     const total = ref(
       Number(props.item.price) +
         shipping.value -
@@ -261,7 +271,17 @@ export default {
         (item.price * qty.value * item.discount) / 100;
     });
 
+    watch(indexSize, () => {
+      if (indexSize.value != null) {
+        alerting.value = null;
+      }
+    });
+
     const handleCheckout = async (name) => {
+      if (!indexSize.value) {
+        return (alerting.value = "Please choose one of the sizes above!");
+      }
+
       if (!user.value) {
         return router.push({ name: "Login" });
       } else {
@@ -296,6 +316,9 @@ export default {
     };
 
     const handleAddToCart = async (item, size) => {
+      if (!size) {
+        return (alerting.value = "Please choose one of the sizes above!");
+      }
       if (!user.value) {
         item.color = url.value;
         item.createdAt = timestamp();
@@ -369,6 +392,7 @@ export default {
       indexSize,
       isPending,
       windowWidth,
+      alerting,
     };
   },
 };

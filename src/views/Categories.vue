@@ -28,7 +28,7 @@
           </router-link>
 
           <h4
-            class="absolute top-0 w-1/2 text-center font-semibold text-white py-2 bg-blue-600 bg-opacity-80 rounded"
+            class="absolute top-0 w-1/2 text-center font-semibold text-white py-2 bg-purple-700 bg-opacity-80 rounded"
           >
             {{ category.name }}
           </h4>

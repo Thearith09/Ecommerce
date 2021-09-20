@@ -3,7 +3,6 @@
     <div>
       <Navbar />
     </div>
-
     <div class="mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div v-if="products">
         <div class="h-auto" v-for="product in products" :key="product.id">
@@ -32,6 +31,7 @@ import Footer from "@/components/Footer.vue";
 import Product from "@/components/Product.vue";
 import getDocument from "@/composables/getDocument";
 import { ref } from "@vue/reactivity";
+import { watch, watchEffect } from "@vue/runtime-core";
 
 export default {
   components: {
@@ -42,11 +42,19 @@ export default {
   props: ["categoryName", "id"],
   setup(props) {
     const currentComponent = ref("Product");
-    const { documents: products } = getDocument(
-      "inventory",
-      props.categoryName,
-      "products"
-    );
+    const products = ref(null);
+    watchEffect(() => {
+      console.log(props.id);
+      const { documents } = getDocument(
+        "inventory",
+        props.categoryName,
+        "products"
+      );
+
+      watch(documents, () => {
+        products.value = documents.value;
+      });
+    });
 
     return { products, currentComponent };
   },

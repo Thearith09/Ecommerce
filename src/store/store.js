@@ -6,6 +6,7 @@ import * as Cookies from "js-cookie";
 const store = createStore({
   state: {
     cart: [],
+    whistlist: [],
     sessionID: null,
   },
   plugins: [
@@ -100,6 +101,20 @@ const store = createStore({
     },
     clearCart(state) {
       state.cart = [];
+    },
+    addToWhistlist(state, item) {
+      state.whistlist.push(item);
+    },
+    removeFromWhistlist(state, name) {
+      if (state.whistlist.length > 0) {
+        const index = state.whistlist.findIndex(
+          (element) => element.name == name
+        );
+        state.whistlist.splice(index, 1);
+      }
+    },
+    clearWhistlist(state) {
+      state.whistlist = [];
     },
   },
 });

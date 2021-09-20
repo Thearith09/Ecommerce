@@ -14,6 +14,7 @@ import Cancel from "../views/Cancel.vue";
 import Profile from "../views/Profile.vue";
 import PageNotFound from "../views/Page404.vue";
 import PurchaseHistory from "../views/PurchaseHistory.vue";
+import MyWhistlist from "../views/MyWhistlist.vue";
 
 import { projectAuth } from "@/firebase/config";
 
@@ -93,6 +94,11 @@ const routes = [
     path: "/profile/purchase-history",
     name: "Purchase-History",
     component: PurchaseHistory,
+  },
+  {
+    path: "/products/my-whistlist",
+    name: "MyWhistlist",
+    component: MyWhistlist,
   },
   {
     path: "/order/success/",

@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: (theme) => ({
-        'page-404': "url('/images/page404.jpg')",
+        "page-404": "url('/images/page404.jpg')",
         cancel: "url('/images/cancel.jpg')",
         successful: "url('/images/successful.jpg')",
       }),
@@ -14,6 +14,9 @@ module.exports = {
       },
       minWidth: {
         iphone: "550px",
+      },
+      maxHeight: {
+        dropdown: "500px",
       },
       gridTemplateColumns: {
         // Simple 16 column grid

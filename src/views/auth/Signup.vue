@@ -3,12 +3,14 @@
     <div>
       <Navbar />
     </div>
-    <div class="my-5 sm:my-auto mb-auto 2xl:w-3/4 2xl:mx-auto">
-      <div class="w-80 sm:w-96 px-5 py-10 bg-white mx-auto shadow rounded-md">
+    <div class="m-10 mb-auto 2xl:w-3/4 2xl:mx-auto">
+      <div
+        class="w-full sm:w-10/12 md:w-8/12 lg:w-7/12 2xl:w-6/12 px-5 py-10 bg-white mx-auto shadow-2xl rounded"
+      >
         <h3
-          class="font-mono font-bold tracking-wide text-purple-600 text-center mb-5"
+          class="font-mono font-bold tracking-wide text-purple-700 text-center mb-5"
         >
-          Sign up Form
+          Signup Form
         </h3>
         <form @submit.prevent="handleSignup" class="space-y-8">
           <div class="space-y-8">
@@ -18,7 +20,7 @@
                 type="text"
                 placeholder=" "
                 required
-                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-700 border-purple-100"
               />
               <label
                 for="Username"
@@ -33,7 +35,7 @@
                 name="email"
                 placeholder=" "
                 required
-                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-700 border-purple-100"
               />
               <label
                 for="email"
@@ -47,7 +49,7 @@
                 type="password"
                 placeholder=" "
                 required
-                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-700 border-purple-100"
               />
               <label
                 for="password"
@@ -61,7 +63,7 @@
                 type="password"
                 placeholder=" "
                 required
-                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-700 border-purple-100"
               />
               <label
                 for="password"
@@ -74,20 +76,20 @@
           <div class="flex">
             <button
               v-if="!isPending"
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-600 rounded-full w-full p-2 tracking-wide shadow hover:text-purple-700 bg-white text-purple-600"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-700 rounded-full w-full p-2 tracking-wide shadow hover:text-purple-900 bg-white text-purple-700"
             >
               sign up
             </button>
             <button
               v-else
-              class="relative flex justify-center rounded-full items-center space-x-4 sm:space-x-12 focus:outline-none w-full p-2 tracking-wide shadow bg-white text-purple-600"
+              class="relative flex justify-center rounded-full items-center space-x-4 sm:space-x-12 focus:outline-none w-full p-2 tracking-wide shadow bg-white text-purple-700"
             >
               <div>
                 signing up...
               </div>
               <div class="absolute top-3 right-2">
                 <div
-                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
+                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-700"
                 ></div>
               </div>
             </button>
@@ -96,7 +98,7 @@
             <p class="text-gray-800 font-thin text-center">
               already have account?<span
                 @click="handleNavigation"
-                class="ml-2 font-semibold text-purple-600 underline cursor-pointer hover:text-purple-700"
+                class="ml-2 font-semibold text-purple-700 underline cursor-pointer hover:text-purple-900"
                 >signin</span
               >
             </p>

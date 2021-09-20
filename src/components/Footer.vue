@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-10 py-5 sm:py-10 flex flex-col sm:flex-row-reverse sm:space-y-0 bg-white shadow-lg h-auto min-w-max sm:min-w-0 border-t-2 border-yellow-200"
+    class="flex flex-col sm:flex-row-reverse py-14 px-10 sm:space-y-0 bg-yellow-300 h-auto md:h-72 min-w-max sm:min-w-0 border-t-2 border-purple-100"
   >
     <div class="pb-5 sm:pb-0 w-full sm:w-3/4 md:w-2/4 lg:w-3/4 xl:w-full">
       <div
@@ -19,18 +19,18 @@
             clip-rule="evenodd"
           />
         </svg>
-        <span>English</span>
+        <span class="font-semibold">English</span>
       </div>
     </div>
 
     <div
-      class="grid sm:grid-cols-2 sm:grid-rows-2 md:grid-cols-3 md:grid-rows-none md:gap-4 space-y-5 sm:space-y-0 "
+      class="grid sm:grid-cols-2 sm:grid-rows-2 md:grid-cols-3 md:grid-rows-none md:gap-4 space-y-5 sm:space-y-0 text-gray-700"
     >
       <div>
-        <h3 class="font-bold text-gray-700 mb-3">
+        <h3 class="font-bold mb-3">
           {{ $t("Customer Services") }}
         </h3>
-        <ul class="text-gray-500">
+        <ul class="text-gray-900">
           <li>Help Center</li>
           <li>Report Abuse</li>
           <li>Submit a Dispute</li>
@@ -38,8 +38,8 @@
       </div>
 
       <div>
-        <h3 class="font-bold text-gray-700 mb-3">{{ $t("About Us") }}</h3>
-        <ul class="text-gray-500">
+        <h3 class="font-bold mb-3">{{ $t("About Us") }}</h3>
+        <ul class="text-gray-900">
           <li>Help Center</li>
           <li>Report Abuse</li>
           <li>Submit a Dispute</li>
@@ -47,36 +47,36 @@
       </div>
 
       <div>
-        <h3 class="font-bold text-gray-700 mb-3">{{ $t("Contact Us") }}</h3>
+        <h3 class="font-bold mb-3">{{ $t("Contact Us") }}</h3>
 
-        <div class="space-y-2">
+        <div class="space-y-2 text-gray-900">
           <div class="flex space-x-2">
             <img
-              class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg"
-              src="@/assets/images/fb.png"
+              class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg p-1"
+              src="@/assets/images/fb1.png"
             />
             <img
-              class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg"
-              src="@/assets/images/tiktok.png"
+              class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg p-1"
+              src="@/assets/images/tiktok1.png"
             />
             <img
-              class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg"
-              src="@/assets/images/twitter.png"
+              class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg p-1"
+              src="@/assets/images/twitter1.png"
             />
           </div>
 
-          <div class="text-gray-500 space-y-2">
+          <div class="space-y-2">
             <div class="flex items-center">
               <img
-                class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg"
-                src="@/assets/images/ms.png"
+                class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg p-1"
+                src="@/assets/images/ms1.png"
               />
               <span class=" pl-2">easy4shopping@gmail.com</span>
             </div>
             <div class="flex items-center">
               <img
-                class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg"
-                src="@/assets/images/phone.png"
+                class="w-8 h-8 rounded-full hover:shadow-sm shadow-lg p-1"
+                src="@/assets/images/tel.png"
               />
               <a :href="`tel:+${mobile}`">
                 <span class="pl-2">077 628 480</span>

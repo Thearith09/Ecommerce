@@ -6,7 +6,7 @@
       >
         <div class="flex-none">
           <img
-            class="w-full h-40 iphone:w-44 tablet:w-72 iphone:h-full object-center object-cover rounded"
+            class="w-full h-40 border-2 border-purple-100 iphone:w-44 tablet:w-72 iphone:h-full object-center object-cover rounded"
             :src="item.color"
           />
         </div>
@@ -14,7 +14,9 @@
         <div class="flex">
           <div class="flex flex-col justify-between">
             <div class="space-y-2">
-              <h2 class="text-pink-600 font-semibold uppercase tracking-wide">
+              <h2
+                class="text-purple-700 font-semibold font-mono uppercase tracking-wide"
+              >
                 {{ item.name }}
               </h2>
 
@@ -33,7 +35,7 @@
                   <input
                     @keydown="handleInput($event, item.name)"
                     @input="handleChangeQty($event, item.name)"
-                    class="inline-block focus:outline-none border-2 border-yellow-200 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
+                    class="inline-block focus:outline-none border-2 border-purple-100 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
                     type="text"
                     v-model="qty"
                   />
@@ -78,7 +80,7 @@
               <div>
                 <p class="text-gray-700 inline-block">Size:</p>
                 <span
-                  class="flex rounded items-center justify-center font-semibold uppercase border-2 h-10 px-3 py-1 border-pink-500 text-pink-500"
+                  class="flex rounded items-center justify-center font-semibold uppercase border-2 h-10 px-3 py-1 border-purple-100 text-purple-700"
                   >{{ item.size }}</span
                 >
               </div>
@@ -87,7 +89,7 @@
           <div>
             <span
               @click="handleRemove(item.name)"
-              class="text-gray-700 hover:text-blue-700 cursor-pointer"
+              class="text-purple-700 font-medium hover:text-purple-900 cursor-pointer"
               >Remove</span
             >
           </div>

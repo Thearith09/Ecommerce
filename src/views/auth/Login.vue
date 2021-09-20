@@ -4,34 +4,33 @@
       <Navbar />
     </div>
 
-    <div class="mb-auto my-5 sm:my-auto 2xl:w-3/4 2xl:mx-auto">
+    <div class="relative mb-auto m-10 2xl:w-3/4 2xl:mx-auto ">
       <!--Alert for reseting password-->
-      <div v-if="sent" class="relative flex flex-col h-screen items-center">
+      <div
+        v-if="sent"
+        class="animate_animated animate__zoomIn animate__delay-2 flex justify-center items-center w-full mb-5 z-20"
+      >
         <div
-          class="animate_animated animate__zoomIn animate_faster fixed top-1/3 w-80 h-auto"
+          class="flex w-full max-w-sm mx-auto overflow-hidden h-24 bg-white rounded  shadow-2xl"
         >
-          <div
-            class="flex w-full max-w-sm mx-auto overflow-hidden h-24 bg-white rounded shadow-md"
-          >
-            <div class="flex items-center justify-center w-24 bg-blue-500">
-              <svg
-                class="animate_animated animate__bounceIn w-6 h-6 text-white fill-current"
-                viewBox="0 0 40 40"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"
-                />
-              </svg>
-            </div>
+          <div class="flex items-center justify-center w-28 bg-blue-500">
+            <svg
+              class="animate_animated animate__bounceIn w-6 h-6 text-white fill-current"
+              viewBox="0 0 40 40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"
+              />
+            </svg>
+          </div>
 
-            <div class="flex justify-center items-center">
-              <div class="mx-5">
-                <p class="text-sm text-gray-600 dark:text-gray-200">
-                  We've been sent a link to reset your account password in your
-                  email box!
-                </p>
-              </div>
+          <div class="flex justify-center items-center">
+            <div class="mx-5">
+              <p class="text-sm text-blue-600 font-bold dark:text-gray-200">
+                We've been sent a link to reset your account password in your
+                email box!
+              </p>
             </div>
           </div>
         </div>
@@ -39,12 +38,12 @@
 
       <div
         v-if="!reset"
-        class="bg-white w-80 sm:w-96 h-auto px-5 py-10 mx-auto shadow rounded-md"
+        class="bg-white w-full sm:w-10/12 md:w-8/12 lg:w-7/12 2xl:w-6/12 shadow-2xl px-5 py-10 mx-auto rounded"
       >
         <h3
-          class="text-purple-600 font-bold tracking-wide font-mono text-center mb-5"
+          class="text-purple-700 font-bold tracking-wide font-mono text-center mb-5"
         >
-          Sign in Form
+          Signin Form
         </h3>
         <form @submit.prevent="handleLogin" class="space-y-5 md:mr-2">
           <div class="space-y-8">
@@ -55,7 +54,7 @@
                 name="email"
                 placeholder=" "
                 required
-                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+                class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-700 border-purple-100"
               />
               <label
                 for="email"
@@ -70,7 +69,7 @@
                   type="password"
                   placeholder=" "
                   required
-                  class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+                  class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-700 border-purple-100"
                 />
                 <label
                   for="password"
@@ -92,21 +91,21 @@
           <div>
             <button
               v-if="!isPending"
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-600 rounded-full shadow p-2 tracking-wide hover:text-purple-700 bg-white text-purple-600 w-full"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-700 rounded-full shadow p-2 tracking-wide hover:text-purple-900 bg-white text-purple-700 w-full"
             >
               sign in
             </button>
 
             <button
               v-else
-              class="relative flex justify-center items-center focus:outline-none rounded-full shadow p-2 tracking-wide bg-white text-purple-600 w-full"
+              class="relative flex justify-center items-center focus:outline-none rounded-full shadow p-2 tracking-wide bg-white text-purple-700 w-full"
             >
               <div>
                 signing in...
               </div>
               <div class="absolute top-3 right-2">
                 <div
-                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
+                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-700"
                 ></div>
               </div>
             </button>
@@ -114,20 +113,20 @@
         </form>
         <div class="flex flex-col justify-center items-center my-5 space-y-1">
           <div class="text-gray-700">Or sign in with</div>
-          <div class="flex space-x-1">
+          <div class="flex space-x-2">
             <div>
               <img
                 @click="handleLoginWithFacebook"
-                class="bg-white shadow rounded-full w-8 h-8 p-1 cursor-pointer"
-                src="@/assets/images/fbicon.png"
+                class="bg-white shadow-md hover:shadow rounded-full w-9 h-9 p-2 cursor-pointer"
+                src="@/assets/images/fb1.png"
                 alt="facebook icon"
               />
             </div>
             <div>
               <img
                 @click="handleLoginWithGoogle"
-                class="bg-white shadow rounded-full w-8 h-8 p-1 cursor-pointer"
-                src="@/assets/images/ggicon.png"
+                class="bg-white shadow-md hover:shadow rounded-full w-9 h-9 p-2 cursor-pointer"
+                src="@/assets/images/gg1.png"
                 alt="google icon"
               />
             </div>
@@ -138,7 +137,7 @@
           <p class="text-gray-800 font-thin">
             doesn't have account yet?<span
               @click="handleNavigation"
-              class="ml-2 font-semibold text-purple-600 underline cursor-pointer hover:text-purple-700"
+              class="ml-2 font-semibold text-purple-700 underline cursor-pointer hover:text-purple-900"
               >signup</span
             >
           </p>
@@ -146,13 +145,13 @@
       </div>
       <div
         v-else
-        class="bg-white px-5 py-10 shadow w-80 sm:w-96 mx-auto rounded-md"
+        class="bg-white px-5 py-10 w-full sm:w-10/12 md:w-8/12 lg:w-7/12 2xl:w-6/12 shadow-2xl mx-auto rounded"
       >
         <div class="flex space-x-12 sm:space-x-20">
           <svg
             @click="reset = !reset"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-purple-600 cursor-pointer transform transition-all hover:-translate-x-1 duration-150"
+            class="h-5 w-5 text-purple-700 cursor-pointer transform transition-all hover:-translate-x-1 duration-150"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -164,12 +163,12 @@
           </svg>
 
           <h3
-            class="text-purple-600 tracking-wide font-bold text-center mb-5 font-mono"
+            class="text-purple-700 tracking-wide font-bold text-center mb-5 font-mono"
           >
             Reset password
           </h3>
         </div>
-        <form @submit.prevent="handleResetPassword" class="space-y-5 md:mr-2">
+        <form @submit.prevent="handleResetPassword" class="space-y-6 md:mr-2">
           <div class="group relative w-full z-0">
             <input
               v-model="email"
@@ -177,7 +176,7 @@
               name="email"
               placeholder=" "
               required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-700 border-purple-100"
             />
             <label
               for="email"
@@ -186,7 +185,7 @@
             >
           </div>
           <button
-            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-600 rounded-full shadow p-2 tracking-wide hover:text-purple-700 bg-white text-purple-600 w-full"
+            class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-700 rounded-full shadow p-2 tracking-wide hover:text-purple-900 bg-white text-purple-700 w-full"
           >
             send reset link
           </button>
@@ -250,11 +249,21 @@ export default {
     const sendItemsToCartOnceUserSignin = (user) => {
       const { documents: cart } = getDocument("carts", user.uid, "items");
       const { updateDoc, addDoc } = useDocument("carts", user.uid, "items");
+      const { documents: whistlist } = getDocument(
+        "whistlist",
+        user.uid,
+        "items"
+      );
+      const { addDoc: addToWhistlist } = useDocument(
+        "whistlist",
+        user.uid,
+        "items"
+      );
 
-      const unwatch = watch(cart, async () => {
+      const unwatchCart = watch(cart, async () => {
         //if there are items in temporary cart, push it to user account
-        unwatch(); //watch only once
-        if (cart.value.length > 0) {
+        unwatchCart(); //watch only once
+        if (cart.value?.length > 0) {
           store.state.cart.forEach(async (item) => {
             //check whether item already add to card or not yet
             let exist = false;
@@ -278,10 +287,35 @@ export default {
           }
         }
         store.commit("clearCart");
-        router.push({ name: "Home" });
       });
 
-      if (store.state.cart.length <= 0) {
+      //apply the same technique as cart for whistlist
+      const unwatchWhistlist = watch(whistlist, async () => {
+        unwatchWhistlist();
+
+        if (whistlist.value?.length > 0) {
+          store.state.whistlist.forEach(async (element) => {
+            let exist = false;
+            whistlist.value.forEach((item) => {
+              if (item.name == element.name) {
+                exist = true;
+              }
+            });
+
+            if (!exist) {
+              await addToWhistlist(element);
+            }
+          });
+        } else {
+          for (let element of store.state.whistlist) {
+            await addToWhistlist(element);
+          }
+        }
+
+        store.commit("clearWhistlist");
+      });
+
+      if (store.state.cart.length <= 0 || store.state.whistlist.length <= 0) {
         router.push({ name: "Home" });
       }
     };

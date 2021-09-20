@@ -11,13 +11,13 @@
         @keypress.enter="handleSearch"
         class="focus:outline-none shadow font-thin w-full p-3 text-sm mr-2 pl-10"
         type="search"
-        placeholder="searching..."
+        placeholder="find anything"
       />
       <svg
         v-if="show"
         @click="handleSearch"
         xmlns="http://www.w3.org/2000/svg"
-        class="absolute top-3 right-5 h-5 w-5 text-gray-500 cursor-pointer"
+        class="absolute top-3 right-5 h-5 w-5 text-purple-800 cursor-pointer"
         viewBox="0 0 20 20x"
         fill="currentColor"
       >

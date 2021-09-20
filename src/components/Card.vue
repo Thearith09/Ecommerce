@@ -8,7 +8,7 @@
     >
       <div
         @click="handleNext"
-        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-blue-600 cursor-pointer hover:text-blue-700"
+        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-purple-700 cursor-pointer hover:text-purple-900"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -28,10 +28,11 @@
     <div
       v-for="(product, index) in products"
       :key="product.id"
-      class="h-auto hover:translate-y-2 transform transition"
+      :class="animate"
+      class="h-auto hover:translate-y-2 transform transition duration-150"
       v-show="index >= start && index <= end"
     >
-      <div class="relative w-full">
+      <div class="relative w-full border-purple-100 border-2 rounded">
         <router-link
           :to="{
             name: 'ProductDetails',
@@ -46,12 +47,6 @@
             class="h-48 min-w-full  object-cover object-center rounded"
           />
         </router-link>
-        <h3
-          v-if="product.discount > 0"
-          class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
-        >
-          {{ product.discount }}% OFF
-        </h3>
       </div>
 
       <div>
@@ -63,14 +58,14 @@
               @click="handleAddToCart(product, i)"
               v-for="(image, i) in product.images"
               :key="image"
-              v-show="i < 4"
-              :class="{ activeBorder: indexActiveBorder[index] == i }"
-              class="p-px h-5 w-5 rounded-full object-cover object-center cursor-pointer"
+              v-show="i < 5"
+              :class="{ hoverColor: indexActiveBorder[index] == i }"
+              class="p-px h-5 w-5 rounded-full shadow object-cover object-center cursor-pointer"
               :src="image.url"
             />
             <div
-              v-if="product.images.length >= 5"
-              class="relative group text-gray-500 cursor-pointer"
+              v-if="product.images.length >= 6"
+              class="relative group text-purple-800 cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -88,24 +83,26 @@
                 class="absolute top-5 right-1 hidden group-hover:block br"
               ></div>
               <div
-                class="absolute top-7 -left-24 bg-blue-600 p-3 hidden group-hover:grid grid-cols-4 gap-1 rounded rounded-tr-none"
+                class="absolute top-7 w-36 right-0 bg-yellow-300 p-3 h-auto hidden group-hover:grid grid-cols-5 gap-1 rounded rounded-tr-none rounded-bl-none"
               >
                 <img
+                  v-for="(image, i) in product.images"
+                  :key="image"
+                  v-show="i >= 5"
                   @mouseover="handleChangeImage(image.url, index, i)"
                   @mouseleave="handleResetImage"
                   @click="handleAddToCart(product, i)"
-                  v-for="(image, i) in product.images"
-                  :key="image"
-                  v-show="i >= 4"
-                  :class="{ activeBorder: indexActiveBorder[index] == i }"
-                  class="p-px h-5 w-5 rounded-full object-cover object-center cursor-pointer"
+                  :class="{ hoverColor: indexActiveBorder[index] == i }"
+                  class="p-px h-5 w-5 rounded-full shadow object-cover object-center cursor-pointer"
                   :src="image.url"
                 />
               </div>
             </div>
           </div>
 
-          <h4 class="text-pink-600 font-semibold uppercase">
+          <h4
+            class="text-purple-700 font-semibold font-mono tracking-wide uppercase"
+          >
             {{ product.name }}
           </h4>
 
@@ -118,11 +115,10 @@
             <div class="flex space-x-2" v-if="product.discount > 0">
               <span
                 class="inline-block text-gray-700 font-semibold line-through"
-                >USD {{ Number(product.price).toFixed(2) }}
+                >USD{{ Number(product.price).toFixed(2) }}
               </span>
               <span class="text-red-600 font-semibold inline-block">
-                USD
-                {{
+                USD{{
                   (
                     product.price -
                     (product.price * product.discount) / 100
@@ -135,6 +131,45 @@
                 >USD {{ Number(product.price).toFixed(2) }}
               </span>
             </div>
+            <div
+              v-if="!myWhistlist.includes(product.name)"
+              @click="handleAddWhistlist(product, name)"
+              class="rounded-full border-2 p-1 border-purple-400 w-7 h-7 flex justify-center items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-gray-400 hover:text-purple-700 cursor-pointer"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </div>
+
+            <div
+              v-else
+              @click="handleRemoveWhistlist(product.name)"
+              class="rounded-full border-2 p-1 border-purple-400 w-7 h-7 flex justify-center items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-purple-700 cursor-pointer"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -146,7 +181,7 @@
     >
       <div
         @click="handlePrevious"
-        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-blue-600 cursor-pointer hover:text-blue-700"
+        class="bg-white w-12 h-12 rounded-full shadow flex justify-center items-center text-purple-700 cursor-pointer hover:text-purple-900"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -176,9 +211,11 @@
 <script>
 import PopupCard from "@/components/PopupCard";
 import getDocument from "@/composables/getDocument";
+import useDocument from "@/composables/useDocument";
 import getUser from "@/composables/getUser";
+import { useStore } from "vuex";
 
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 
 export default {
   components: {
@@ -192,8 +229,13 @@ export default {
     const item = ref("");
     const urls = ref([]);
     const index = ref(null);
+    const animate = ref(null);
     const indexActiveBorder = ref([]);
     const windowWidth = ref(window.innerWidth);
+    const myWhistlist = ref([]);
+
+    const store = useStore();
+    const tempWhistlist = ref(store.state.whistlist);
 
     const { user } = getUser();
     const { documents: products } = getDocument(
@@ -201,6 +243,25 @@ export default {
       props.name,
       "products"
     );
+    const {
+      addDoc: addToMyWhistlist,
+      deleteDoc: removeMyWhistlist,
+    } = useDocument("whistlist", user.value?.uid, "items");
+    const { documents: whistlist } = getDocument(
+      "whistlist",
+      user.value?.uid,
+      "items"
+    );
+
+    watch(whistlist, () => {
+      const results = [];
+      whistlist.value?.forEach((item) => {
+        if (item?.name) {
+          results.push(item.name);
+        }
+      });
+      myWhistlist.value = results;
+    });
 
     const onResize = () => {
       windowWidth.value = window.innerWidth;
@@ -224,6 +285,15 @@ export default {
       } else {
         end.value = 4;
       }
+      if (!user.value) {
+        const results = [];
+        tempWhistlist.value?.forEach((item) => {
+          if (item.name) {
+            results.push(item.name);
+          }
+        });
+        myWhistlist.value = results;
+      }
     });
 
     const handleAddToCart = (product, i) => {
@@ -243,6 +313,9 @@ export default {
     };
 
     const handlePrevious = () => {
+      //for applying animate style once button was interacted
+      animate.value = "animate__animated animate__slideInLeft animate__faster";
+
       if (windowWidth.value < 640) {
         start.value -= 1;
         end.value -= 1;
@@ -262,6 +335,9 @@ export default {
     };
 
     const handleNext = () => {
+      //for applying animate style once button was interacted
+      animate.value = "animate__animated animate__slideInRight animate__faster";
+
       if (windowWidth.value < 640) {
         start.value += 1;
         end.value += 1;
@@ -280,12 +356,32 @@ export default {
       }
     };
 
+    const handleAddWhistlist = async (item, name) => {
+      item.categoryName = name;
+      if (user.value) {
+        await addToMyWhistlist(item);
+      } else {
+        store.commit("addToWhistlist", item);
+        console.log(store.state.whistlist);
+      }
+    };
+
+    const handleRemoveWhistlist = async (name) => {
+      if (user.value) {
+        await removeMyWhistlist(name);
+      } else {
+        store.commit("removeFromWhistlist", name);
+      }
+    };
+
     return {
       handleAddToCart,
       handleNext,
       handlePrevious,
       handleChangeImage,
       handleResetImage,
+      handleAddWhistlist,
+      handleRemoveWhistlist,
       start,
       end,
       currentComponent,
@@ -295,6 +391,8 @@ export default {
       indexActiveBorder,
       index,
       products,
+      animate,
+      myWhistlist,
     };
   },
 };
@@ -304,6 +402,6 @@ export default {
 .br {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 20px solid rgba(37, 99, 235, 1);
+  border-bottom: 20px solid #fcd34d;
 }
 </style>

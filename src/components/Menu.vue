@@ -4,7 +4,7 @@
     class="animate__animated animate__faster flex h-screen fixed inset-0 w-screen bg-gray-700 bg-opacity-50 z-40 min-w-max"
   >
     <div v-if="subMenu" id="main-menu" class="bg-white w-80">
-      <div class="flex px-2 py-3 border-b-2 border-gray-200">
+      <div class="flex px-2 py-3 border-b-2 border-purple-100">
         <div class="relative">
           <div v-if="user?.photoURL">
             <img
@@ -14,7 +14,7 @@
           </div>
           <div v-else>
             <h1
-              class="h-8 w-8 lg:h-9 lg:w-9 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-center font-semibold uppercase text-white rounded-full"
+              class="h-8 w-8 lg:h-9 lg:w-9 flex items-center justify-center bg-yellow-300 hover:text-purple-900 text-purple-700 text-center font-semibold uppercase rounded-full"
             >
               {{ user.displayName[0] }}
             </h1>
@@ -26,19 +26,19 @@
           ></div>
         </div>
         <div class="ml-2 leading-none text-gray-700 tracking-wide">
-          <p class="font-bold">{{ user.displayName }}</p>
-          <span class="text-sm text-gray-500">{{ user.email }}</span>
+          <p class="font-bold uppercase">{{ user.displayName }}</p>
+          <span class="text-sm text-gray-500 font-mono">{{ user.email }}</span>
         </div>
       </div>
 
       <div>
         <div
           v-if="!user.admin && !user.delivery && !user.packer"
-          class="font-light px-2 py-3 space-y-3 bg-white border-b-2 border-gray-200"
+          class="px-2 py-3 space-y-3 bg-white border-b-2 border-purple-100 text-gray-700 font-medium"
         >
           <div
             @click="handleShowCategory"
-            class="flex justify-between text-gray-700 hover:text-purple-700 cursor-pointer"
+            class="flex justify-between items-center hover:text-purple-700 cursor-pointer"
           >
             <p>
               Categories
@@ -57,9 +57,41 @@
             </svg>
           </div>
 
-          <div class="relative w-full">
+          <div class="hover:text-purple-700 cursor-pointer">
+            Wishlist
+          </div>
+
+          <div
+            class="flex justify-between hover:text-purple-700 cursor-pointer"
+          >
+            <router-link :to="{ name: 'CartDetails' }"> My Cart</router-link>
+            <p
+              v-if="cart?.length > 0"
+              class="bg-yellow-300 font-bold text-purple-900 font-mono w-6 h-6 rounded-full text-sm flex justify-center items-center"
+            >
+              {{ cart.length }}
+            </p>
+          </div>
+
+          <div class="hover:text-purple-700 cursor-pointer">
+            Payment Methods
+          </div>
+
+          <div class="hover:text-purple-700 cursor-pointer">
+            Order History
+          </div>
+
+          <router-link
+            :to="{ name: 'Purchase-History' }"
+            class="hover:text-purple-700 cursor-pointer block"
+          >
+            Purchase History
+          </router-link>
+
+          <div
+            class="hover:text-purple-700 cursor-pointer flex justify-between items-center"
+          >
             <router-link
-              class="text-gray-700 hover:text-purple-700 cursor-pointer block"
               :to="{ name: 'Profile', params: { info: 'base-information' } }"
             >
               Profile Settings
@@ -67,38 +99,16 @@
 
             <div
               v-if="myProfile && !myProfile.phone"
-              class="absolute top-0 right-0 text-red-600"
+              class="text-white font-bold bg-red-600 h-4 w-4 text-sm rounded-full flex justify-center items-center"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+              !
             </div>
           </div>
-
-          <!-- <p class="text-gray-700 hover:text-purple-700 cursor-pointer">
-            Order History
-          </p> -->
-
-          <router-link
-            :to="{ name: 'Purchase-History' }"
-            class="text-gray-700 hover:text-purple-700 cursor-pointer block"
-          >
-            Purchase History
-          </router-link>
         </div>
 
         <div
           v-else
-          class="font-light px-2 py-3 space-y-3 bg-white border-b-2 border-gray-200"
+          class="font-light px-2 py-3 space-y-3 bg-white border-b-2 border-purple-100"
         >
           <div
             @click="handleShowCategory"
@@ -237,10 +247,10 @@
           </div>
         </div>
 
-        <div class="flex px-2 py-3 border-b-2 border-gray-200">
+        <div class="flex px-2 py-3 border-b-2 border-purple-100 font-medium">
           <div
             @click="handleSwitchLanguage"
-            class="w-28 px-2 py-1 flex justify-center space-x-2 items-center rounded cursor-pointer border-2 border-gray-400 text-gray-700"
+            class="w-28 px-2 py-1 flex justify-center space-x-2 items-center rounded cursor-pointer border-2 border-purple-100 text-gray-700 hover:text-purple-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -258,16 +268,11 @@
           </div>
         </div>
 
-        <div class="px-2 py-3 bg-white border-gray-200">
-          <span
-            @click="handleLogout"
-            class="text-gray-700 cursor-pointer hover:text-purple-700 flex items-center space-x-1"
-          >
-            <!-- <span class="material-icons text-md">
-              logout
-            </span> -->
-            <span>sign out</span></span
-          >
+        <div
+          @click="handleLogout"
+          class="mx-2 my-3 border-purple-100 hover:text-purple-700 cursor-pointer font-medium"
+        >
+          sign out
         </div>
       </div>
     </div>
@@ -276,7 +281,7 @@
     <div
       v-else
       id="sub-menu"
-      class="animate__animated animate__fadeInRight animate__faster font-light bg-white w-80 h-screen"
+      class="animate__animated animate__slideInRight font-light bg-white w-80 h-screen"
     >
       <div
         v-if="succeedMessage"
@@ -297,11 +302,11 @@
 
       <div
         @click="handleCloseSubMenu"
-        class="flex justify-start items-center space-x-1 bg-gray-100 p-2 text-gray-700 cursor-pointer"
+        class="flex justify-start items-center font-serif space-x-1 bg-purple-50 p-2 text-purple-800 font-bold cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
+          class="h-6 w-6"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -315,9 +320,9 @@
       </div>
 
       <!--show category-->
-      <div v-show="!showCategory" class="px-2 py-3 cursor-pointer">
+      <div v-show="!showCategory" class="px-2 py-3 cursor-pointer font-medium">
         <p
-          class="py-2 hover:text-blue-700 tracking-wide text-gray-700"
+          class="text-gray-700 hover:text-purple-700 mb-3 tracking-wide"
           v-for="category in categories"
           :key="category.id"
           @click="handleNavigation(category.id)"
@@ -325,7 +330,7 @@
           {{ category.name }}
         </p>
         <router-link
-          class="py-2 hover:text-blue-700 tracking-wide text-gray-700 block"
+          class="my-3 text-gray-700 hover:text-purple-700 tracking-wide block"
           :to="{ name: 'Categories' }"
           >All Categories</router-link
         >
@@ -341,7 +346,7 @@
               type="text"
               placeholder=" "
               required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-purple-100"
             />
             <label
               for="Username"
@@ -410,7 +415,7 @@
               name="email"
               placeholder=" "
               required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-purple-100"
             />
             <label
               for="email"
@@ -480,7 +485,7 @@
               name="email"
               placeholder=" "
               required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-purple-100"
             />
             <label
               for="email"
@@ -562,7 +567,7 @@
               type="text"
               placeholder=" "
               required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-gray-200"
+              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-purple-100"
             />
             <label
               for="email"
@@ -595,7 +600,7 @@
 
     <div
       @click="handleClose"
-      class="bg-white rounded-full w-10 h-10 text-gray-500 flex justify-center items-center cursor-pointer my-2 ml-2"
+      class="bg-white rounded-full w-10 h-10 text-purple-900 flex justify-center items-center cursor-pointer my-2 ml-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -624,6 +629,7 @@ import getUserDoc from "@/composables/getUserDoc";
 import SwitchLanguage from "@/components/SwitchLanguage.vue";
 import getCollection from "@/composables/getCollection";
 import useCollection from "@/composables/useCollection";
+import getDocument from "@/composables/getDocument";
 import { projectAuth, functions, timestamp } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
@@ -663,6 +669,8 @@ export default {
     const { documents: users } = getCollection("users");
     const { addDoc, isPending, error } = useCollection("inventory");
 
+    const { documents: cart } = getDocument("carts", user.value?.uid, "items");
+
     const types = ["image/png", "image/jpg", "image/jpeg", "image/svg"];
 
     onMounted(() => {
@@ -695,10 +703,10 @@ export default {
 
       document
         .getElementById("sub-menu")
-        .classList.remove("animate__fadeInRight");
+        .classList.remove("animate__slideInRight");
       document
         .getElementById("sub-menu")
-        .classList.add("animate__fadeOutRight");
+        .classList.add("animate__slideOutRight");
 
       setTimeout(() => {
         subMenu.value = true;
@@ -706,8 +714,8 @@ export default {
     };
 
     const handleClose = () => {
-      document.getElementById("menu").classList.remove("animate__fadeInLeft");
-      document.getElementById("menu").classList.add("animate__fadeOutLeft");
+      document.getElementById("menu").classList.remove("animate__slideInLeft");
+      document.getElementById("menu").classList.add("animate__slideOutRight");
       setTimeout(() => {
         emit("close");
         subMenu.value = true;
@@ -894,6 +902,7 @@ export default {
       fileError,
       succeedMessage,
       failedMessage,
+      cart,
     };
   },
 };

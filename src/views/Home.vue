@@ -7,9 +7,18 @@
       <div>
         <Slideshow />
       </div>
-      <div v-for="(category, index) in categories" :key="category.id">
-        <div v-if="index < 5" class="my-5 mx-10 2xl:mx-0 space-y-3">
-          <div class="font-bold text-xl text-gray-700 uppercase mt-8">
+      <div
+        class="my-5 2xl:mx-0 mx-10"
+        v-for="(category, index) in categories"
+        :key="category.id"
+      >
+        <div
+          v-if="index < 5"
+          class="space-y-3 max-w-sm sm:max-w-none w-full mx-auto"
+        >
+          <div
+            class="font-bold text-xl text-gray-700 uppercase mt-8 bg-purple-50 p-2"
+          >
             {{ $t(`${header[index]?.toUpperCase()}`) }}
           </div>
           <Card :name="category.name" />

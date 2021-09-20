@@ -8,7 +8,7 @@
           <svg
             @click="handleClose"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-500 cursor-pointer"
+            class="h-5 w-5 text-purple-800 cursor-pointer"
             viewBox="0 0 20 20x"
             fill="currentColor"
           >
@@ -21,23 +21,19 @@
         </div>
 
         <div class="flex w-80 sm:w-96 md:w-80">
-          <div class="relative h-52">
+          <div class="relative h-full border-2 border-purple-100 rounded">
             <img
               class="flex-none w-full h-full rounded object-cover object-center"
               :src="item.images[index].url"
             />
-            <h3
-              v-if="item.discount > 0"
-              class="absolute bottom-0 right-0 bg-pink-500 bg-opacity-90 font-mono text-white p-1 rounded"
-            >
-              {{ item.discount }}% OFF
-            </h3>
           </div>
         </div>
 
         <div class="w-80 sm:w-96 md:pl-5">
           <div class="space-y-2">
-            <h2 class="text-pink-600 font-semibold uppercase">
+            <h2
+              class="text-purple-700 text-lg font-mono tracking-wide font-semibold uppercase"
+            >
               {{ item.name }}
             </h2>
             <h4 class="text-gray-500 leading-none">
@@ -65,7 +61,7 @@
               <div class="flex space-x-1 text-gray-500">
                 <span
                   @click="handleActiveSize(i)"
-                  :class="{ activeBorder: indexSize == i }"
+                  :class="{ activeSize: indexSize == i }"
                   v-for="(size, i) in item.sizes"
                   :key="size"
                   class="flex rounded items-center justify-center font-semibold uppercase border-2 py-1 px-3 cursor-pointer"
@@ -74,6 +70,14 @@
                 </span>
               </div>
             </div>
+            <div
+              v-if="alerting"
+              class="flex justify-center items-center bg-red-100 border-2 border-red-300 w-full h-12 rounded"
+            >
+              <p class="text-red-600 font-semibold font-mono">
+                {{ alerting }}
+              </p>
+            </div>
             <div class="text-gray-500">
               <p class="text-gray-700">qty:</p>
               <div class="flex space-x-5">
@@ -81,7 +85,7 @@
                   <input
                     @keydown="handleInput"
                     @input="handleChangeQty($event)"
-                    class="inline-block focus:outline-none border-2 border-yellow-200 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
+                    class="inline-block focus:outline-none border-2 border-purple-100 pr-5 pl-5 h-10 w-28 rounded text-center text-sm text-gray-700"
                     type="text"
                     v-model="qty"
                   />
@@ -121,8 +125,6 @@
                 </div>
 
                 <button
-                  :disabled="indexSize == null"
-                  :class="{ frozen: indexSize == null }"
                   @click="
                     handleAddToCart(
                       item,
@@ -130,7 +132,7 @@
                       item.sizes[indexSize]
                     )
                   "
-                  class="rounded focus:outline-none w-full shadow font-semibold text-white bg-pink-600 hover:bg-pink-700 p-2"
+                  class="rounded focus:outline-none w-full shadow font-bold text-purple-700 bg-yellow-300 hover:translate-y-1 transform transition-all duration-150 p-2"
                 >
                   ADD TO CART
                 </button>
@@ -151,12 +153,14 @@ import useDocument from "@/composables/useDocument";
 import getDocument from "@/composables/getDocument";
 import getUser from "@/composables/getUser";
 import { useStore } from "vuex";
+import { watch } from "@vue/runtime-core";
 
 export default {
   props: ["item", "index"],
   setup(props, { emit }) {
     const indexSize = ref(null);
     const qty = ref(1);
+    const alerting = ref(null);
 
     const router = useRouter();
     const store = useStore();
@@ -168,6 +172,12 @@ export default {
       "items"
     );
     const { documents: cart } = getDocument("carts", user.value?.uid, "items");
+
+    watch(indexSize, () => {
+      if (indexSize.value != null) {
+        alerting.value = null;
+      }
+    });
 
     const handleClose = () => {
       emit("close");
@@ -196,6 +206,10 @@ export default {
     };
 
     const handleAddToCart = async (item, image, size) => {
+      if (!size) {
+        return (alerting.value = "Please choose one of the sizes above!");
+      }
+
       const addedItem = {
         name: item.name,
         description: item.description,
@@ -238,6 +252,7 @@ export default {
       handleAddToCart,
       indexSize,
       qty,
+      alerting,
     };
   },
 };

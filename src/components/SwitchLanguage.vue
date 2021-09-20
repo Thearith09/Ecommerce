@@ -2,9 +2,9 @@
   <div
     class="flex justify-center fixed w-full h-screen inset-0 bg-gray-900 bg-opacity-50 z-20"
   >
-    <div class="flex justify-center items-center w-full h-2/4 sm:h-3/4">
+    <div class="flex justify-center items-center w-full h-2/4 mx-5 sm:mx-0">
       <div
-        class="relative px-2 py-5 sm:px-5 text-gray-700 bg-white rounded-md w-96 sm:w-2/3 lg:w-1/2 h-auto"
+        class="relative px-2 py-5 sm:px-5 text-purple-800 bg-white rounded-md w-full sm:w-10/12 md:w-8/12 lg:w-7/12 2xl:w-6/12 h-auto"
       >
         <div class="flex justify-between items-end">
           <p class="font-mono font-bold text-lg">
@@ -13,7 +13,7 @@
           <svg
             @click="handleClose"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-500 cursor-pointer"
+            class="h-5 w-5 text-purple-800 cursor-pointer"
             viewBox="0 0 20 20x"
             fill="currentColor"
           >
@@ -26,7 +26,7 @@
         </div>
 
         <div
-          class="locale-changer grid grid-cols-2 sm:grid-cols-3 gap-4 p-5 text-gray-700"
+          class="locale-changer grid grid-cols-2 sm:grid-cols-3 gap-4 p-5 text-purple-900"
         >
           <div v-for="(lang, i) in locales" :key="lang">
             <p

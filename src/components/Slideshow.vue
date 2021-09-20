@@ -181,21 +181,19 @@ export default {
 
 .vueperslides__progress {
   background: rgba(0, 0, 0, 0.25);
-  color: #1d4ed8;
+  color: #6d28d9;
 }
 .vueperslides__arrow svg {
   stroke-width: 1;
-  font-size: 15px;
-  color: #1d4ed8;
+  color: #6d28d9;
 }
 @media only screen and (max-width: 768px) {
   .vueperslides__arrow svg {
     stroke-width: 1;
-    font-size: 12px;
   }
 }
 .vueperslides__arrow:focus {
-  /* outline: none; */
+  outline: none;
 }
 .vueperslides__bullet--active .default {
   /* color: #ec4899; */

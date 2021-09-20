@@ -11,6 +11,7 @@
           :search="search"
           :previous="previous"
           :next="next"
+          :animate="animate"
           :key="id"
           @close="handleClose"
           @emitProducts="handleReceiveBack"
@@ -24,7 +25,7 @@
             @click="handlePrevious(items.length)"
             :class="{ frozen: previous <= 0 }"
             :disabled="previous <= 0"
-            class="h-8 w-8 lg:h-9 lg:w-9 rounded-full focus:outline-none border-2 border-blue-600 text-blue-600 flex justify-center hover:text-blue-700 items-center"
+            class="h-8 w-8 lg:h-9 lg:w-9 rounded-full focus:outline-none border-2 border-purple-700 text-purple-700 flex justify-center hover:text-purple-900 items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +45,7 @@
               v-for="i in Math.ceil(items.length / 5)"
               :key="i"
               v-show="i >= start && i <= end"
-              class="flex items-center px-2 text-blue-600 font-bold lg:text-lg"
+              class="flex items-center px-2 text-purple-700 font-bold lg:text-lg"
             >
               <li :class="{ activePaginate: i == indexActive }">{{ i }}</li>
             </ul>
@@ -53,7 +54,7 @@
             @click="handleNext(items.length)"
             :class="{ frozen: next >= items.length }"
             :disabled="next >= items.length"
-            class="h-8 w-8 lg:h-9 lg:w-9 rounded-full focus:outline-none border-2 border-blue-600 text-blue-600 hover:text-blue-700 flex justify-center items-center"
+            class="h-8 w-8 lg:h-9 lg:w-9 rounded-full focus:outline-none border-2 border-purple-700 text-purple-700 hover:text-purple-900 flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -111,6 +112,7 @@ export default {
     const next = ref(5);
     const indexActive = ref(1);
     const items = ref(null);
+    const animate = ref(null);
     const currentComponent = ref("ListProducts");
 
     const handleClose = () => {
@@ -122,6 +124,8 @@ export default {
     };
 
     const handleNext = (limitedIncrement) => {
+      animate.value = "animate__animated animate__slideInRight animate__faster";
+
       limitedIncrement = Math.ceil(limitedIncrement / 5);
       if (end.value < limitedIncrement) {
         start.value++;
@@ -135,6 +139,8 @@ export default {
     };
 
     const handlePrevious = (limitedDecrement) => {
+      animate.value = "animate__animated animate__slideInLeft  animate__faster";
+
       limitedDecrement = Math.ceil(limitedDecrement / 5);
       if (end.value > 5) {
         start.value--;
@@ -159,6 +165,7 @@ export default {
       handleNext,
       handlePrevious,
       handleReceiveBack,
+      animate,
     };
   },
 };

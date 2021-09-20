@@ -8,7 +8,7 @@
 
     <div v-if="paginateOrders" class="relative mx-10">
       <!--for screen greater than 768px-->
-      <div v-if="windowWidth >= 768">
+      <div :class="animate" v-if="windowWidth >= 768">
         <div
           class="flex items-center text-blue-800 font-semibold h-12 p-2 bg-yellow-200"
         >
@@ -98,7 +98,7 @@
       <!--end for screen greater than 768px-->
 
       <!--for screen less than 768px-->
-      <div v-if="windowWidth < 768">
+      <div :class="animate" v-if="windowWidth < 768">
         <div
           v-if="windowWidth >= 640"
           class="flex items-center font-semibold text-blue-800 bg-yellow-200 p-2"
@@ -165,7 +165,7 @@
                         src="@/assets/images/visa128.png"
                         alt=""
                       />
-                      <p>****{{ order.paymentMethod.last4 }}</p>
+                      <p>****{{ order.paymentMethod?.last4 }}</p>
                     </div>
                   </div>
                 </div>
@@ -631,6 +631,7 @@ export default {
     const paginateOrders = ref(null);
     const windowWidth = ref(window.innerWidth);
     const showModal = ref(false);
+    const animate = ref(null);
 
     const store = useStore();
     const { user } = getUser();
@@ -655,6 +656,8 @@ export default {
     });
 
     const handlePrevious = async (limitedDecrement) => {
+      animate.value = "animate__animated animate__fadeInLeft animate__faster";
+
       paginateOrders.value = await previousPage();
 
       limitedDecrement = Math.ceil(limitedDecrement / 10);
@@ -669,6 +672,8 @@ export default {
       indexActive.value--;
     };
     const handleNext = async (limitedIncrement) => {
+      animate.value = "animate__animated animate__fadeInRight animate__faster";
+
       paginateOrders.value = await nextPage();
 
       limitedIncrement = Math.ceil(limitedIncrement / 10);
@@ -754,6 +759,7 @@ export default {
     };
 
     return {
+      animate,
       user,
       showModal,
       date,

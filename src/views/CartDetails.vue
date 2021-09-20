@@ -9,7 +9,7 @@
         v-if="cart?.length > 0 || tempCart.length > 0"
         class="flex flex-col-reverse lg:flex-row lg:space-x-2 lg:w-11/12 mb-auto my-5 lg:mx-auto"
       >
-        <div v-if="cart" class="flex flex-col bg-white rounded">
+        <div v-if="cart" class="flex flex-col bg-white space-y-1 rounded">
           <div v-for="item in cart" :key="item.id">
             <Cart :item="item" @updateQty="handleUpdateQty" />
           </div>
@@ -36,7 +36,7 @@
               <span>${{ subTotal.toFixed(2) }} </span>
             </div>
             <div
-              class="bg-red-600 text-white space-x-10 items-center p-2 rounded"
+              class="bg-yellow-200 text-purple-700 space-x-10 items-center p-2 rounded"
             >
               <span> Discount </span>
               <span>- ${{ discount.toFixed(2) }} </span>
@@ -44,37 +44,41 @@
           </div>
 
           <div
-            class="text-right space-x-10 items-center font-medium text-gray-700 border-b-2 border-yellow-200 pb-3"
+            class="text-right space-x-10 items-center font-medium text-gray-700 border-b-2 border-purple-100 pb-3"
           >
             <span class="underline"> Shipping </span>
             <span>${{ shipping.toFixed(2) }}</span>
           </div>
 
           <div>
-            <div class="text-right space-x-10 text-gray-700 font-bold">
-              <span>Total Price</span>
-              <span class="text-red-600">${{ total.toFixed(2) }}</span>
+            <div
+              class="text-right space-x-10 text-gray-700 font-semibold uppercase"
+            >
+              <span>Total Amount</span>
+              <span class="text-purple-700 text-xl font-mono"
+                >${{ total.toFixed(2) }}</span
+              >
             </div>
           </div>
 
-          <div class="pb-5 border-b-2 border-yellow-200">
+          <div class="pb-5 border-b-2 border-purple-100">
             <button
               v-if="!isPending"
               @click="handleCheckout"
-              class="focus:outline-none w-full p-3 flex rounded justify-center items-center cursor-pointer text-white bg-blue-600 hover:bg-blue-700 font-medium shadow"
+              class="focus:outline-none w-full p-3 flex rounded justify-center items-center cursor-pointer text-purple-700 font-bold bg-yellow-300 hover:translate-y-1 transform transition-all duration-150 shadow"
             >
               Checkout
             </button>
             <button
               v-else
-              class="relative flex justify-center items-center focus:outline-none rounded shadow p-3 tracking-wide bg-blue-600 text-white w-full"
+              class="relative flex justify-center items-center focus:outline-none rounded shadow p-3 tracking-wide bg-yellow-300 text-purple-700 font-bold w-full"
             >
               <div>
                 Checking out...
               </div>
               <div class="absolute top-4 right-2">
                 <div
-                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-white"
+                  class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-700"
                 ></div>
               </div>
             </button>
@@ -84,12 +88,12 @@
 
       <div
         v-if="userSignin ? cart?.length <= 0 : tempCart.length <= 0"
-        class="relative rounded w-11/12 h-auto my-10 p-5 md:w-6/12 mx-auto lg:my-20 border-2 border-yellow-200 bg-white"
+        class="relative rounded w-11/12 h-auto my-10 p-5 md:w-6/12 mx-auto lg:my-20 border-2 border-purple-100 bg-white"
       >
         <div class="flex justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-24 sm:h-28 inline-block p-5 text-blue-600"
+            class="h-24 sm:h-28 inline-block p-5 text-purple-700"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -111,7 +115,7 @@
 
         <div
           @click="handleNavigation"
-          class="text-white py-3 w-40 text-center mx-auto mb-5 bg-blue-600 cursor-pointer"
+          class="font-bold py-3 w-40 text-center mx-auto mb-5 bg-yellow-300 text-purple-700 cursor-pointer"
         >
           Keep Shopping
         </div>

@@ -18,6 +18,9 @@ service cloud.firestore {
     match /carts/{userId}/{document=**} {
       allow read, write: if request.auth.uid == userId;
     }
+    match /whistlist/{userId}/{document=**} {
+      allow read, write: if request.auth.uid == userId;
+    }
     match /users/{userId} {
       allow read: if true;
       allow write: if request.auth.uid == userId;
