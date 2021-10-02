@@ -38,9 +38,7 @@
             class="flex items-center text-blue-800 p-3 h-auto bg-white border-b-2 border-yellow-200 transform transition hover:translate-y-1"
           >
             <div class="w-full">
-              <p
-                class="break-words md:w-28 lg:w-40 line-clamp-1 lg:hover:line-clamp-4 md:hover:line-clamp-5"
-              >
+              <p class="break-words md:w-28 lg:w-40">
                 {{ order.id }}
               </p>
             </div>
@@ -174,9 +172,7 @@
               <div v-else class="text-blue-800 pb-2">
                 <fieldset class="border-2 border-yellow-200 rounded p-2">
                   <legend class="text-xs">Parcel ID</legend>
-                  <p
-                    class="text-left break-words w-40 line-clamp-1 hover:line-clamp-4"
-                  >
+                  <p class="text-left break-words w-40">
                     {{ order.id }}
                   </p>
                 </fieldset>
@@ -236,9 +232,7 @@
                   class="border-2 border-yellow-200 rounded p-3 text-blue-800"
                 >
                   <legend class="text-xs">Parcel ID</legend>
-                  <p
-                    class="text-left break-words w-40 line-clamp-1 hover:line-clamp-4"
-                  >
+                  <p class="text-left break-words w-40">
                     {{ order.id }}
                   </p>
                 </fieldset>

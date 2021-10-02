@@ -39,4 +39,7 @@
   .activeLanguage {
     @apply border-2 border-purple-100;
   }
+  .activeDropdownLanguage {
+    @apply text-white bg-purple-700;
+  }
 }

@@ -9,10 +9,11 @@
     "webpack": "webpack --watch"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "5.15.4",
     "@j-t-mcc/vue3-chartjs": "1.1.2",
     "@kurkle/color": "0.1.9",
+    "@popperjs/core": "2.10.1",
     "@stripe/stripe-js": "^1.15.0",
-    "@tailwindcss/line-clamp": "0.2.0",
     "browser-sync-webpack-plugin": "^2.3.0",
     "chart.js": "3.4.0",
     "chartjs-adapter-luxon": "1.0.0",
@@ -24,7 +25,6 @@
     "luxon": "1.27.0",
     "moment": "^2.29.1",
     "print-js": "^1.6.0",
-    "uuid": "8.3.2",
     "vue": "^3.0.0",
     "vue-i18n": "^9.1.0",
     "vue-router": "^4.0.0-0",

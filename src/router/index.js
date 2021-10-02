@@ -15,12 +15,12 @@ import Profile from "../views/Profile.vue";
 import PageNotFound from "../views/Page404.vue";
 import PurchaseHistory from "../views/PurchaseHistory.vue";
 import MyWhistlist from "../views/MyWhistlist.vue";
+import AdminDashboard from "../views/Admin-Dashboard/AdminDashboard";
 
 import { projectAuth } from "@/firebase/config";
 
 const requireAuth = (from, to, next) => {
   const user = projectAuth.currentUser;
-
   if (user?.admin || user?.packer || user?.delivery) {
     next();
   } else {
@@ -29,10 +29,40 @@ const requireAuth = (from, to, next) => {
 };
 
 const routes = [
+  //for admin
+  {
+    path: "/admin-dashboard",
+    name: "AdminDashboard",
+    component: AdminDashboard,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/orders/checkoutorder",
+    name: "CheckoutOrder",
+    component: CheckoutOrder,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/reports",
+    name: "Reports",
+    component: Reports,
+    beforeEnter: requireAuth,
+  },
+
+  //for user
   {
     path: "/",
     name: "Home",
     component: Home,
+    beforeEnter: (to, from, next) => {
+      const user = projectAuth.currentUser;
+      console.log("User: ", user);
+      if (user?.admin || user?.packer || user?.delivery) {
+        next("/admin-dashboard");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/login",
@@ -67,22 +97,10 @@ const routes = [
     props: true,
   },
   {
-    path: "/orders/checkoutorder",
-    name: "CheckoutOrder",
-    component: CheckoutOrder,
-    beforeEnter: requireAuth,
-  },
-  {
     path: "/category/products/:id",
     name: "ProductDetails",
     component: ProductDetails,
     props: true,
-  },
-  {
-    path: "/reports",
-    name: "Reports",
-    component: Reports,
-    beforeEnter: requireAuth,
   },
   {
     path: "/profile/:info",

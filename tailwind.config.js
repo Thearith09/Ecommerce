@@ -46,7 +46,6 @@ module.exports = {
     extend: {
       backgroundColor: ["active", "first"],
       textColor: ["active"],
-      lineClamp: ["hover"],
       height: ["hover"],
       padding: ["hover"],
       gridColumn: ["hover"],
@@ -59,5 +58,5 @@ module.exports = {
     scale: ["active", "group-hover", "focus"],
     display: ["hover", "group-hover"],
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [],
 };

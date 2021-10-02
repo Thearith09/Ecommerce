@@ -9,11 +9,9 @@ const facebookLogin = async (provider) => {
     const result = await projectAuth.signInWithPopup(provider);
     const credential = result.credential;
     const user = result.user;
-    console.log(user);
-    console.log(result);
     const accessToken = credential.accessToken;
 
-    return { user, accessToken };
+    return { result, user, accessToken };
   } catch (err) {
     error.value = err.message;
   }

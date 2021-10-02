@@ -247,6 +247,9 @@ export default {
     };
 
     const sendItemsToCartOnceUserSignin = (user) => {
+      if (user.admin || user.packer || user.delivery) {
+        return router.push({ name: "AdminDashboard" });
+      }
       const { documents: cart } = getDocument("carts", user.uid, "items");
       const { updateDoc, addDoc } = useDocument("carts", user.uid, "items");
       const { documents: whistlist } = getDocument(
@@ -320,11 +323,26 @@ export default {
       }
     };
 
+    const claimUserRole = async (user) => {
+      const idTokenResult = await user.getIdTokenResult();
+      if (idTokenResult.claims.admin) {
+        user.admin = idTokenResult.claims.admin;
+      }
+      if (idTokenResult.claims.packer) {
+        user.packer = idTokenResult.claims.packer;
+      }
+      if (idTokenResult.claims.delivery) {
+        user.delivery = idTokenResult.claims.delivery;
+      }
+      return user;
+    };
+
     const handleLogin = async () => {
       const res = await login(email.value, password.value);
       if (!error.value) {
-        if (res.user?.emailVerified) {
-          sendItemsToCartOnceUserSignin(res.user);
+        const user = await claimUserRole(res.user);
+        if (user.emailVerified) {
+          sendItemsToCartOnceUserSignin(user);
         } else {
           err.value = "Please verify your email!";
         }
@@ -355,26 +373,24 @@ export default {
     const handleLoginWithGoogle = async () => {
       const provider = new firebase.auth.GoogleAuthProvider();
       const { error, googleLogin } = useGoogleLogin();
-      const { user, accessToken } = await googleLogin(provider);
-      if (!error.value) {
-        if (user.emailVerified) {
-          let existedUser = false;
-          users?.value.forEach((doc) => {
-            if (doc.id == user.uid) existedUser = true;
-          });
+      const { result, accessToken } = await googleLogin(provider);
+      const user = await claimUserRole(result.user);
 
-          //check whether user exist or not yet, prevent user-info from resetting
-          if (!existedUser) {
-            await addUser(user.uid, {
-              name: user.displayName,
-              email: user.email,
-              createdAt: timestamp(),
-            });
-          }
-          sendItemsToCartOnceUserSignin(user);
-        } else {
-          err.value = "Your email doesnt' exist!";
+      if (!error.value) {
+        let existedUser = false;
+        users?.value.forEach((doc) => {
+          if (doc.id == user.uid) existedUser = true;
+        });
+
+        //check whether user exist or not yet, prevent user-info from resetting
+        if (!existedUser) {
+          await addUser(user.uid, {
+            name: user.displayName,
+            email: user.email,
+            createdAt: timestamp(),
+          });
         }
+        sendItemsToCartOnceUserSignin(user);
       } else {
         err.value = error.value;
       }
@@ -383,7 +399,8 @@ export default {
     const handleLoginWithFacebook = async () => {
       const provider = new firebase.auth.FacebookAuthProvider();
       const { error, facebookLogin } = useFacebookLogin();
-      const { user, accessToken } = await facebookLogin(provider);
+      const { result, accessToken } = await facebookLogin(provider);
+      const user = await claimUserRole(result.user);
 
       if (!error.value) {
         await user.sendEmailVerification();
