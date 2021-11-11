@@ -3,7 +3,6 @@
     <div>
       <Navbar />
     </div>
-
     <div
       class="mb-auto h-auto px-10 lg:px-0 w-full lg:w-3/4 2xl:w-7/12 mx-auto"
     >
@@ -11,10 +10,10 @@
         <h1
           class="text-gray-700 font-bold px-2 py-3 my-10 lg:my-16 text-xl lg:text-4xl font-serif tracking-wider"
         >
-          Purchase History
+          Order History
         </h1>
       </div>
-      <div v-if="purchasedHistories?.length > 0">
+      <div v-if="orderHistories?.length > 0">
         <div class="pb-5">
           <div
             v-if="windowWidth >= 768"
@@ -39,7 +38,7 @@
           </div>
 
           <div
-            v-for="(purchase, i) in purchasedHistories"
+            v-for="(order, i) in orderHistories"
             :key="i"
             v-show="i >= previous && i < next"
           >
@@ -61,31 +60,42 @@
               </div>
 
               <div>
-                #{{
-                  purchase.id.substring(
-                    purchase.id.length - 5,
-                    purchase.id.length
-                  )
-                }}
+                #{{ order.id.substring(order.id.length - 5, order.id.length) }}
               </div>
 
               <div class="col-span-3">
-                {{ date(purchase.createdAt.toDate()).format("dddd MMM, YYYY") }}
+                {{ date(order.createdAt.toDate()).format("dddd MMM, YYYY") }}
               </div>
 
-              <div class="col-span-1 text-purple-700 font-bold ">
-                ${{ purchase.amount }}
+              <div
+                v-if="order.paymentStatus === 'paid'"
+                class="text-purple-700 font-bold"
+              >
+                ${{ (order.amountTotal / 100).toFixed(2) }}
+              </div>
+              <div v-else class="text-purple-700 font-bold">
+                $0.00
               </div>
 
-              <div class="col-span-3 flex items-center">
-                <div>{{ purchase.paymentMethod.brand }}</div>
-                <div>****{{ purchase.paymentMethod.last4 }}</div>
+              <div
+                v-if="order.paymentStatus === 'paid'"
+                class="col-span-3 flex items-center"
+              >
+                <div>{{ order.paymentMethod.brand }}</div>
+                <div>****{{ order.paymentMethod.last4 }}</div>
+              </div>
+              <div v-else class="col-span-3 text-red-600 font-semibold">
+                <p class="bg-opacity-20 inline-block">
+                  Failed
+                </p>
               </div>
 
-              <div class="col-span-3">
+              <div class="col-span-3 flex">
                 <button
-                  @click="handleInvoice(purchase)"
+                  @click="handleInvoice(order)"
+                  :disabled="order.paymentStatus !== 'paid'"
                   class="focus:outline-none py-1 px-10 lg:px-14 rounded border-2 border-purple-100 text-purple-700 hover:text-purple-900 hover:border-purple-400"
+                  :class="{ frozen: order.paymentStatus !== 'paid' }"
                 >
                   invoice
                 </button>
@@ -95,14 +105,12 @@
             <div v-else class="space-y-1 text-gray-700">
               <fieldset class="border-2 border-purple-100 rounded p-2">
                 <legend class="text-xs text-purple-700">
-                  {{
-                    date(purchase.createdAt.toDate()).format("dddd MMM, YYYY")
-                  }}
+                  {{ date(order.createdAt.toDate()).format("dddd MMM, YYYY") }}
                 </legend>
                 <div
                   class="grid grid-cols-3 items-center bg-purple-100 text-purple-700 font-semibold p-2"
                 >
-                  <div>Purchase ID</div>
+                  <div>order ID</div>
                   <div>Amount</div>
                   <div class="">Payment Method</div>
                 </div>
@@ -110,27 +118,40 @@
                 <div class="grid grid-cols-3 items-center p-2">
                   <div class="w-full">
                     #{{
-                      purchase.id.substring(
-                        purchase.id.length - 5,
-                        purchase.id.length
-                      )
+                      order.id.substring(order.id.length - 5, order.id.length)
                     }}
                   </div>
 
-                  <div class="w-full text-purple-700 font-bold">
-                    ${{ purchase.amount }}
+                  <div
+                    v-if="order.paymentStatus === 'paid'"
+                    class="w-full text-purple-700 font-bold"
+                  >
+                    ${{ (order.amountTotal / 100).toFixed(2) }}
+                  </div>
+                  <div v-else class="text-purple-700 font-bold">
+                    $0.00
                   </div>
 
-                  <div class="w-full flex items-center">
-                    <div>{{ purchase.paymentMethod.brand }}</div>
-                    <div>****{{ purchase.paymentMethod.last4 }}</div>
+                  <div
+                    v-if="order.paymentStatus === 'paid'"
+                    class="w-full flex items-center"
+                  >
+                    <div>{{ order.paymentMethod.brand }}</div>
+                    <div>****{{ order.paymentMethod.last4 }}</div>
+                  </div>
+                  <div v-else class="text-red-600 font-semibold">
+                    <p class="bg-opacity-20 inline-block">
+                      Failed
+                    </p>
                   </div>
                 </div>
 
                 <div class="w-full py-1">
                   <button
-                    @click="handleInvoice(purchase)"
+                    @click="handleInvoice(order)"
+                    :disabled="order.paymentStatus !== 'paid'"
                     class="focus:outline-none py-1 w-full rounded border-2 border-purple-100 text-purple-700 hover:text-purple-900 hover:border-purple-400"
+                    :class="{ frozen: order.paymentStatus !== 'paid' }"
                   >
                     invoice
                   </button>
@@ -140,7 +161,7 @@
           </div>
         </div>
       </div>
-      <div v-if="purchasedHistories?.length <= 0">
+      <div v-if="orderHistories?.length <= 0">
         <div
           class="flex flex-col items-center space-y-5 border-b-2 border-t-2 border-purple-100 py-10"
         >
@@ -161,18 +182,18 @@
           </router-link>
           <div>
             <div class="text-gray-400">
-              You don't have any purchases.
+              You don't have any orders.
             </div>
           </div>
         </div>
       </div>
 
       <div
-        v-if="purchasedHistories?.length > 0"
+        v-if="orderHistories?.length > 0"
         class="flex justify-center items-center mb-5 md:mt-5 w-1/4 mx-auto space-x-2"
       >
         <button
-          @click="handlePrevious(purchasedHistories.length)"
+          @click="handlePrevious(orderHistories.length)"
           :class="{ frozen: previous <= 0 }"
           :disabled="previous <= 0"
           class="h-8 w-8 lg:h-9 lg:w-9 rounded-full focus:outline-none border-2 border-purple-700 text-purple-700 flex justify-center hover:text-purple-900 items-center"
@@ -192,7 +213,7 @@
         </button>
         <div class="flex items-center">
           <ul
-            v-for="i in Math.ceil(purchasedHistories.length / 5)"
+            v-for="i in Math.ceil(orderHistories.length / 5)"
             :key="i"
             v-show="i >= start && i <= end"
             class="flex items-center px-2 text-purple-700 font-bold lg:text-lg"
@@ -203,9 +224,9 @@
           </ul>
         </div>
         <button
-          @click="handleNext(purchasedHistories.length)"
-          :class="{ frozen: next >= purchasedHistories.length }"
-          :disabled="next >= purchasedHistories.length"
+          @click="handleNext(orderHistories.length)"
+          :class="{ frozen: next >= orderHistories.length }"
+          :disabled="next >= orderHistories.length"
           class="h-8 w-8 lg:h-9 lg:w-9 rounded-full focus:outline-none border-2 border-purple-700 text-purple-700 hover:text-purple-900  flex justify-center items-center"
         >
           <svg
@@ -230,7 +251,7 @@
 
     <component
       :is="currentComponent"
-      :itemInfo="purchaseInfo"
+      :itemInfo="orderInfo"
       @close="currentComponent = null"
     />
   </div>
@@ -239,7 +260,7 @@
 import Footer from "@/components/Footer.vue";
 import Navbar from "@/components/Navbar.vue";
 import getUser from "@/composables/getUser";
-import getPurchaseHistory from "@/composables/getPurchaseHistory";
+import getOrderHistory from "@/composables/getOrderHistory";
 import PrintInvoice from "@/components/PrintInvoice";
 import moment from "moment";
 import { ref } from "@vue/reactivity";
@@ -252,7 +273,7 @@ export default {
   },
   setup() {
     const date = moment;
-    const purchaseInfo = ref(null);
+    const orderInfo = ref(null);
     const currentComponent = ref(null);
     const start = ref(1);
     const end = ref(5);
@@ -262,8 +283,8 @@ export default {
     const windowWidth = ref(window.innerWidth);
 
     const { user } = getUser();
-    const { documents: purchasedHistories } = getPurchaseHistory(
-      "reports",
+    const { documents: orderHistories } = getOrderHistory(
+      "orders",
       user.value?.email
     );
 
@@ -275,8 +296,8 @@ export default {
       window.addEventListener("resize", onResize);
     });
 
-    const handleInvoice = (purchase) => {
-      purchaseInfo.value = purchase;
+    const handleInvoice = (order) => {
+      orderInfo.value = order;
       currentComponent.value = "PrintInvoice";
     };
 
@@ -310,11 +331,11 @@ export default {
       handleNext,
       handlePrevious,
       handleInvoice,
-      purchasedHistories,
+      orderHistories,
       date,
       windowWidth,
       currentComponent,
-      purchaseInfo,
+      orderInfo,
       indexActive,
       start,
       end,

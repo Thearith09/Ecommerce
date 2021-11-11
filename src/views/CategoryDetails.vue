@@ -4,7 +4,7 @@
       <Navbar />
     </div>
 
-    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto bg-gray-50">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto bg-white">
       <div class="mx-5 my-5 h-auto">
         <component
           :is="currentComponent"
@@ -12,7 +12,6 @@
           :key="id"
           :previous="previous"
           :next="next"
-          :animate="animate"
           @emitProducts="handleReceiveBack"
         />
 
@@ -100,7 +99,6 @@ export default {
     const previous = ref(0);
     const next = ref(5);
     const indexActive = ref(1);
-    const animate = ref(null);
     const currentComponent = ref("ListProducts");
 
     const handleReceiveBack = (prods) => {
@@ -108,8 +106,6 @@ export default {
     };
 
     const handleNext = (limitedIncrement) => {
-      animate.value = "animate__animated animate__slideInRight animate__faster";
-
       limitedIncrement = Math.ceil(limitedIncrement / 5);
       if (end.value < limitedIncrement) {
         start.value++;
@@ -123,8 +119,6 @@ export default {
     };
 
     const handlePrevious = (limitedDecrement) => {
-      animate.value = "animate__animated animate__slideInLeft  animate__faster";
-
       limitedDecrement = Math.ceil(limitedDecrement / 5);
       if (end.value > 5) {
         start.value--;
@@ -148,7 +142,6 @@ export default {
       next,
       handleNext,
       handlePrevious,
-      animate,
     };
   },
 };

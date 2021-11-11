@@ -12,11 +12,23 @@ module.exports = {
         portrait: { raw: "(orientation: portrait)" },
         // => @media (orientation: portrait) { ... }
       },
+      height: {
+        phoneHeight: "550px",
+      },
+      width: {
+        miniTablet: "700px",
+      },
       minWidth: {
         iphone: "550px",
+        miniTablet: "700px",
+        tablet: "800px",
+      },
+      minHeight: {
+        phoneHeight: "500px",
       },
       maxHeight: {
         dropdown: "500px",
+        itemList: "860px",
       },
       gridTemplateColumns: {
         // Simple 16 column grid
@@ -39,6 +51,7 @@ module.exports = {
         // for small phone screen
         iphone: "500px",
         tablet: "640px",
+        Ipad: "800px",
       },
     },
   },
@@ -53,6 +66,8 @@ module.exports = {
       zIndex: ["hover"],
       position: ["group-hover"],
       inset: ["group-hover"],
+      scale: ["hover", "group-hover"],
+      rotate: ["active", "active", "group-hover"],
     },
     ringOffsetColor: ["hover", "active", "focus"],
     scale: ["active", "group-hover", "focus"],

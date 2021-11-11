@@ -88,7 +88,7 @@
 
       <div
         v-if="userSignin ? cart?.length <= 0 : tempCart.length <= 0"
-        class="relative rounded w-11/12 h-auto my-10 p-5 md:w-6/12 mx-auto lg:my-20 border-2 border-purple-100 bg-white"
+        class="relative rounded w-11/12 h-auto my-10 p-5 md:w-6/12 mx-auto lg:my-20 shadow border-2 border-purple-100 bg-white"
       >
         <div class="flex justify-center">
           <svg

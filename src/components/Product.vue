@@ -33,8 +33,10 @@
         <div class="border-b-2 border-purple-100 pb-5">
           <button
             v-if="!isPending"
-            @click="handleCheckout(item.name)"
+            :disabled="item.status != 'in stock'"
+            @click="handleCheckout(item)"
             class="rounded focus:outline-none w-full shadow font-bold text-purple-700 bg-yellow-300 hover:translate-y-1 transform transition-all duration-150 p-2"
+            :class="{ frozen: item.status != 'in stock' }"
           >
             Checkout
           </button>
@@ -72,7 +74,7 @@
       </div>
 
       <div>
-        <div class="relative">
+        <div class="relative w-full sm:w-96">
           <img
             class="flex-none w-full object-cover object-center rounded"
             :src="url"
@@ -99,14 +101,29 @@
               <h3
                 class="text-purple-700 font-semibold font-mono text-lg tracking-wide uppercase py-1"
               >
-                {{ item.name }}
+                <p>{{ item.name }}</p>
               </h3>
               <h5 class="text-gray-500 leading-none">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-                ipsam minima quasi ducimus aperiam repudiandae et ex consectetur
-                ipsum facilis? Id, unde!
+                {{ item.description }}
+              </h5>
+
+              <h5
+                v-if="item.status == 'in stock'"
+                class="text-green-500 leading-none pt-5 font-semibold"
+              >
+                {{ item.status }}
+              </h5>
+              <h5 v-else class="text-red-500 leading-none pt-5 font-semibold">
+                {{ item.status }}
               </h5>
             </div>
+
+            <p
+              v-if="item.discount > 0"
+              class="font-semibold font-mono text-lg tracking-wide text-red-500"
+            >
+              {{ item.discount }}% OFF
+            </p>
 
             <div
               v-if="item.discount > 0"
@@ -199,7 +216,9 @@
           <div class="py-2">
             <button
               @click="handleAddToCart(item, indexSize)"
+              :disabled="item.status != 'in stock'"
               class="rounded focus:outline-none w-full shadow font-bold text-purple-700 bg-yellow-300 hover:translate-y-1 transform transition-all duration-150 p-2"
+              :class="{ frozen: item.status != 'in stock' }"
             >
               ADD TO CART
             </button>
@@ -240,7 +259,9 @@ export default {
     );
     const pieces = ref(1);
     const indexSize = ref(null);
-    const discount = ref((props.item.price * props.item.discount) / 100);
+    const discount = ref(
+      ((props.item.price * props.item.discount) / 100).toFixed(2)
+    );
 
     const router = useRouter();
     const store = useStore();
@@ -277,7 +298,7 @@ export default {
       }
     });
 
-    const handleCheckout = async (name) => {
+    const handleCheckout = async (item) => {
       if (!indexSize.value) {
         return (alerting.value = "Please choose one of the sizes above!");
       }
@@ -287,8 +308,10 @@ export default {
       } else {
         isPending.value = true;
         const checkoutItem = {
+          categoryName: props.categoryName,
           color: url.value,
-          name: name,
+          name: item.name,
+          code: item.code,
           qty: qty.value,
           size: indexSize.value,
         };
@@ -333,9 +356,10 @@ export default {
         cart.value?.forEach((cart) => {
           if (cart.name == item.name) qty.value += cart.qty;
         });
-
         await addDoc({
+          categoryName: props.categoryName,
           name: item.name,
+          code: item.code,
           description: item.description,
           price: Number(item.price).toFixed(2),
           discount: item.discount,

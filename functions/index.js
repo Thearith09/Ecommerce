@@ -1,6 +1,24 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const { auth } = require("firebase-admin");
 admin.initializeApp();
+
+const stripe = require("stripe")(functions.config().stripe.secret);
+
+exports.getAllUsers = functions.https.onCall(async (data, context) => {
+  const maxUsersPerQuery = 100;
+
+  try {
+    const userRecords = await admin.auth().listUsers();
+    const allUsers = [];
+    userRecords.users.forEach((user) => {
+      allUsers.push(user.toJSON());
+    });
+    return allUsers;
+  } catch (err) {
+    return err.message;
+  }
+});
 
 exports.addAdminRole = functions.https.onCall((data, context) => {
   if (!context.auth)
@@ -60,7 +78,6 @@ exports.addDeliveryRole = functions.https.onCall((data, context) => {
 });
 
 exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
-  const stripe = require("stripe")(functions.config().stripe.secret);
   const results = [];
   let items = [];
   // let coupon;
@@ -73,9 +90,10 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
       .get();
     items[0] = data.checkoutItem;
 
-    const price =
+    const price = Math.round(
       product.data().price -
-      (product.data().price * product.data().discount) / 100;
+        (product.data().price * product.data().discount) / 100
+    );
 
     items[0].price = price;
     items[0].discount = product.data().discount;
@@ -84,7 +102,7 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
       quantity: items[0].qty,
       price_data: {
         currency: "usd",
-        unit_amount: parseFloat((100 * price).toFixed(2)),
+        unit_amount: 100 * price,
         product_data: {
           images: [items[0].color],
           name: items[0].name,
@@ -110,18 +128,18 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
     // console.log("Items: ", items);
 
     documents.forEach(async (doc) => {
-      item = doc.data();
-      // console.log("Item: ", item)
-      // console.log("Item.data: ", item.data())
-      // discount += parseInt(item.data().discount);
-      item.price = item.price - (item.price * item.discount) / 100;
+      const item = doc.data();
+      // console.log("Item: ", item);
+      item.price =
+        Math.round(item.price - (item.price * item.discount) / 100) * 100;
+      console.log("Item: ", item.price);
       items.push(item);
 
       results.push({
         quantity: item.qty,
         price_data: {
           currency: "usd",
-          unit_amount: parseFloat((100 * item.price).toFixed(2)),
+          unit_amount: item.price,
           product_data: {
             images: [item.color],
             name: item.name,
@@ -162,7 +180,7 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
     .set({
       email: data.email,
       phone: data.phone,
-      createdAt: data.createdAt,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
       items: items,
     });
 
@@ -172,9 +190,7 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
 });
 
 exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
-  const stripe = require("stripe")(functions.config().stripe.token);
   let event;
-
   try {
     const webhookSecret = functions.config().stripe.payments_webhook_secret;
     event = stripe.webhooks.constructEvent(

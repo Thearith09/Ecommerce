@@ -1,20 +1,18 @@
 <template>
-  <nav
-    class="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden md:w-96 md:py-0 md:px-0 shadow bg-white flex flex-wrap items-center justify-between relative z-10 py-4 px-6"
-  >
-    <div
-      class="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap flex flex-wrap items-center justify-between w-full mx-auto"
-    >
-      <!-- Toggler -->
+  <div class="bg-white border-b border-gray-300 py-3 px-6 shadow">
+    <div v-if="input" class="flex justify-between items-center w-full py-1">
       <button
-        v-if="windowWidth < 768"
-        class="cursor-pointer text-purple-700 hover:text-purple-900 focus:outline-none"
+        class="cursor-pointer text-gray-700 hover:text-purple-700 text-left focus:outline-none"
         type="button"
-        @click="toggleCollapseShow('bg-white m-1 py-3 px-6')"
+        @click="
+          sidebarSelected != 1
+            ? ((sidebarSelected = 1), (subSidebarShow = 1))
+            : (sidebarSelected = null)
+        "
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
+          class="h-7 w-7"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -25,210 +23,281 @@
           />
         </svg>
       </button>
-      <!-- Brand -->
-      <a
-        v-if="windowWidth < 768"
-        class="text-left text-purple-700 inline-block whitespace-nowrap uppercase font-bold p-4 font-serif"
-      >
-        Easy4shopping
-      </a>
+
       <!-- User -->
-      <div v-if="windowWidth < 768" class="flex items-center space-x-3">
+      <div class="flex items-center space-x-4">
+        <div>
+          <i
+            @click="handleToggleInput"
+            class="fas fa-search text-gray-700 hover:text-purple-700 cursor-pointer text-lg"
+          ></i>
+        </div>
+        <NotificationDropdown
+          class="cursor-pointer"
+          @onSwitchingComponent="handleSwitchingComponent($event)"
+        />
         <SwitchingLanguageDropdown class="cursor-pointer" />
-        <NotificationDropdown class="cursor-pointer" />
-        <UserDropdown class="cursor-pointer" />
-      </div>
-      <!-- Collapse -->
-      <div
-        class="md:flex md:flex-col md:relative md:shadow-none shadow-xl absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded"
-        :class="collapseShow"
-      >
-        <!-- Collapse header -->
-        <div
-          class="md:min-w-full md:hidden block mb-2 border-b border-solid border-purple-200"
-        >
-          <div class="flex flex-wrap">
-            <div class="w-6/12 md:w-full">
-              <a
-                class="md:block md:text-xl md:my-3 md:px-6 text-purple-700 text-left inline-block whitespace-nowrap uppercase font-bold py-4 font-serif tracking-widest"
-              >
-                Easy4shopping
-              </a>
-            </div>
-            <div v-if="windowWidth < 768" class="w-6/12 flex justify-end">
-              <button
-                type="button"
-                class="cursor-pointer px-3 py-1 text-purple-700 hover:text-purple-900 focus:outline-none"
-                @click="toggleCollapseShow('hidden')"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Navigation -->
-        <div
-          class="md:flex-col md:min-w-full flex flex-col space-y-2 font-serif tracking-wider"
-        >
-          <a
-            href="#dashboard"
-            class="cursor-pointer text-gray-500 hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-6 py-2"
-          >
-            <div class="text-xs uppercase py-3 font-bold flex space-x-3">
-              <i class="fas fa-tachometer-alt text-sm"></i>
-              <p>Dashboard</p>
-            </div>
-          </a>
-
-          <a
-            href="#catalog"
-            class="relative flex justify-between cursor-pointer items-center text-gray-500 hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-6 py-2"
-            @click="toggleCatelog"
-          >
-            <div class="text-xs uppercase py-3 font-bold flex space-x-4">
-              <i class="fas fa-database text-sm"></i>
-              <div>
-                Catalog
-              </div>
-            </div>
-            <div :class="toggle ? 'hidden' : 'block'">
-              <i class="fas fa-chevron-left text-sm"></i>
-            </div>
-            <div
-              class="absolute top-4 right-5"
-              :class="!toggle ? 'hidden' : 'block'"
-            >
-              <i class="fas fa-chevron-down text-sm"></i>
-            </div>
-          </a>
-
-          <div
-            class="flex flex-col font-semibold space-y-2 text-gray-500 capitalize text-sm font-serif tracking-wider px-10"
-            :class="!toggle ? 'hidden' : 'block'"
-          >
-            <a
-              href="#category-list"
-              class="hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-4"
-            >
-              <div class="text-xs uppercase py-5 font-bold flex space-x-4">
-                <i class="fas fa-arrow-right sm"></i>
-                <p>Category List</p>
-              </div></a
-            >
-            <a
-              href="#category"
-              class="hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-4"
-            >
-              <div class="text-xs uppercase py-5 font-bold flex space-x-4">
-                <i class="fas fa-arrow-right sm"></i>
-                <p>Category</p>
-              </div></a
-            >
-            <a
-              href="#product-list"
-              class="hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-4"
-            >
-              <div class="text-xs uppercase py-5 font-bold flex space-x-4">
-                <i class="fas fa-arrow-right sm"></i>
-                <p>Product List</p>
-              </div></a
-            >
-            <a
-              href="#product"
-              class="hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-4"
-              ><div class="text-xs uppercase py-5 font-bold flex space-x-4">
-                <i class="fas fa-arrow-right sm"></i>
-                <p>Product</p>
-              </div></a
-            >
-          </div>
-
-          <a
-            href="#orders"
-            class="cursor-pointer text-gray-500 hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-6 py-2"
-          >
-            <div class="text-xs uppercase py-3 font-bold flex space-x-3">
-              <i class="fab fa-opencart text-sm"></i>
-              <p>Orders</p>
-            </div>
-          </a>
-
-          <a
-            href="#customers"
-            class="text-gray-500 cursor-pointer hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-6 py-2"
-          >
-            <div class="text-xs uppercase py-3 font-bold flex space-x-5">
-              <i class="fas fa-user text-sm"></i>
-              <p>Customers</p>
-            </div>
-          </a>
-        </div>
-
-        <!-- Divider -->
-        <hr class="my-2 md:min-w-full border-purple-200" />
-
-        <div
-          class="md:flex-col md:min-w-full flex flex-col space-y-2 font-serif tracking-wider"
-        >
-          <a
-            href="#profile"
-            class="text-gray-500 cursor-pointer hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-6 py-2"
-          >
-            <div
-              class="text-xs uppercase py-3 font-bold flex space-x-3"
-              href="#/profile"
-            >
-              <i class="fas fa-user-circle text-sm"></i>
-              <p>Profile</p>
-            </div>
-          </a>
-          <a
-            href="#languages"
-            class="text-gray-500 cursor-pointer hover:text-purple-600 hover:bg-purple-100 focus:text-purple-600 focus:bg-purple-100 px-6 py-2"
-          >
-            <div class="text-xs uppercase py-3 font-bold flex space-x-3">
-              <i class="fas fa-globe  text-sm"></i>
-              <p>{{ $t("Languages") }}</p>
-            </div>
-          </a>
-        </div>
-
-        <!-- Divider -->
-        <hr class="my-2 md:min-w-full border-purple-200" />
-
-        <ul
-          class="md:flex-col md:min-w-full flex flex-col list-none font-serif tracking-wider"
-        >
-          <li
-            class="text-gray-500 cursor-pointer hover:text-purple-600 hover:bg-purple-100 px-6 py-2"
-          >
-            <a class="text-xs uppercase py-3 font-bold flex space-x-3"
-              ><i class="fas fa-sign-out-alt text-sm"></i>
-              <p @click="handleLogout">Logout</p></a
-            >
-          </li>
-        </ul>
+        <UserDropdown
+          class="cursor-pointer pl-2 border-l-2 border-gray-700"
+          @onSwitchingComponent="handleSwitchingComponentOnyProfile($event)"
+        />
       </div>
     </div>
-  </nav>
+
+    <form v-else class="relative w-full py-1">
+      <span
+        class="z-10 h-full font-normal text-center absolute text-base items-center justify-center w-8 pl-3 py-4"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-gray-700"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+            clip-rule="evenodd"
+          /></svg
+      ></span>
+      <input
+        type="text"
+        placeholder="find anything"
+        autofocus
+        class="px-3 py-3 placeholder-gray-700 text-gray-700 relative bg-white shadow outline-none focus:outline-none border focus:border-gray-300 w-full pl-10"
+      />
+      <span
+        class="z-10 h-full font-normal text-center absolute top-3 right-1 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2"
+        ><svg
+          @click="handleToggleInput"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 text-gray-900 cursor-pointer"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          /></svg
+      ></span>
+    </form>
+  </div>
+
+  <div
+    ref="sidebarShow"
+    class="max-w-0 w-full overflow-hidden h-screen bg-gray-900 fixed bg-opacity-50 z-50 flex"
+    :style="sidebarSelected == 1 ? 'max-width: 100%' : ''"
+  >
+    <div
+      class="transition-all duration-500 overflow-hidden max-w-0 w-full flex flex-col bg-white h-screen"
+      :style="
+        sidebarSelected == 1 && subSidebarShow == 1 ? 'max-width: 320px' : ''
+      "
+    >
+      <div
+        class="px-5 min-w-full block mb-2 border-b border-solid border-gray-300"
+      >
+        <div>
+          <a
+            class="text-purple-700 text-lg text-left inline-block whitespace-nowrap uppercase font-bold py-4 font-serif tracking-widest"
+          >
+            Easy4shopping
+          </a>
+        </div>
+      </div>
+
+      <div class="px-5 flex flex-col space-y-2 font-serif tracking-wider">
+        <a
+          @click="handleSwitchingComponent('Dashboard')"
+          href="#dashboard"
+          class="cursor-pointer text-gray-600 hover:text-white hover:bg-purple-700 hover:bg-opacity-90 focus:bg-purple-700 focus:bg-opacity-90 focus:text-white"
+        >
+          <div class="text-xs uppercase py-5 px-3 font-bold flex space-x-3">
+            <i class="fas fa-tachometer-alt text-sm"></i>
+            <p>{{ $t("Dashboard") }}</p>
+          </div>
+        </a>
+
+        <a
+          href="#catalog"
+          class="group relative cursor-pointer items-center text-gray-600 hover:text-white hover:bg-purple-700 hover:bg-opacity-90 focus:bg-purple-700 focus:bg-opacity-90 focus:text-white"
+          @click="
+            catalogSelected !== 1
+              ? (catalogSelected = 1)
+              : (catalogSelected = null)
+          "
+        >
+          <div class="text-xs uppercase py-5 px-3 font-bold flex space-x-4">
+            <i class="fas fa-database text-sm"></i>
+            <div>
+              Catalog
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="absolute right-5 fill-current h-4 w-4 transform transition-all duration-150 ease-in-out"
+              :class="
+                catalogSelected == 1 ? '-rotate-90 top-4' : 'rotate-0 top-5'
+              "
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </div>
+        </a>
+        <div
+          ref="catalogShow"
+          class="max-h-0 overflow-hidden transition-all duration-500 bg-white text-gray-600 w-full"
+          :class="catalogSelected == 1 ? 'border' : 'border-0'"
+          :style="
+            catalogSelected == 1
+              ? 'max-height: ' + $refs.catalogShow.scrollHeight + 'px'
+              : ''
+          "
+        >
+          <a
+            @click="handleSwitchingComponent('PromotionList')"
+            href="#promotion-list"
+            class="block hover:bg-purple-700 hover:bg-opacity-90 hover:text-white focus:bg-purple-700 focus:bg-opacity-90 focus:text-white px-4"
+          >
+            <div class="text-xs uppercase py-4 font-bold flex space-x-4">
+              <i class="fas fa-arrow-right"></i>
+              <p>{{ $t("promotion list") }}</p>
+            </div></a
+          >
+          <a
+            v-if="user?.admin || user?.packer"
+            @click="handleSwitchingComponent('AddPromotion')"
+            href="#add-a-new-promotion"
+            class="block hover:bg-purple-700 hover:bg-opacity-90 hover:text-white focus:bg-purple-700 focus:bg-opacity-90 focus:text-white px-4"
+          >
+            <div class="text-xs uppercase py-4 font-bold flex space-x-4">
+              <i class="fas fa-arrow-right"></i>
+              <p>{{ $t("Add a new promotion") }}</p>
+            </div></a
+          >
+          <a
+            @click="handleSwitchingComponent('CategoryList')"
+            href="#category-list"
+            class="block hover:bg-purple-700 hover:bg-opacity-90 hover:text-white focus:bg-purple-700 focus:bg-opacity-90 focus:text-white px-4"
+          >
+            <div class="text-xs uppercase py-4 font-bold flex space-x-4">
+              <i class="fas fa-arrow-right"></i>
+              <p>{{ $t("Category list") }}</p>
+            </div></a
+          >
+          <a
+            v-if="user?.admin || user?.packer"
+            @click="handleSwitchingComponent('AddCategory')"
+            href="#add-a-new-category"
+            class="block hover:bg-purple-700 hover:bg-opacity-90 hover:text-white focus:bg-purple-700 focus:bg-opacity-90 focus:text-white px-4"
+          >
+            <div class="text-xs uppercase py-4 font-bold flex space-x-4">
+              <i class="fas fa-arrow-right"></i>
+              <p>{{ $t("Add a New Category") }}</p>
+            </div></a
+          >
+          <a
+            @click="handleSwitchingComponent('ProductList')"
+            href="#product-list"
+            class="block hover:bg-purple-700 hover:bg-opacity-90 hover:text-white focus:bg-purple-700 focus:bg-opacity-90 focus:text-white px-4"
+          >
+            <div class="text-xs uppercase py-4 font-bold flex space-x-4">
+              <i class="fas fa-arrow-right"></i>
+              <p>{{ $t("Product List") }}</p>
+            </div></a
+          >
+          <a
+            v-if="user?.admin || user?.packer"
+            @click="handleSwitchingComponent('AddProduct')"
+            href="#dd-a-new-product"
+            class="block hover:bg-purple-700 hover:bg-opacity-90 hover:text-white focus:bg-purple-700 focus:bg-opacity-90 focus:text-white px-4"
+            ><div class="text-xs uppercase py-4 font-bold flex space-x-4">
+              <i class="fas fa-arrow-right"></i>
+              <p>{{ $t("Add a new Product") }}</p>
+            </div></a
+          >
+        </div>
+
+        <a
+          @click="handleSwitchingComponent('OrderList')"
+          href="#orders"
+          class="cursor-pointer text-gray-600 hover:bg-purple-700 hover:text-white focus:bg-purple-700 focus:bg-opacity-90 focus:text-white"
+        >
+          <div class="text-xs uppercase py-5 px-3 font-bold flex space-x-3">
+            <i class="fab fa-opencart text-sm"></i>
+            <p>{{ $t("Orders") }}</p>
+          </div>
+        </a>
+
+        <a
+          @click="handleSwitchingComponent('UserList')"
+          href="#users"
+          class="text-gray-600 cursor-pointer hover:text-white hover:bg-purple-700 hover:bg-opacity-90 focus:bg-purple-700 focus:bg-opacity-90 focus:text-white"
+        >
+          <div class="text-xs uppercase py-5 px-3 font-bold flex space-x-5">
+            <i class="fas fa-users text-sm"></i>
+            <p>{{ $t("Users") }}</p>
+          </div>
+        </a>
+      </div>
+
+      <hr class="my-2 md:min-w-full border-gray-300" />
+
+      <div class="px-5 flex flex-col space-y-2 font-serif tracking-wider">
+        <a
+          @click="handleSwitchingComponent('UserProfile')"
+          href="#profile"
+          class="text-gray-600 cursor-pointer hover:text-white hover:bg-purple-700 hover:bg-opacity-90 focus:bg-purple-700 focus:bg-opacity-90 focus:text-white"
+        >
+          <div class="text-xs uppercase py-5 px-3 font-bold flex space-x-3">
+            <i class="fas fa-user-circle text-sm"></i>
+            <p>{{ $t("Profile") }}</p>
+          </div>
+        </a>
+        <a
+          v-if="user?.admin || user?.packer"
+          @click="handleSwitchingComponent('Reports')"
+          href="#sales-report"
+          class="text-gray-600 cursor-pointer hover:text-white hover:bg-purple-700 hover:bg-opacity-90 focus:bg-purple-700 focus:bg-opacity-90 focus:text-white"
+        >
+          <div class="text-xs uppercase py-5 px-3 font-bold flex space-x-3">
+            <i class="fas fa-file-pdf text-sm"></i>
+            <p>{{ $t("Sales Report") }}</p>
+          </div>
+        </a>
+      </div>
+
+      <hr class="my-2 md:min-w-full border-gray-300" />
+
+      <div class="px-5 flex flex-col list-none font-serif tracking-wider">
+        <div
+          @click="handleLogout"
+          class="text-gray-600 cursor-pointer hover:text-white hover:bg-purple-700 hover:bg-opacity-90"
+        >
+          <a class="text-xs uppercase py-5 px-3 font-bold flex space-x-3"
+            ><i class="fas fa-sign-out-alt text-sm"></i>
+            <p>{{ $t("Logout") }}</p></a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="w-full h-full cursor-move" @click="toggleCollapseShow"></div>
+  </div>
 </template>
 <script>
 import NotificationDropdown from "@/components/Admin-Dashboard/NotificationDropdown.vue";
 import UserDropdown from "@/components/Admin-Dashboard/UserDropdown.vue";
 import SwitchingLanguageDropdown from "@/components/Admin-Dashboard/SwitchingLanguageDropdown";
+import getUser from "@/composables/getUser";
 import { ref } from "@vue/reactivity";
-import { onMounted, watch } from "@vue/runtime-core";
+import { onMounted } from "@vue/runtime-core";
 import { projectAuth } from "@/firebase/config";
 import { useRouter } from "vue-router";
 export default {
@@ -237,20 +306,16 @@ export default {
     UserDropdown,
     SwitchingLanguageDropdown,
   },
-  setup() {
-    const collapseShow = ref("hidden");
+  setup(props, { emit }) {
     const toggle = ref(false);
-
+    const input = ref(true);
     const windowWidth = ref(window.innerWidth);
     const router = useRouter();
+    const catalogSelected = ref(null);
+    const sidebarSelected = ref(null);
+    const subSidebarShow = ref(null);
 
-    watch(windowWidth, () => {
-      if (windowWidth.value >= 768) {
-        collapseShow.value = "bg-white";
-      } else {
-        collapseShow.value = "bg-white m-1 py-3 px-6";
-      }
-    });
+    const { user } = getUser();
 
     const onResize = () => {
       windowWidth.value = window.innerWidth;
@@ -258,13 +323,13 @@ export default {
 
     onMounted(() => {
       window.addEventListener("resize", onResize);
-      if (windowWidth.value >= 768) {
-        collapseShow.value = "bg-white";
-      }
     });
 
-    const toggleCollapseShow = (classes) => {
-      collapseShow.value = classes;
+    const toggleCollapseShow = () => {
+      subSidebarShow.value = null;
+      setTimeout(() => {
+        sidebarSelected.value = null;
+      }, 500);
     };
 
     const toggleCatelog = () => {
@@ -276,13 +341,38 @@ export default {
       router.push({ name: "Login" });
     };
 
+    const handleSwitchingComponentOnyProfile = ({
+      component,
+      dynamicParam,
+    }) => {
+      emit("onSwitching", component, dynamicParam);
+    };
+
+    const handleSwitchingComponent = (component) => {
+      catalogSelected.value = null;
+      sidebarSelected.value = null;
+      subSidebarShow.value = null;
+      emit("onSwitching", component);
+    };
+
+    const handleToggleInput = () => {
+      input.value = !input.value;
+    };
+
     return {
-      collapseShow,
+      user,
+      catalogSelected,
+      sidebarSelected,
+      subSidebarShow,
+      input,
+      windowWidth,
       toggle,
       toggleCatelog,
       toggleCollapseShow,
-      windowWidth,
       handleLogout,
+      handleSwitchingComponent,
+      handleSwitchingComponentOnyProfile,
+      handleToggleInput,
     };
   },
 };

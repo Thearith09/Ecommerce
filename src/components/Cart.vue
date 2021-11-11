@@ -14,9 +14,7 @@
         <div class="flex">
           <div class="flex flex-col justify-between">
             <div class="space-y-2">
-              <h2
-                class="text-purple-700 font-semibold font-mono uppercase tracking-wide"
-              >
+              <h2 class="text-purple-700 font-semibold uppercase tracking-wide">
                 {{ item.name }}
               </h2>
 

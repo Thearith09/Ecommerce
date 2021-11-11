@@ -4,9 +4,9 @@
     class="animate__animated animate__faster flex h-screen fixed inset-0 w-screen bg-gray-700 bg-opacity-50 z-40 min-w-max"
   >
     <div v-if="subMenu" id="main-menu" class="bg-white w-80">
-      <div class="flex px-2 py-3 border-b-2 border-purple-100">
+      <div v-if="user" class="flex px-2 py-3 border-b-2 border-purple-100">
         <div class="relative">
-          <div v-if="user?.photoURL">
+          <div v-if="user.photoURL">
             <img
               class="w-8 h-8 rounded-full object-cover object-center"
               :src="user.photoURL"
@@ -33,7 +33,6 @@
 
       <div>
         <div
-          v-if="!user.admin && !user.delivery && !user.packer"
           class="px-2 py-3 space-y-3 bg-white border-b-2 border-purple-100 text-gray-700 font-medium"
         >
           <div
@@ -57,31 +56,46 @@
             </svg>
           </div>
 
-          <div class="hover:text-purple-700 cursor-pointer">
-            Wishlist
+          <div
+            class="flex justify-between hover:text-purple-700 cursor-pointer"
+          >
+            <router-link :to="{ name: 'MyWhistlist' }">
+              My Wishlist
+            </router-link>
+            <div
+              v-if="tempWhistlist?.length > 0 || whistlist?.length > 0"
+              class="bg-yellow-300 font-bold text-purple-900 font-mono w-6 h-6 rounded-full text-sm flex justify-center items-center"
+            >
+              {{ tempWhistlist?.length || whistlist?.length }}
+            </div>
           </div>
 
           <div
             class="flex justify-between hover:text-purple-700 cursor-pointer"
           >
-            <router-link :to="{ name: 'CartDetails' }"> My Cart</router-link>
+            <router-link :to="{ name: 'CartDetails' }">My Cart</router-link>
             <p
-              v-if="cart?.length > 0"
+              v-if="tempCart?.length > 0 || cart?.length > 0"
               class="bg-yellow-300 font-bold text-purple-900 font-mono w-6 h-6 rounded-full text-sm flex justify-center items-center"
             >
-              {{ cart.length }}
+              {{ tempCart?.length || cart?.length }}
             </p>
           </div>
 
-          <div class="hover:text-purple-700 cursor-pointer">
+          <div v-if="user" class="hover:text-purple-700 cursor-pointer">
             Payment Methods
           </div>
 
-          <div class="hover:text-purple-700 cursor-pointer">
+          <router-link
+            v-if="user"
+            :to="{ name: 'Order-History' }"
+            class="hover:text-purple-700 cursor-pointer"
+          >
             Order History
-          </div>
+          </router-link>
 
           <router-link
+            v-if="user"
             :to="{ name: 'Purchase-History' }"
             class="hover:text-purple-700 cursor-pointer block"
           >
@@ -89,6 +103,7 @@
           </router-link>
 
           <div
+            v-if="user"
             class="hover:text-purple-700 cursor-pointer flex justify-between items-center"
           >
             <router-link
@@ -103,147 +118,6 @@
             >
               !
             </div>
-          </div>
-        </div>
-
-        <div
-          v-else
-          class="font-light px-2 py-3 space-y-3 bg-white border-b-2 border-purple-100"
-        >
-          <div
-            @click="handleShowCategory"
-            class="flex justify-between text-gray-700 hover:text-purple-700 cursor-pointer"
-          >
-            <p>
-              Categories
-            </p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-
-          <div
-            v-if="user.admin"
-            @click="handleShowCategoryForm"
-            class="flex justify-between text-gray-700 hover:text-purple-700 cursor-pointer"
-          >
-            <p>
-              Add Category
-            </p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-
-          <div
-            v-if="user.admin"
-            @click="handleShowPromoteForm"
-            class="flex justify-between text-gray-700 hover:text-purple-700 cursor-pointer"
-          >
-            <p>
-              Promote as Admin
-            </p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-
-          <div
-            @click="handleShowGetUserInfoForm"
-            class="flex justify-between text-gray-700 hover:text-purple-700 cursor-pointer"
-          >
-            <p>
-              Get a User Info
-            </p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-
-          <div
-            @click="handleShowUserOrderForm"
-            class="flex justify-between text-gray-700 hover:text-purple-700 cursor-pointer"
-          >
-            <p>
-              Get a User Order Info
-            </p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-
-          <div class="text-gray-700 hover:text-purple-700 cursor-pointer">
-            <router-link
-              class="relative cursor-pointer items-center"
-              :to="{ name: 'CheckoutOrder' }"
-            >
-              {{ $t("Checkout Order") }}
-            </router-link>
-          </div>
-
-          <div
-            class="flex justify-between text-gray-700 hover:text-purple-700 cursor-pointer"
-          >
-            <router-link
-              class="text-gray-700 hover:text-purple-700 cursor-pointer block"
-              :to="{ name: 'Profile', params: { info: 'base-information' } }"
-            >
-              Profile Settings
-            </router-link>
-          </div>
-
-          <div
-            v-if="user.admin || user.packer"
-            class="text-gray-700 hover:text-purple-700 cursor-pointer"
-          >
-            <router-link :to="{ name: 'Reports' }">
-              <span class="text-center">{{ $t("Reports") }}</span>
-            </router-link>
           </div>
         </div>
 
@@ -269,10 +143,29 @@
         </div>
 
         <div
+          v-if="user"
           @click="handleLogout"
           class="mx-2 my-3 border-purple-100 hover:text-purple-700 cursor-pointer font-medium"
         >
           sign out
+        </div>
+
+        <div
+          v-else
+          class="mx-2 my-3 border-purple-100 font-medium flex flex-col space-y-2"
+        >
+          <router-link
+            class="hover:text-purple-700 cursor-pointer"
+            :to="{ name: 'Login' }"
+          >
+            Login
+          </router-link>
+          <router-link
+            class="hover:text-purple-700 cursor-pointer"
+            :to="{ name: 'Signup' }"
+          >
+            Signup
+          </router-link>
         </div>
       </div>
     </div>
@@ -283,23 +176,6 @@
       id="sub-menu"
       class="animate__animated animate__slideInRight font-light bg-white w-80 h-screen"
     >
-      <div
-        v-if="succeedMessage"
-        class="animate_animated animate__zoomIn animate_faster fixed top-0 w-full h-auto p-2 bg-green-500 bg-opacity-90 rounded-b z-20"
-      >
-        <p class="text-white text-center">
-          {{ succeedMessage }}
-        </p>
-      </div>
-      <div
-        v-if="failedMessage"
-        class="animate_animated animate__zoomIn animate__faster fixed top-0 w-full h-auto bg-red-600 bg-opacity-90 rounded-b p-2 z-20"
-      >
-        <p class="text-white">
-          {{ failedMessage }}
-        </p>
-      </div>
-
       <div
         @click="handleCloseSubMenu"
         class="flex justify-start items-center font-serif space-x-1 bg-purple-50 p-2 text-purple-800 font-bold cursor-pointer"
@@ -335,267 +211,6 @@
           >All Categories</router-link
         >
       </div>
-
-      <!--show category form-->
-      <form v-show="!showCategoryForm" @submit.prevent="handleAddCategory">
-        <div class="w-full h-full text-gray-700 space-y-5 p-5">
-          <h3 class="text-gray-700 font-mono">Add a New Category</h3>
-          <div class="group relative w-full z-0">
-            <input
-              v-model="categoryName"
-              type="text"
-              placeholder=" "
-              required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-purple-100"
-            />
-            <label
-              for="Username"
-              class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
-              >Enter category name</label
-            >
-          </div>
-          <div
-            id="img"
-            class="w-full rounded h-60 border-2 boder-gray-500 p-2"
-          ></div>
-          <label
-            class="w-full rounded h-20 flex flex-col items-center px-4 py-3 bg-white shadow tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150"
-          >
-            <span class="material-icons-outlined">
-              cloud_upload
-            </span>
-            <span class="mt-2 text-base leading-normal">Select a file</span>
-            <input
-              @change="handleChanges"
-              type="file"
-              class="hidden"
-              required
-            />
-          </label>
-          <h4 v-if="fileError" class="text-red-600 text-sm">
-            {{ fileError }}
-          </h4>
-          <h4 v-if="error" class="text-red-600">{{ error }}</h4>
-          <button
-            v-if="!isPending"
-            class="focus:outline-none rounded tracking-wide bg-white shadow w-full p-2 text-purple-600 hover:text-white hover:bg-purple-600"
-          >
-            Add
-          </button>
-          <button
-            v-else
-            class="relative flex justify-center items-center focus:outline-none rounded tracking-wide bg-white shadow w-full p-2 text-purple-600"
-          >
-            <div>
-              Saving...
-            </div>
-            <div class="absolute top-3 right-2">
-              <div
-                class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
-              ></div>
-            </div>
-          </button>
-        </div>
-      </form>
-
-      <!--show promote user form-->
-      <form
-        v-show="!showPromoteForm"
-        @submit.prevent="handlePromoteUser"
-        class="text-gray-500"
-      >
-        <div class="w-full h-full space-y-5 p-5">
-          <h3 class="text-gray-700 font-mono">
-            Promote a User
-          </h3>
-          <div class="relative w-full z-0">
-            <input
-              v-model="email"
-              type="email"
-              name="email"
-              placeholder=" "
-              required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-purple-100"
-            />
-            <label
-              for="email"
-              class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
-              >Enter user's email</label
-            >
-          </div>
-          <div class="text-gray-500 font-mono">
-            <label for="">User roles:</label>
-            <select
-              required
-              v-model="role"
-              class="border-2 border-gray-500 px-3 py-1 mx-3 rounded"
-            >
-              <option value="admin">Admin</option>
-              <option value="packer">Packer</option>
-              <option value="delivery">Delivery</option>
-            </select>
-          </div>
-          <button
-            v-if="!pending"
-            class="focus:outline-none rounded tracking-wide shadow w-full p-2 bg-white text-purple-600 hover:text-white hover:bg-purple-600"
-          >
-            Promote
-          </button>
-          <button
-            v-else
-            class="relative flex justify-center items-center focus:outline-none rounded tracking-wide bg-white shadow w-full p-2 text-purple-600"
-          >
-            <div>
-              Promoting...
-            </div>
-            <div class="absolute top-3 right-2">
-              <div
-                class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
-              ></div>
-            </div>
-          </button>
-        </div>
-      </form>
-
-      <!--show get a user info form-->
-      <form
-        v-show="!showUserInfoForm"
-        @submit.prevent="handleGetUserInfo"
-        class="text-gray-500"
-      >
-        <div class="w-full h-full space-y-5 p-5">
-          <h3 class="text-gray-700 font-mono">
-            Get a User Info
-          </h3>
-          <div class="border-2 border-gray-500 p-3 rounded" v-if="userInfo">
-            <p class="flex justify-between items-center">
-              Username: <span>{{ userInfo.name }}</span>
-            </p>
-            <p class="flex justify-between items-center">
-              Phone: <span>{{ userInfo.phone }}</span>
-            </p>
-            <p class="flex justify-between items-center">
-              Email: <span>{{ userInfo.email }}</span>
-            </p>
-          </div>
-          <div class="relative w-full z-0">
-            <input
-              v-model="email"
-              type="email"
-              name="email"
-              placeholder=" "
-              required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-purple-100"
-            />
-            <label
-              for="email"
-              class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
-              >Enter user's email</label
-            >
-          </div>
-          <button
-            v-if="!pending"
-            class="focus:outline-none rounded shadow tracking-wide w-full p-2 bg-white text-purple-600 hover:bg-purple-600 hover:text-white"
-          >
-            Submit
-          </button>
-          <button
-            v-else
-            class="relative flex justify-center items-center focus:outline-none rounded tracking-wide bg-white shadow w-full p-2 text-purple-600"
-          >
-            <div>
-              Requesting...
-            </div>
-            <div class="absolute top-3 right-2">
-              <div
-                class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
-              ></div>
-            </div>
-          </button>
-        </div>
-      </form>
-
-      <!--show get a user order info-->
-      <form
-        v-show="!showUserOrderForm"
-        @submit.prevent="handleGetUserOrder"
-        class="text-gray-500"
-      >
-        <div class="w-full h-full space-y-5 p-5">
-          <h3 class="text-gray-700 font-mono">
-            Get a User Order Info
-          </h3>
-          <div class="border-2 border-gray-500 p-3 rounded" v-if="orderInfo">
-            <p class="flex justify-between items-center">
-              Customer name:
-              <span>{{ orderInfo.shippingInfo?.name }}</span>
-            </p>
-            <p class="flex justify-between items-center">
-              Phone:
-              <span>{{ orderInfo.phone }}</span>
-            </p>
-            <div v-for="(item, i) in orderInfo.items" :key="i">
-              <p class="flex justify-between items-center">
-                Item ID:
-                <span>{{ item.name }}</span>
-              </p>
-              <p class="flex justify-between items-center">
-                Color:
-                <span><img class="h-8 w-12" :src="item.color" alt=""/></span>
-              </p>
-              <p class="flex justify-between items-center">
-                Size:
-                <span>{{ item.size }}</span>
-              </p>
-              <p class="flex justify-between items-center">
-                Quantity:
-                <span>{{ item.qty }}</span>
-              </p>
-            </div>
-            <p class="flex justify-between items-start">
-              Address:
-              <span class="flex flex-col justify-end">
-                <span>{{ orderInfo.shippingInfo.address.line1 }},</span>
-                <span>{{ orderInfo.shippingInfo.address.line2 }},</span>
-                <span>{{ orderInfo.shippingInfo.address.city }},</span>
-              </span>
-            </p>
-          </div>
-          <div class="relative w-full z-0">
-            <input
-              v-model="parcelId"
-              type="text"
-              placeholder=" "
-              required
-              class="pb-1 block w-full border-b-2 focus:outline-none bg-transparent focus:ring-0 focus:border-purple-600 border-purple-100"
-            />
-            <label
-              for="email"
-              class="absolute duration-300 top-0 -z-1 origin-0 text-gray-500"
-              >Enter parcel ID</label
-            >
-          </div>
-          <button
-            v-if="!pending"
-            class="focus:outline-none rounded tracking-wide shadow w-full p-2 bg-white text-purple-600 hover:bg-purple-600 hover:text-white"
-          >
-            Submit
-          </button>
-          <button
-            v-else
-            class="relative flex justify-center items-center focus:outline-none rounded tracking-wide bg-white shadow w-full p-2 text-purple-600"
-          >
-            <div>
-              Requesting...
-            </div>
-            <div class="absolute top-3 right-2">
-              <div
-                class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-purple-600"
-              ></div>
-            </div>
-          </button>
-        </div>
-      </form>
     </div>
 
     <div
@@ -628,14 +243,12 @@ import getUser from "@/composables/getUser";
 import getUserDoc from "@/composables/getUserDoc";
 import SwitchLanguage from "@/components/SwitchLanguage.vue";
 import getCollection from "@/composables/getCollection";
-import useCollection from "@/composables/useCollection";
 import getDocument from "@/composables/getDocument";
-import { projectAuth, functions, timestamp } from "@/firebase/config";
+import { projectAuth } from "@/firebase/config";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
-import useStorage from "@/composables/useStorage";
-const { url, uploadImage } = useStorage();
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -644,34 +257,24 @@ export default {
   setup(props, { emit }) {
     const currentComponent = ref("");
     const subMenu = ref(true);
-    const email = ref(null);
-    const file = ref(null);
-    const role = ref("");
-    const categoryName = ref("");
-    const parcelId = ref(null);
-    const orderInfo = ref(null);
-    const userInfo = ref(null);
-    const fileError = ref(null);
     const pending = ref(false);
-    const succeedMessage = ref(null);
-    const failedMessage = ref(null);
     const showCategory = ref(true);
-    const showPromoteForm = ref(true);
-    const showCategoryForm = ref(true);
-    const showUserInfoForm = ref(true);
-    const showUserOrderForm = ref(true);
+
+    const store = useStore();
+    const tempCart = ref(store.state.cart);
+    const tempWhistlist = ref(store.state.whistlist);
 
     const router = useRouter();
     const { user } = getUser();
     const { _user: myProfile } = getUserDoc("users");
     const { documents: categories } = getCollection("inventory");
-    const { documents: orders } = getCollection("orders");
-    const { documents: users } = getCollection("users");
-    const { addDoc, isPending, error } = useCollection("inventory");
 
     const { documents: cart } = getDocument("carts", user.value?.uid, "items");
-
-    const types = ["image/png", "image/jpg", "image/jpeg", "image/svg"];
+    const { documents: whistlist } = getDocument(
+      "whistlist",
+      user.value?.uid,
+      "items"
+    );
 
     onMounted(() => {
       document.getElementById("menu").classList.add("animate__fadeInLeft");
@@ -682,24 +285,8 @@ export default {
       showCategory.value = false;
     };
 
-    const handleShowCategoryForm = () => {
-      subMenu.value = !subMenu.value;
-      showCategoryForm.value = false;
-    };
-
-    const handleShowPromoteForm = () => {
-      subMenu.value = !subMenu.value;
-      showPromoteForm.value = false;
-    };
-
     const handleCloseSubMenu = () => {
       showCategory.value = true;
-      showPromoteForm.value = true;
-      showCategoryForm.value = true;
-      showUserInfoForm.value = true;
-      showUserOrderForm.value = true;
-      orderInfo.value = null;
-      userInfo.value = null;
 
       document
         .getElementById("sub-menu")
@@ -740,169 +327,24 @@ export default {
       emit("close");
     };
 
-    const handlePromoteUser = async () => {
-      pending.value = true;
-      let res;
-      switch (role.value) {
-        case "admin":
-          const addAdminRole = functions.httpsCallable("addAdminRole");
-          res = await addAdminRole({
-            email: email.value,
-            role: role.value,
-          });
-          break;
-        case "packer":
-          const addPackerRole = functions.httpsCallable("addPackerRole");
-          res = await addPackerRole({
-            email: email.value,
-            role: role.value,
-          });
-          break;
-        case "delivery":
-          const addDeliveryRole = functions.httpsCallable("addDeliveryRole");
-          res = await addDeliveryRole({
-            email: email.value,
-            role: role.value,
-          });
-          break;
-        default:
-          res = "Unknown role";
-          break;
-      }
-      if (res.data.errorInfo) {
-        failedMessage.value = res.data.errorInfo.message;
-        pending.value = false;
-        email.value = "";
-        setTimeout(() => {
-          failedMessage.value = null;
-        }, 4000);
-      } else {
-        succeedMessage.value = res.data.message;
-        email.value = "";
-        pending.value = false;
-        setTimeout(() => {
-          succeedMessage.value = null;
-        }, 3000);
-      }
-    };
-
-    const handleChanges = (e) => {
-      const selected = e.target.files[0];
-      const limitedMB = 1048576; //1MB
-
-      if (selected.size > limitedMB) {
-        fileError.value = `Size of the image must be less than 1MB.`;
-        file.value = null;
-      } else {
-        if (selected && types.includes(selected.type)) {
-          //append profile to the div with id(img) immediately
-          const div = document.getElementById("img");
-          //check whether div has children or not
-          if (div.firstChild) {
-            div.removeChild(div.firstChild);
-          }
-          const image = document.createElement("img");
-          image.style.height = "100%";
-          image.style.width = "100%";
-          image.style.objectFit = "cover";
-          image.style.objectPosition = "center";
-          image.src = URL.createObjectURL(selected);
-          div.append(image);
-
-          file.value = selected;
-          fileError.value = null;
-        } else {
-          file.value = null;
-          fileError.value = `Only file of type jpg, jpeg, png, svg are allowed!`;
-        }
-      }
-    };
-
-    const handleAddCategory = async () => {
-      if (file.value) {
-        await uploadImage(file.value);
-
-        await addDoc({
-          name: categoryName.value,
-          url: url.value,
-          createdAt: timestamp(),
-        });
-
-        if (!error.value) {
-          router.push({ name: "Categories" });
-          categoryName.value = "";
-        }
-      }
-    };
-
-    const handleShowGetUserInfoForm = () => {
-      subMenu.value = false;
-      showUserInfoForm.value = false;
-    };
-
-    const handleShowUserOrderForm = () => {
-      subMenu.value = false;
-      showUserOrderForm.value = false;
-    };
-
-    const handleGetUserOrder = () => {
-      pending.value = true;
-      orders.value.forEach((order) => {
-        if (order.id == parcelId.value.trim()) orderInfo.value = order;
-      });
-      pending.value = false;
-    };
-
-    const handleGetUserInfo = async () => {
-      pending.value = true;
-      const getUserInfo = functions.httpsCallable("getUserInfo");
-      const res = await getUserInfo({
-        email: email.value,
-      });
-      pending.value = false;
-      email.value = "";
-      users.value?.forEach((user) => {
-        if (user.id == res.data?.uid) userInfo.value = user;
-      });
-    };
-
     return {
       handleClose,
       handleLogout,
       handleShowCategory,
-      handleShowCategoryForm,
-      handleShowPromoteForm,
-      handleShowGetUserInfoForm,
-      handleShowUserOrderForm,
       handleCloseSubMenu,
       handleSwitchLanguage,
-      handleGetUserOrder,
-      handleGetUserInfo,
       handleNavigation,
-      handleChanges,
-      handleAddCategory,
-      handlePromoteUser,
       categories,
       user,
       pending,
-      role,
-      parcelId,
-      orderInfo,
       myProfile,
-      userInfo,
-      categoryName,
       currentComponent,
       showCategory,
-      showPromoteForm,
-      showCategoryForm,
-      showUserOrderForm,
-      showUserInfoForm,
       subMenu,
-      email,
-      fileError,
-      succeedMessage,
-      failedMessage,
       cart,
+      whistlist,
+      tempCart,
+      tempWhistlist,
     };
   },
 };

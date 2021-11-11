@@ -37,8 +37,17 @@
               {{ item.name }}
             </h2>
             <h4 class="text-gray-500 leading-none">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Blanditiis numquam magni obcaecati doloribus commodi neque animi!
+              {{ item.description }}
+            </h4>
+
+            <h4
+              v-if="item.status == 'in stock'"
+              class="text-green-500 leading-none"
+            >
+              {{ item.status }}
+            </h4>
+            <h4 v-else class="text-red-500 leading-none">
+              {{ item.status }}
             </h4>
             <div v-if="item.discount > 0" class="flex space-x-1">
               <span class="font-medium text-gray-700 line-through block"
@@ -132,7 +141,9 @@
                       item.sizes[indexSize]
                     )
                   "
+                  :disabled="item.status != 'in stock'"
                   class="rounded focus:outline-none w-full shadow font-bold text-purple-700 bg-yellow-300 hover:translate-y-1 transform transition-all duration-150 p-2"
+                  :class="{ frozen: item.status != 'in stock' }"
                 >
                   ADD TO CART
                 </button>
@@ -156,7 +167,7 @@ import { useStore } from "vuex";
 import { watch } from "@vue/runtime-core";
 
 export default {
-  props: ["item", "index"],
+  props: ["item", "index", "name"],
   setup(props, { emit }) {
     const indexSize = ref(null);
     const qty = ref(1);
@@ -207,11 +218,14 @@ export default {
 
     const handleAddToCart = async (item, image, size) => {
       if (!size) {
+        console.log(props.name);
         return (alerting.value = "Please choose one of the sizes above!");
       }
 
       const addedItem = {
+        categoryName: props.name,
         name: item.name,
+        code: item.code,
         description: item.description,
         price: Number(item.price).toFixed(2),
         discount: item.discount,
@@ -230,7 +244,9 @@ export default {
         });
 
         await addDoc({
+          categoryName: props.name,
           name: item.name,
+          code: item.code,
           description: item.description,
           price: Number(item.price).toFixed(2),
           discount: item.discount,

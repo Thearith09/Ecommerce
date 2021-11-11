@@ -1,13 +1,13 @@
 <template>
-  <div class="bg-cancel bg-center bg-cover h-screen w-full">
+  <div class="h-screen w-full bg-gradient-to-bl from-yellow-100 to-yellow-200">
     <div class="flex justify-center items-center h-3/4">
       <div
-        class="relative w-full mx-5 sm:w-8/12 md:w-6/12 lg:w-5/12 h-56 px-10 space-y-3 flex flex-col justify-center items-center bg-white shadow-lg rounded-md"
+        class="relative w-full mx-5 sm:w-8/12 md:w-6/12 lg:w-6/12 h-56 px-10 space-y-3 flex flex-col justify-center items-center bg-white shadow border rounded-md"
       >
         <div id="tick" class="absolute -top-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="animate__animated animate__bounceIn h-20 w-20 text-yellow-300"
+            class="animate__animated animate__bounceIn h-20 w-20 text-yellow-400"
             viewBox="0 0 20 20"
             fill="currentColor"
           >

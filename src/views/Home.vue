@@ -3,7 +3,7 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto bg-gray-50">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto bg-white">
       <div>
         <Slideshow />
       </div>
@@ -12,16 +12,11 @@
         v-for="(category, index) in categories"
         :key="category.id"
       >
-        <div
-          v-if="index < 5"
-          class="space-y-3 max-w-sm sm:max-w-none w-full mx-auto"
-        >
-          <div
-            class="font-bold text-xl text-gray-700 uppercase mt-8 bg-purple-50 p-2"
-          >
+        <div class="space-y-3 max-w-sm sm:max-w-none w-full mx-auto">
+          <div class="font-bold text-xl text-gray-700 uppercase mt-8">
             {{ $t(`${header[index]?.toUpperCase()}`) }}
           </div>
-          <Card :name="category.name" />
+          <Card :name="category.id" />
         </div>
       </div>
     </div>

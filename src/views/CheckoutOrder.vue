@@ -5,9 +5,7 @@
     </div>
 
     <div class="my-5 mb-auto h-auto 2xl:w-3/4 2xl:mx-auto">
-      <div>
-        <Checkout :orders="orders" />
-      </div>
+      <div></div>
     </div>
     <div class="mt-5">
       <Footer />
@@ -18,14 +16,12 @@
 <script>
 import Footer from "@/components/Footer.vue";
 import Navbar from "@/components/Navbar.vue";
-import Checkout from "@/components/Checkout.vue";
 import getCollection from "@/composables/getCollection";
 
 export default {
   components: {
     Footer,
     Navbar,
-    Checkout,
   },
   setup() {
     const { documents: orders } = getCollection("orders");

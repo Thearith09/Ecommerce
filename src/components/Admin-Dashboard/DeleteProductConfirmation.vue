@@ -1,9 +1,40 @@
 <template>
-  <div class="w-full fixed h-screen inset-0 bg-gray-900 bg-opacity-50 z-20">
-    <div class="flex justify-center items-center h-3/4 px-5 sm:px-0">
+  <div
+    class="pt-8 px-5 h-auto sm:w-11/12 md:w-10/12 lg:w-8/12 2xl:w-7/12 mx-auto"
+  >
+    <div class="pb-3">
       <div
-        class="bg-white w-full p-5 sm:w-3/4 md:w-2/4 2xl:w-1/3 h-auto shadow rounded-md"
+        class="relative flex space-x-1 text-gray-500 text-sm font-medium pb-2"
       >
+        <p
+          @click="handleSwitchingComponent('Dashboard')"
+          class="hover:underline cursor-pointer"
+        >
+          Dashboard
+        </p>
+        <p>/</p>
+        <p
+          @click="handleSwitchingComponent('CategoryList')"
+          class="hover:underline cursor-pointer"
+        >
+          Categories
+        </p>
+        <p>/</p>
+        <p
+          @click="handleSwitchingComponent('ProductList')"
+          class="hover:underline cursor-pointer"
+        >
+          Products
+        </p>
+        <p>/</p>
+        <p>#{{ product.code }}</p>
+      </div>
+      <div class="font-bold text-xl font-serif text-gray-900 capitalize">
+        Item #{{ product.code }}
+      </div>
+    </div>
+    <div class="flex justify-center items-center h-3/4">
+      <div class="bg-white w-full p-5 shadow rounded-md border">
         <div class="flex justify-center">
           <img src="@/assets/images/removeIcon.png" alt="remove icon" />
         </div>
@@ -13,12 +44,14 @@
         >
           <p>
             Are you seriously want to remove this
-            <span class="text-blue-600">[{{ product.name }}]</span>
+            <span class="text-purple-700 font-bold text-lg"
+              >[{{ product.name }}]</span
+            >
             item? Once you remove you won't be able to recover it.
           </p>
         </div>
 
-        <div class="w-3/4 mx-auto">
+        <div class="relative w-3/4 mx-auto">
           <div class="flex justify-center">
             <button
               v-if="!pending"
@@ -45,7 +78,7 @@
           <div class="flex justify-center">
             <button
               class="py-2 px-10 rounded text-gray-500 hover:text-gray-700 tracking-wide font-semibold focus:outline-none"
-              @click="handleCancel"
+              @click="handleSwitchingComponent('ProductList')"
             >
               Cancel
             </button>
@@ -64,7 +97,7 @@ import getUser from "@/composables/getUser";
 import { ref } from "@vue/reactivity";
 
 export default {
-  props: ["product", "name"],
+  props: ["product"],
   setup(props, { emit }) {
     const { user } = getUser();
     const pending = ref(false);
@@ -77,17 +110,17 @@ export default {
     );
     const { deleteDoc: deleteProduct } = useDocument(
       "inventory",
-      props.name,
+      props.product?.categoryName,
       "products"
     );
     const { documents: products } = getDocument(
       "inventory",
-      props.name,
+      props.product?.categoryName,
       "products"
     );
 
-    const handleCancel = () => {
-      emit("close");
+    const handleSwitchingComponent = (component) => {
+      emit("onSwitchingComponent", component);
     };
 
     const handleRemove = async () => {
@@ -115,10 +148,10 @@ export default {
         }
       });
       pending.value = false;
-      emit("close");
+      handleSwitchingComponent("ProductList");
     };
 
-    return { handleCancel, handleRemove, pending };
+    return { handleSwitchingComponent, handleRemove, pending };
   },
 };
 </script>

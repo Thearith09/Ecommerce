@@ -6,7 +6,6 @@ import Categories from "../views/Categories.vue";
 import CategoryDetails from "../views/CategoryDetails.vue";
 import CartDetails from "../views/CartDetails.vue";
 import ProductSearching from "../views/ProductSearching.vue";
-import CheckoutOrder from "../views/CheckoutOrder.vue";
 import ProductDetails from "../views/ProductDetails.vue";
 import Reports from "../views/Reports.vue";
 import Success from "../views/Success.vue";
@@ -14,6 +13,7 @@ import Cancel from "../views/Cancel.vue";
 import Profile from "../views/Profile.vue";
 import PageNotFound from "../views/Page404.vue";
 import PurchaseHistory from "../views/PurchaseHistory.vue";
+import OrderHistory from "../views/OrderHistory.vue";
 import MyWhistlist from "../views/MyWhistlist.vue";
 import AdminDashboard from "../views/Admin-Dashboard/AdminDashboard";
 
@@ -36,12 +36,7 @@ const routes = [
     component: AdminDashboard,
     beforeEnter: requireAuth,
   },
-  {
-    path: "/orders/checkoutorder",
-    name: "CheckoutOrder",
-    component: CheckoutOrder,
-    beforeEnter: requireAuth,
-  },
+
   {
     path: "/reports",
     name: "Reports",
@@ -112,6 +107,11 @@ const routes = [
     path: "/profile/purchase-history",
     name: "Purchase-History",
     component: PurchaseHistory,
+  },
+  {
+    path: "/profile/order-history",
+    name: "Order-History",
+    component: OrderHistory,
   },
   {
     path: "/products/my-whistlist",

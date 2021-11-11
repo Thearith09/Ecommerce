@@ -24,15 +24,16 @@
         </svg>
       </div>
     </div>
-
     <div
       v-for="(product, index) in products"
       :key="product.id"
       :class="animate"
-      class="h-auto hover:translate-y-2 transform transition duration-150"
+      class="h-auto"
       v-show="index >= start && index <= end"
     >
-      <div class="relative w-full border-purple-100 border-2 rounded">
+      <div
+        class="relative w-full border-purple-100 border-2 rounded overflow-hidden"
+      >
         <router-link
           :to="{
             name: 'ProductDetails',
@@ -44,137 +45,144 @@
         >
           <img
             :src="urls[index] ? urls[index] : product.images[0].url"
-            class="h-48 min-w-full  object-cover object-center rounded"
+            class="h-52 min-w-full  object-cover object-center rounded transform transition duration-500 hover:scale-110"
           />
         </router-link>
+        <div
+          v-if="product.promotionDescription"
+          class="absolute bottom-0 rounded-b py-3 w-full capitalize font-semibold bg-purple-700 bg-opacity-90 text-white flex justify-center items-center"
+        >
+          {{ product.promotionDescription }} {{ product.discount }}% OFF
+        </div>
       </div>
 
-      <div>
-        <div class="text-gray-100 py-2">
-          <div class="flex space-x-1 items-center">
-            <img
-              @mouseover="handleChangeImage(image.url, index, i)"
-              @mouseleave="handleResetImage"
-              @click="handleAddToCart(product, i)"
-              v-for="(image, i) in product.images"
-              :key="image"
-              v-show="i < 5"
-              :class="{ hoverColor: indexActiveBorder[index] == i }"
-              class="p-px h-5 w-5 rounded-full shadow object-cover object-center cursor-pointer"
-              :src="image.url"
-            />
-            <div
-              v-if="product.images.length >= 6"
-              class="relative group text-purple-800 cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <div
-                class="absolute top-5 right-1 hidden group-hover:block br"
-              ></div>
-              <div
-                class="absolute top-7 w-36 right-0 bg-yellow-300 p-3 h-auto hidden group-hover:grid grid-cols-5 gap-1 rounded rounded-tr-none rounded-bl-none"
-              >
-                <img
-                  v-for="(image, i) in product.images"
-                  :key="image"
-                  v-show="i >= 5"
-                  @mouseover="handleChangeImage(image.url, index, i)"
-                  @mouseleave="handleResetImage"
-                  @click="handleAddToCart(product, i)"
-                  :class="{ hoverColor: indexActiveBorder[index] == i }"
-                  class="p-px h-5 w-5 rounded-full shadow object-cover object-center cursor-pointer"
-                  :src="image.url"
-                />
-              </div>
-            </div>
-          </div>
-
-          <h4
-            class="text-purple-700 font-semibold font-mono tracking-wide uppercase"
+      <div class="text-gray-100 py-2">
+        <div class="flex space-x-1 items-center">
+          <img
+            @mouseover="handleChangeImage(image.url, index, i)"
+            @mouseleave="handleResetImage"
+            @click="handleAddToCart(product, i)"
+            v-for="(image, i) in product.images"
+            :key="image"
+            v-show="i < 5"
+            :class="{ hoverColor: indexActiveBorder[index] == i }"
+            class="p-px h-5 w-5 rounded-full shadow object-cover object-center cursor-pointer"
+            :src="image.url"
+          />
+          <div
+            v-if="product.images.length >= 6"
+            class="relative group text-purple-800 cursor-pointer"
           >
-            {{ product.name }}
-          </h4>
-
-          <div class="leading-none">
-            <span class="text-gray-500 text-sm leading-none"
-              >Lorem ipsum dolor sit amet consectetur adipisicing elit.</span
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              viewBox="0 0 20 20"
+              fill="currentColor"
             >
+              <path
+                fill-rule="evenodd"
+                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <div
+              class="absolute top-5 right-1 hidden group-hover:block br"
+            ></div>
+            <div
+              class="absolute top-7 w-36 right-0 bg-purple-400 bg-opacity-90 p-3 h-auto hidden group-hover:grid grid-cols-5 gap-1 rounded rounded-tr-none rounded-bl-none"
+            >
+              <img
+                v-for="(image, i) in product.images"
+                :key="image"
+                v-show="i >= 5"
+                @mouseover="handleChangeImage(image.url, index, i)"
+                @mouseleave="handleResetImage"
+                @click="handleAddToCart(product, i)"
+                :class="{ hoverColor: indexActiveBorder[index] == i }"
+                class="p-px h-5 w-5 rounded-full shadow object-cover object-center cursor-pointer"
+                :src="image.url"
+              />
+            </div>
           </div>
-          <div class="mt-2 flex justify-between items-center">
-            <div class="flex space-x-2" v-if="product.discount > 0">
-              <span
-                class="inline-block text-gray-700 font-semibold line-through"
-                >USD{{ Number(product.price).toFixed(2) }}
-              </span>
-              <span class="text-red-600 font-semibold inline-block">
-                USD{{
-                  (
-                    product.price -
-                    (product.price * product.discount) / 100
-                  ).toFixed(2)
-                }}
-              </span>
-            </div>
-            <div v-else>
-              <span class="inline-block text-gray-700 font-semibold"
-                >USD {{ Number(product.price).toFixed(2) }}
-              </span>
-            </div>
-            <div
-              v-if="!myWhistlist.includes(product.name)"
-              @click="handleAddWhistlist(product, name)"
-              class="rounded-full border-2 p-1 border-purple-400 w-7 h-7 flex justify-center items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-gray-400 hover:text-purple-700 cursor-pointer"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            </div>
+        </div>
 
-            <div
-              v-else
-              @click="handleRemoveWhistlist(product.name)"
-              class="rounded-full border-2 p-1 border-purple-400 w-7 h-7 flex justify-center items-center"
+        <h4 class="text-purple-700 font-semibold tracking-wide uppercase">
+          {{ product.name }}
+        </h4>
+
+        <div class="leading-none">
+          <span class="text-gray-500 text-sm leading-none"
+            >Lorem ipsum dolor sit amet consectetur adipisicing elit.</span
+          >
+        </div>
+        <div class="pt-1">
+          <span v-if="product.status == 'in stock'" class="text-green-500">{{
+            product.status
+          }}</span>
+          <span v-else class="text-red-500">{{ product.status }}</span>
+        </div>
+
+        <div class="mt-2 flex justify-between items-center">
+          <div class="flex space-x-2" v-if="product.discount > 0">
+            <span class="inline-block text-gray-700 font-semibold line-through"
+              >USD{{ Number(product.price).toFixed(2) }}
+            </span>
+            <span class="text-red-600 font-semibold inline-block">
+              USD{{
+                (
+                  product.price -
+                  (product.price * product.discount) / 100
+                ).toFixed(2)
+              }}
+            </span>
+          </div>
+          <div v-else>
+            <span class="inline-block text-gray-700 font-semibold"
+              >USD {{ Number(product.price).toFixed(2) }}
+            </span>
+          </div>
+          <div
+            v-if="!myWhistlist.includes(product.name)"
+            @click="handleAddWhistlist(product, name)"
+            class="rounded-full border-2 p-1 border-purple-400 w-7 h-7 flex justify-center items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-gray-400 hover:text-purple-700 cursor-pointer"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-purple-700 cursor-pointer"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </div>
+
+          <div
+            v-else
+            @click="handleRemoveWhistlist(product.name)"
+            class="rounded-full border-2 p-1 border-purple-400 w-7 h-7 flex justify-center items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-purple-700 cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                clipRule="evenodd"
+              />
+            </svg>
           </div>
         </div>
       </div>
     </div>
-
     <div
       :class="{ hideImage: start == 0 }"
       class="absolute -left-5 top-16 z-10"
@@ -201,6 +209,7 @@
   <div>
     <component
       :is="currentComponent"
+      :name="name"
       :item="item"
       :index="index"
       @close="currentComponent = ''"
@@ -402,6 +411,6 @@ export default {
 .br {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 20px solid #fcd34d;
+  border-bottom: 20px solid rgba(167, 139, 250, var(--tw-bg-opacity));
 }
 </style>

@@ -3,7 +3,7 @@
     <div>
       <Navbar />
     </div>
-    <div class="m-10 mb-auto 2xl:w-3/4 2xl:mx-auto">
+    <div class="mx-10 my-5 mb-auto 2xl:w-3/4 2xl:mx-auto">
       <div
         class="w-full sm:w-10/12 md:w-8/12 lg:w-7/12 2xl:w-6/12 px-5 py-10 bg-white mx-auto shadow-2xl rounded"
       >
@@ -76,7 +76,7 @@
           <div class="flex">
             <button
               v-if="!isPending"
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-700 rounded-full w-full p-2 tracking-wide shadow hover:text-purple-900 bg-white text-purple-700"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-700 rounded-full w-full p-2 tracking-wide shadow hover:bg-purple-700 hover:text-white bg-white text-purple-700"
             >
               sign up
             </button>

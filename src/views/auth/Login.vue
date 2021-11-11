@@ -4,7 +4,7 @@
       <Navbar />
     </div>
 
-    <div class="relative mb-auto m-10 2xl:w-3/4 2xl:mx-auto ">
+    <div class="relative mb-auto mx-10 my-5 2xl:w-3/4 2xl:mx-auto ">
       <!--Alert for reseting password-->
       <div
         v-if="sent"
@@ -91,7 +91,7 @@
           <div>
             <button
               v-if="!isPending"
-              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-700 rounded-full shadow p-2 tracking-wide hover:text-purple-900 bg-white text-purple-700 w-full"
+              class="focus:outline-none focus:ring focus:ring-offset-2 focus:ring-purple-700 rounded-full shadow p-2 tracking-wide hover:bg-purple-700 hover:text-white bg-white text-purple-700 w-full"
             >
               sign in
             </button>
@@ -403,7 +403,7 @@ export default {
       const user = await claimUserRole(result.user);
 
       if (!error.value) {
-        await user.sendEmailVerification();
+        // await user.sendEmailVerification();
 
         let existedUser = false;
         users?.value.forEach((doc) => {

@@ -1,15 +1,15 @@
 <template>
   <div
-    class="justify-center items-center inset-0 h-screen overflow-scroll w-full fixed bg-gray-700 bg-opacity-50 z-40"
+    class="inset-0 h-screen w-full fixed bg-gray-700 bg-opacity-50 z-40 overflow-auto"
   >
     <div class="md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
       <div class="relative">
         <div
           id="print-invoice"
-          class="w-full px-10 bg-white rounded-md shadow py-10"
+          class="w-full px-10 bg-white rounded-md shadow py-10 min-w-iphone"
         >
           <div
-            class="flex flex-col sm:flex-row items-center  sm:justify-between sm:items-end border-b-2 border-purple-100 pt-10 pb-20"
+            class="flex justify-between items-end border-b-2 border-purple-100 pt-10 pb-20"
           >
             <div>
               <img
@@ -21,16 +21,14 @@
             <div class="text-gray-400 font-semibold leading-none">
               <p>
                 {{
-                  date(purchaseInfo.createdAt.toDate()).format(
-                    "dddd do MMM, YYYY"
-                  )
+                  date(itemInfo.createdAt.toDate()).format("dddd do MMM, YYYY")
                 }}
               </p>
               <p>
                 Invoice #{{
-                  purchaseInfo.id.substring(
-                    purchaseInfo.id.length - 5,
-                    purchaseInfo.id.length
+                  itemInfo.id.substring(
+                    itemInfo.id.length - 5,
+                    itemInfo.id.length
                   )
                 }}
               </p>
@@ -61,17 +59,21 @@
                 <div>
                   <span>Customer:</span>
                   <h5 class="text-purple-700 text-xl font-semibold uppercase">
-                    {{ purchaseInfo.shippingInfo.name }}
+                    {{ itemInfo.shippingInfo.name }}
                   </h5>
                 </div>
                 <div class="text-sm">
                   <h5>
-                    {{ purchaseInfo.shippingInfo.address.line1 }},
-                    {{ purchaseInfo.shippingInfo.address.line2 }},
-                    {{ purchaseInfo.shippingInfo.address.city }}
+                    {{ itemInfo.shippingInfo.address.line1 }},
+                    {{ itemInfo.shippingInfo.address.line2 }},
+                    {{ itemInfo.shippingInfo.address.city }}
                   </h5>
                   <div>
-                    {{ purchaseInfo.userContact.phone }}
+                    {{
+                      itemInfo.userContact
+                        ? itemInfo.userContact.phone
+                        : itemInfo.phone
+                    }}
                   </div>
                 </div>
               </div>
@@ -83,12 +85,12 @@
           >
             <p class="col-span-2 sm:col-span-3">Item Description</p>
             <p>Price</p>
-            <p>Discount</p>
             <p>Quantity</p>
+            <p class="flex justify-end">Total</p>
           </div>
 
           <div>
-            <div v-for="(item, index) in purchaseInfo.items" :key="index">
+            <div v-for="(item, index) in itemInfo.items" :key="index">
               <div
                 :class="{
                   'bg-even': index % 2 == 0,
@@ -101,10 +103,11 @@
                     {{ item.name }}
                   </p>
                 </div>
-                <p>${{ Number(item.price).toFixed(2) }}</p>
-                <p class="flex justify-center">{{ item.discount }}%</p>
+                <p>${{ (item.price / 100).toFixed(2) }}</p>
                 <p class="flex justify-center">{{ item.qty }}</p>
-                <p class="flex justify-end"></p>
+                <p class="flex justify-end">
+                  ${{ ((item.price / 100) * item.qty).toFixed(2) }}
+                </p>
               </div>
             </div>
           </div>
@@ -116,13 +119,19 @@
               class="w-40 ml-auto flex justify-between items-center uppercase space-x-2"
             >
               <span>shipping</span>
-              <span>$2</span>
+              <span>$2.00</span>
             </div>
             <div
               class="w-40 ml-auto flex justify-between items-center space-x-2 text-2xl uppercase"
             >
               <span>Total</span>
-              <span>${{ purchaseInfo.amount }}</span>
+              <span
+                >${{
+                  itemInfo.amount
+                    ? itemInfo.amount.toFixed(2)
+                    : (itemInfo.amountTotal / 100).toFixed(2)
+                }}</span
+              >
             </div>
           </div>
 
@@ -175,7 +184,7 @@ import { ref } from "@vue/reactivity";
 
 export default {
   //invoiceIndex from admin page for printing invoice
-  props: ["purchaseInfo"],
+  props: ["itemInfo"],
   emits: ["close"],
   setup(props, { emit }) {
     const date = moment;

@@ -18,9 +18,8 @@ const getCollection = (collection, limited, date) => {
       .orderBy("createdAt", "desc")
       .where("createdAt", ">=", date.from)
       .where("createdAt", "<=", date.to);
-
   } else if (limited) {
-    console.log("LimitedTemp: ", limitedTemp)
+    console.log("LimitedTemp: ", limitedTemp);
     isPending.value = true;
     collectionRef = projectFirestore
       .collection(collection)
@@ -28,61 +27,68 @@ const getCollection = (collection, limited, date) => {
       .limit(limited);
     //paginage
     previousPage = async () => {
-        limitedTemp -= limited;
-        let documentSnapshots = await projectFirestore
+      limitedTemp -= limited;
+      let documentSnapshots = await projectFirestore
         .collection(collection)
         .orderBy("createdAt", "desc")
-        .limit(limitedTemp).get();
+        .limit(limitedTemp)
+        .get();
 
-        try {
-            let results = [];
-            let lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - limited];
-            let response = await projectFirestore
-              .collection(collection)
-              .orderBy("createdAt", "desc")
-              .startAt(lastVisible)
-              .limit(limited).get();
+      try {
+        let results = [];
+        let lastVisible =
+          documentSnapshots.docs[documentSnapshots.docs.length - limited];
+        let response = await projectFirestore
+          .collection(collection)
+          .orderBy("createdAt", "desc")
+          .startAt(lastVisible)
+          .limit(limited)
+          .get();
 
-            console.log("LimitedTemp: ", limitedTemp);
-    
-            response.docs.forEach((doc) => results.push({ ...doc.data(), id: doc.id }));
-            console.log(results)
-            return results;
-    
-          } catch (err) {
-            return err;
-          }
+        console.log("LimitedTemp: ", limitedTemp);
+
+        response.docs.forEach((doc) =>
+          results.push({ ...doc.data(), id: doc.id })
+        );
+        console.log(results);
+        return results;
+      } catch (err) {
+        return err;
+      }
     };
 
     nextPage = async () => {
       let documentSnapshots = await projectFirestore
         .collection(collection)
         .orderBy("createdAt", "desc")
-        .limit(limitedTemp).get();
+        .limit(limitedTemp)
+        .get();
 
       try {
         let results = [];
-        let lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+        let lastVisible =
+          documentSnapshots.docs[documentSnapshots.docs.length - 1];
         let response = await projectFirestore
           .collection(collection)
           .orderBy("createdAt", "desc")
           .startAfter(lastVisible)
-          .limit(limited).get();
+          .limit(limited)
+          .get();
 
-          limitedTemp += limited;
-          console.log("LimitedTemp: ", limitedTemp);
+        limitedTemp += limited;
+        console.log("LimitedTemp: ", limitedTemp);
 
-        response.docs.forEach((doc) => results.push({ ...doc.data(), id: doc.id }));
-        console.log(results)
+        response.docs.forEach((doc) =>
+          results.push({ ...doc.data(), id: doc.id })
+        );
+        console.log(results);
         isPending.value = false;
         return results;
-
       } catch (err) {
         isPending.value = false;
         return err;
       }
     };
-    
   } else {
     collectionRef = projectFirestore
       .collection(collection)

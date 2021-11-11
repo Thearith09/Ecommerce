@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-successful bg-cover bg-center flex justify-center items-center h-screen w-full"
+    class="flex justify-center items-center h-screen w-full bg-gradient-to-bl from-purple-300 to-purple-500"
   >
     <!-- <img
       class="object-cover object-center min-w-full min-h-full"
@@ -9,7 +9,7 @@
     /> -->
     <div class="fixed top-0 flex justify-center items-center h-3/4">
       <div
-        class="relative w-full mx-5 sm:w-8/12 h-56 px-10 space-y-3 rounded-md flex flex-col justify-center items-center bg-white shadow"
+        class="relative w-full mx-5 sm:w-8/12 h-56 px-10 space-y-3 rounded-md flex flex-col justify-center items-center bg-white shadow border"
       >
         <div
           id="tick"

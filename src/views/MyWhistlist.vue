@@ -27,7 +27,7 @@
             </div>
 
             <div class="w-full">
-              Stock status
+              status
             </div>
 
             <div class="w-full col-span-2 lg:col-span-1"></div>
@@ -38,28 +38,41 @@
             :key="item.id"
             v-show="i >= previous && i < next"
           >
-            <router-link
-              :to="{
-                name: 'ProductDetails',
-                params: { id: item.name, categoryName: item.categoryName },
-              }"
+            <div
               v-if="windowWidth >= 640"
               class="grid grid-cols-6 lg:grid-cols-5 items-center sm:mb-5 md:mb-0 text-gray-700 px-3 py-5 h-auto bg-white border-b-2 border-purple-100 transform transition hover:translate-x-1"
             >
               <div class="col-span-2 flex items-center space-x-1 text-gray-700">
                 <img
-                  class="w-12 h-12 object-cover object-center border-2 border-purple-100 rounded shadow"
+                  @click="handleNavigateToProduct(item)"
+                  class="w-12 h-12 object-cover object-center transform -translate-y-1 cursor-pointer"
                   :src="item.images[0].url"
                   alt="product image"
                 />
-                <p>{{ item.name }}</p>
+                <div class="text-gray-400 text-sm">
+                  <p
+                    @click="handleNavigateToProduct(item)"
+                    class="text-base font-medium text-gray-500 cursor-pointer"
+                  >
+                    {{ item.name }}
+                  </p>
+                  <p>code: {{ item.code }}</p>
+                </div>
               </div>
 
               <div class="w-full text-purple-700 font-semibold">
                 $ {{ item.price }}
               </div>
 
-              <div class="w-full font-semibold">in Stock</div>
+              <div
+                v-if="item.status == 'in stock'"
+                class="w-full font-semibold text-green-500"
+              >
+                {{ item.status }}
+              </div>
+              <div v-else class="w-full font-semibold text-red-500">
+                {{ item.status }}
+              </div>
 
               <div class="col-span-2 lg:col-span-1 flex items-center space-x-1">
                 <button
@@ -69,7 +82,7 @@
                   Remove
                 </button>
               </div>
-            </router-link>
+            </div>
 
             <div v-else class="text-gray-700">
               <fieldset
@@ -83,19 +96,16 @@
                 >
                   <div>Image</div>
                   <div>Unit Price</div>
-                  <div>Stock Status</div>
+                  <div>Status</div>
                 </div>
 
-                <router-link
-                  :to="{
-                    name: 'ProductDetails',
-                    params: { id: item.id, categoryName: item.categoryName },
-                  }"
+                <div
                   class="grid grid-cols-3 items-center p-2 hover:bg-purple-50"
                 >
                   <div class="w-full">
                     <img
-                      class="w-12 h-12 object-cover object-center border-2 border-purple-100 rounded shadow"
+                      @click="handleNavigateToProduct(item)"
+                      class="w-12 h-12 object-cover object-center border-2 border-purple-100 rounded shadow cursor-pointer"
                       :src="item.images[0].url"
                       alt="product image"
                     />
@@ -105,8 +115,16 @@
                     $ {{ item.price }}
                   </div>
 
-                  <div class="w-full font-semibold">in Stock</div>
-                </router-link>
+                  <div
+                    v-if="item.status == 'in stock'"
+                    class="w-full font-semibold text-green-500"
+                  >
+                    {{ item.status }}
+                  </div>
+                  <div v-else class="w-full font-semibold text-red-500">
+                    {{ item.status }}
+                  </div>
+                </div>
 
                 <div class="w-full flex items-center space-x-2">
                   <button
@@ -121,6 +139,7 @@
           </div>
         </div>
       </div>
+
       <div v-if="myWhistlist?.length <= 0">
         <div
           class="flex flex-col items-center space-y-5 border-b-2 border-t-2 border-purple-100 py-10"
@@ -221,6 +240,7 @@ import getUser from "@/composables/getUser";
 import { ref } from "@vue/reactivity";
 import { onMounted, watch, watchEffect } from "@vue/runtime-core";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   components: {
     Footer,
@@ -237,7 +257,8 @@ export default {
 
     const store = useStore();
     const tempWhistlist = ref(store.state.whistlist);
-    console.log("Temp Whistlist", tempWhistlist.value);
+
+    const router = useRouter();
 
     const { user } = getUser();
     const { documents: whistlist } = getDocument(
@@ -304,8 +325,16 @@ export default {
       }
     };
 
+    const handleNavigateToProduct = (item) => {
+      router.push({
+        name: "ProductDetails",
+        params: { id: item.name, categoryName: item.categoryName },
+      });
+    };
+
     return {
       handleRemoveWhistlist,
+      handleNavigateToProduct,
       handleNext,
       handlePrevious,
       windowWidth,
