@@ -10,14 +10,14 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p
           @click="handleSwitchingComponent('PromotionList')"
           class="hover:underline cursor-pointer"
         >
-          Promotions
+          {{ $t("Promotions") }}
         </p>
         <p>/</p>
         <p>
@@ -52,15 +52,13 @@
               class="relative py-2 px-10 rounded tracking-wide bg-red-600 hover:bg-red-700 text-white focus:outline-none"
               @click="handleRemove"
             >
-              Remove
+              {{ $t("Remove") }}
             </button>
             <button
               v-else
               class="relative flex item-center justify-center rounded py-2 px-10 items-center bg-red-600 hover:bg-red-700 text-white tracking-wide focus:outline-none"
             >
-              <div>
-                Removing...
-              </div>
+              <div>{{ $t("Removing") }}...</div>
               <div class="absolute top-3 right-1">
                 <div
                   class="mr-2 animate-spin rounded-full h-4 w-4 border-b-2 border-r-2 border-white"
@@ -73,7 +71,7 @@
               class="py-2 px-10 rounded text-gray-500 hover:text-gray-700 tracking-wide font-semibold focus:outline-none"
               @click="handleSwitchingComponent('PromotionList')"
             >
-              Cancel
+              {{ $t("Cancel") }}
             </button>
           </div>
         </div>

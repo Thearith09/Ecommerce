@@ -42,7 +42,7 @@
           </button>
           <button
             v-else
-            class="relative flex justify-center items-center focus:outline-none rounded shadow p-2 tracking-wide bg-yellow-300 text-purple-700 font-bold w-full"
+            class="relative flex justify-center items-center focus:outline-none cursor-wait rounded shadow p-2 tracking-wide bg-yellow-300 text-purple-700 font-bold w-full"
           >
             <div>
               Checking out...

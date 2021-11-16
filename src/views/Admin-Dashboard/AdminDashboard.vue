@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-screen bg-gray-50">
+  <div class="flex flex-col h-auto bg-gray-50">
     <Sidebar
       :class="{ hidden: toggleSidebar }"
       @onSwitching="handleSwitchingComponent"

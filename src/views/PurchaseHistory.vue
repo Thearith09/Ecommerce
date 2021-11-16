@@ -7,15 +7,15 @@
     <div
       class="mb-auto h-auto px-10 lg:px-0 w-full lg:w-3/4 2xl:w-7/12 mx-auto"
     >
-      <div class="bg-yellow-300">
+      <div>
         <h1
-          class="text-gray-700 font-bold px-2 py-3 my-10 lg:my-16 text-xl lg:text-4xl font-serif tracking-wider"
+          class="text-gray-700 font-bold py-5 text-2xl font-serif tracking-wider"
         >
           Purchase History
         </h1>
       </div>
       <div v-if="purchasedHistories?.length > 0">
-        <div class="pb-5">
+        <div>
           <div
             v-if="windowWidth >= 768"
             class="grid grid-cols-12 items-center gap-4 text-purple-700 font-semibold h-12 p-2 bg-purple-100"
@@ -93,7 +93,7 @@
             </div>
 
             <div v-else class="space-y-1 text-gray-700">
-              <fieldset class="border-2 border-purple-100 rounded p-2">
+              <fieldset class="border-2 border-purple-100 mb-5 rounded p-2">
                 <legend class="text-xs text-purple-700">
                   {{
                     date(purchase.createdAt.toDate()).format("dddd MMM, YYYY")

@@ -22,7 +22,7 @@
               href="https://easy4shopping.net"
               class="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
             >
-              eash4shopping.net
+              eash4shopping@gmail.com
             </a>
           </li>
           <li>

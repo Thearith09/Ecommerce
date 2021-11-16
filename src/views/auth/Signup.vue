@@ -10,7 +10,7 @@
         <h3
           class="font-mono font-bold tracking-wide text-purple-700 text-center mb-5"
         >
-          Signup Form
+          {{ $t("Signup Form") }}
         </h3>
         <form @submit.prevent="handleSignup" class="space-y-8">
           <div class="space-y-8">
@@ -82,7 +82,7 @@
             </button>
             <button
               v-else
-              class="relative flex justify-center rounded-full items-center space-x-4 sm:space-x-12 focus:outline-none w-full p-2 tracking-wide shadow bg-white text-purple-700"
+              class="relative flex justify-center rounded-full items-center space-x-4 sm:space-x-12 focus:outline-none cursor-wait w-full p-2 tracking-wide shadow bg-white text-purple-700"
             >
               <div>
                 signing up...

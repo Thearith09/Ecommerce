@@ -2,7 +2,7 @@
   <div class="relative pb-32 pt-8 px-5 md:px-10 lg:px-16 mx-auto">
     <div class="pb-3">
       <p class="px-5 text-2xl text-white font-bold font-serif">
-        Dashboard
+        {{ $t("Dashboard") }}
       </p>
     </div>
     <div class="px-5 w-full">
@@ -19,7 +19,7 @@
                     class="relative w-full pr-4 text-gray-700 max-w-full flex-grow flex-1"
                   >
                     <h5 class="uppercase font-bold text-xs">
-                      Total Incomes
+                      {{ $t("Total Incomes") }}
                     </h5>
                     <span class="font-semibold text-xl">
                       ${{
@@ -45,7 +45,7 @@
                     <i class="fas fa-arrow-up"></i> {{ comparisonTotal }}%
                   </span>
                   <span class="whitespace-nowrap">
-                    Versus last month
+                    {{ $t("Versus last month") }}
                   </span>
                 </p>
 
@@ -54,7 +54,7 @@
                     <i class="fas fa-arrow-down"></i> {{ comparisonTotal }}%
                   </span>
                   <span class="whitespace-nowrap">
-                    Versus last month
+                    {{ t$("Versus last month") }}
                   </span>
                 </p>
               </div>
@@ -69,7 +69,7 @@
                 <div class="flex flex-wrap">
                   <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
                     <h5 class="uppercase font-bold text-xs">
-                      Total Orders
+                      {{ $t("Total Orders") }}
                     </h5>
                     <span class="font-semibold text-xl">
                       {{ totalOrder || 0 }}
@@ -88,7 +88,7 @@
                     <i class="fas fa-arrow-up"></i> {{ comparisonOrders }}%
                   </span>
                   <span class="whitespace-nowrap">
-                    Versus last month
+                    {{ $t("Versus last month") }}
                   </span>
                 </p>
                 <p v-else class="text-sm mt-4">
@@ -96,7 +96,7 @@
                     <i class="fas fa-arrow-down"></i> {{ comparisonOrders }}%
                   </span>
                   <span class="whitespace-nowrap">
-                    Versus last month
+                    {{ $t("Versus last month") }}
                   </span>
                 </p>
               </div>
@@ -113,7 +113,7 @@
                     class="relative w-full pr-4 text-gray-700 max-w-full flex-grow flex-1"
                   >
                     <h5 class="uppercase font-bold text-xs">
-                      Sales
+                      {{ $t("Sales") }}
                     </h5>
                     <span class="font-semibold text-xl">
                       ${{ totalSales }}
@@ -136,7 +136,7 @@
                     {{ comparisonSales }}%
                   </span>
                   <span class="whitespace-nowrap">
-                    Versus yesterday
+                    {{ $t("Versus yesterday") }}
                   </span>
                 </p>
 
@@ -146,7 +146,7 @@
                     {{ comparisonSales }}%
                   </span>
                   <span class="whitespace-nowrap">
-                    Versus yesterday
+                    {{ $t("Versus yesterday") }}
                   </span>
                 </p>
               </div>

@@ -10,22 +10,22 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p
           @click="handleSwitchingComponent('CategoryList')"
           class="hover:underline cursor-pointer"
         >
-          Categories
+          {{ $t("Categories") }}
         </p>
         <p>/</p>
         <p>
-          {{ category?.id ? "Edit Category" : "Add a New Category" }}
+          {{ category?.id ? $t("Edit Category") : $t("Add a new Category") }}
         </p>
       </div>
       <div class="font-bold text-xl font-serif text-gray-900">
-        {{ category?.id ? "Edit Category" : "Add a New Category" }}
+        {{ category?.id ? $t("Edit Category") : $t("Add a new Category") }}
       </div>
     </div>
     <form

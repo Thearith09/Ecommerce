@@ -8,23 +8,23 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p>
-          Promotions
+          {{ $t("Promotions") }}
         </p>
       </div>
       <div class="flex justify-between items-center font-bold text-gray-900">
         <div class="text-xl font-serif">
-          Promotions
+          {{ $t("Promotions") }}
         </div>
         <div
           v-if="user?.admin || user?.packer"
           @click="handleSwitchingComponent('AddPromotion')"
           class="relative bg-yellow-400 opacity-80 py-2 px-6 rounded cursor-pointer hover:opacity-100"
         >
-          New Promotion
+          {{ $t("New Promotion") }}
         </div>
       </div>
     </div>
@@ -74,7 +74,7 @@
               class="flex items-center space-x-3 text-sm py-2 px-4 text-gray-500 hover:bg-purple-600 hover:text-white focus:bg-purple-600 focus:text-white"
             >
               <i class="fas fa-pen"></i>
-              <p>Edit</p>
+              <p>{{ $t("Edit") }}</p>
             </a>
             <a
               @click="
@@ -87,7 +87,7 @@
               class="flex items-center space-x-3 text-sm py-2 px-4 text-gray-500 hover:bg-purple-600 hover:text-white focus:bg-purple-600 focus:text-white"
             >
               <i class="fas fa-trash"></i>
-              <p>Remove</p>
+              <p>{{ $t("Remove") }}</p>
             </a>
           </div>
         </div>

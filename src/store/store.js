@@ -7,6 +7,7 @@ const store = createStore({
   state: {
     cart: [],
     whistlist: [],
+    trackingDate: [],
     sessionID: null,
   },
   plugins: [
@@ -59,9 +60,6 @@ const store = createStore({
           state.trackingDate.push(parcel);
         }
       } else {
-        state.trackingDate = [];
-        console.log(state.cart);
-        console.log(state.trackingDate);
         const parcel = {};
         parcel.id = tracking.parcelID;
         parcel[tracking.name] = tracking.value;

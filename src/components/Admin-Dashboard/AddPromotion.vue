@@ -8,22 +8,22 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p
           @click="handleSwitchingComponent('PromotionList')"
           class="hover:underline cursor-pointer"
         >
-          Promotions
+          {{ $t("Promotions") }}
         </p>
         <p>/</p>
         <p>
-          {{ promotion?.id ? "Edit Promotion" : "Add a New Promotion" }}
+          {{ promotion?.id ? $t("Edit Promotion") : $t("Add a new Promotion") }}
         </p>
       </div>
       <div class="font-bold text-xl font-serif text-gray-900">
-        {{ promotion?.id ? "Edit Promotion" : "Add a New Promotion" }}
+        {{ promotion?.id ? $t("Edit Promotion") : $t("Add a new Promotion") }}
       </div>
     </div>
     <div>
@@ -124,7 +124,7 @@
                       value="item"
                       class="text-purple-600"
                     />
-                    <span class="ml-2">an Indvidual Item</span>
+                    <span class="ml-2">an Individual Item</span>
                   </label>
                 </div>
                 <hr class="my-5 border-purple-700" />

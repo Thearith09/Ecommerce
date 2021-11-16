@@ -7,9 +7,9 @@
     <div
       class="mb-auto h-auto px-10 xl:px-0 w-full xl:w-3/4 2xl:w-7/12 mx-auto"
     >
-      <div class="bg-yellow-300">
+      <div>
         <h1
-          class="text-gray-700 font-bold px-2 py-3 my-10 xl:my-16 text-xl xl:text-4xl font-serif tracking-wider"
+          class="text-gray-700 font-bold py-5 text-2xl font-serif tracking-wider"
         >
           My Whistlist
         </h1>
@@ -86,7 +86,7 @@
 
             <div v-else class="text-gray-700">
               <fieldset
-                class="border-2 border-purple-100 rounded p-2 my-5 space-y-1"
+                class="border-2 border-purple-100 rounded p-2 mb-5 space-y-1"
               >
                 <legend class="font-semibold text-purple-700">
                   {{ item.name }}

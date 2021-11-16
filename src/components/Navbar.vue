@@ -79,7 +79,7 @@
           <input
             v-model="search"
             @keypress.enter="handleSearch"
-            class="focus:outline-none ring ring-offset-2 ring-purple-700 font-thin hover:shadow-sm w-full shadow-lg rounded-full p-1 md:py-2 text-sm mr-2 pl-10 sm:mr-2 sm:pl-10"
+            class="focus:outline-none ring ring-offset-2 ring-purple-700 placeholder-gray-700 text-gray-700 hover:shadow-sm w-full shadow-lg rounded-full p-1 md:py-2 text-sm mr-2 pl-10 sm:mr-2 sm:pl-10"
             type="search"
             placeholder="find anything"
           />
@@ -434,9 +434,9 @@
             >
           </h4>
         </div>
-        <span class="text-purple-700 hover:text-purple-900 text-lg"
-          >Categories</span
-        >
+        <span class="text-purple-700 hover:text-purple-900 text-lg">
+          Categories
+        </span>
       </div>
 
       <div class="flex justify-between items-center w-full relative">
@@ -455,7 +455,7 @@
         <input
           v-model="search"
           @keypress.enter="handleSearch"
-          class="focus:outline-none ring ring-offset-2 ring-purple-700 font-thin hover:shadow-sm w-full rounded-full p-1 lg:p-2 lg:pl-10 text-sm mr-2 pl-10 sm:mr-2 sm:pl-10"
+          class="focus:outline-none ring ring-offset-2 ring-purple-700 placeholder-gray-700 text-gray-700 hover:shadow-sm w-full rounded-full p-1 lg:p-2 lg:pl-10 text-sm mr-2 pl-10 sm:mr-2 sm:pl-10"
           type="search"
           placeholder="find anything"
         />
@@ -597,9 +597,9 @@
                 class="flex items-center py-3 px-5 shadow-lg border-b-2 border-purple-100"
               >
                 <div>
-                  <div v-if="user.photoURL">
+                  <div v-if="user.photoURL" class="w-8 h-8">
                     <img
-                      class="w-8 h-8 min-w-full rounded-full object-cover object-center"
+                      class="w-full h-full rounded-full object-cover object-center"
                       :src="user.photoURL"
                     />
                   </div>
@@ -614,7 +614,7 @@
 
                 <div class="ml-2 leading-none text-gray-700">
                   <p class="font-bold uppercase">{{ user.displayName }}</p>
-                  <span class="text-sm text-gray-500">{{ user.email }}</span>
+                  <span class="text-xs text-gray-500">{{ user.email }}</span>
                 </div>
               </div>
 

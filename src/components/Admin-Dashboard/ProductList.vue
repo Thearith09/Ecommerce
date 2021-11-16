@@ -11,30 +11,30 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p
           @click="handleSwitchingComponent('CategoryList')"
           class="hover:underline cursor-pointer"
         >
-          Categories
+          {{ $t("Categories") }}
         </p>
         <p>/</p>
         <p>
-          Products
+          {{ $t("Products") }}
         </p>
       </div>
       <div class="flex justify-between font-bold text-gray-900">
         <div class="text-xl font-serif">
-          Products
+          {{ $t("Products") }}
         </div>
         <div
           v-if="user?.admin || user?.packer"
           @click="handleSwitchingComponent('AddProduct')"
           class="relative bg-yellow-400 opacity-80 py-2 px-6 rounded cursor-pointer hover:opacity-100"
         >
-          New Product
+          {{ $t("New Product") }}
         </div>
       </div>
     </div>
@@ -67,20 +67,18 @@
       <div
         class="grid grid-cols-12 gap-4 font-bold border-b border-t px-7 py-3 rounded-t border-gray-200"
       >
-        <div class="col-span-5">
-          Product
+        <div class="col-span-5">{{ $t("Product") }}</div>
+
+        <div class="col-span-2">
+          {{ $t("Category") }}
         </div>
 
         <div class="col-span-2">
-          Category
-        </div>
-
-        <div class="col-span-2">
-          Stock
+          {{ $t("Stock") }}
         </div>
 
         <div class="col-span-2 text-center">
-          Price
+          {{ $t("Price") }}
         </div>
       </div>
 
@@ -125,7 +123,6 @@
           <div class="col-span-2 text-center">${{ item.price }}</div>
           <div class="relative flex justify-end">
             <a
-              href="#"
               class="cursor-pointer p-1"
               :class="{ activeActionModal: activeModals[i].active }"
             >

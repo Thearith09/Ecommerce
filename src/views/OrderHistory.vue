@@ -6,9 +6,9 @@
     <div
       class="mb-auto h-auto px-10 lg:px-0 w-full lg:w-3/4 2xl:w-7/12 mx-auto"
     >
-      <div class="bg-yellow-300">
+      <div>
         <h1
-          class="text-gray-700 font-bold px-2 py-3 my-10 lg:my-16 text-xl lg:text-4xl font-serif tracking-wider"
+          class="text-gray-700 font-bold py-5 text-2xl font-serif tracking-wider"
         >
           Order History
         </h1>

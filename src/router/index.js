@@ -51,7 +51,6 @@ const routes = [
     component: Home,
     beforeEnter: (to, from, next) => {
       const user = projectAuth.currentUser;
-      console.log("User: ", user);
       if (user?.admin || user?.packer || user?.delivery) {
         next("/admin-dashboard");
       } else {

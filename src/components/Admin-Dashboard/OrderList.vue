@@ -11,15 +11,15 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p>
-          Orders
+          {{ $t("Orders") }}
         </p>
       </div>
       <div class="font-bold text-xl text-gray-900 font-serif">
-        Orders
+        {{ $t("Orders") }}
       </div>
     </div>
 
@@ -244,28 +244,12 @@
     </div>
 
     <div
+      v-if="user"
       class="flex flex-col items-center justify-center h-auto bg-white shadow rounded border p-8"
     >
       <div
         class="w-full py-10 flex justify-center items-center my-5 h-12 text-purple-700 shadow-inner border bg-white rounded"
       >
-        <!-- <div
-            @click="handleClose"
-            class="cursor-pointer transform transition hover:-translate-x-1"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div> -->
         <div class="font-bold text-xl capitalize tracking-wider">
           Tracking Orders
         </div>

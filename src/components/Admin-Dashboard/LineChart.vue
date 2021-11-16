@@ -10,7 +10,7 @@
               class="uppercase text-blueGray-100 mb-1 text-xs font-semibold"
             ></h6>
             <h2 class="text-white text-xl font-semibold">
-              Sales value
+              {{ $t("Sales value") }}
             </h2>
           </div>
         </div>
@@ -39,13 +39,18 @@ export default {
           "May",
           "June",
           "July",
+          "August",
+          "September",
+          "Octorber",
+          "November",
+          "December",
         ],
         datasets: [
           {
             label: new Date().getFullYear() - 1,
             backgroundColor: "#FCD34D",
             borderColor: "#FCD34D",
-            data: [65, 78, 66, 44, 56, 67, 75],
+            data: [65, 78, 66, 44, 56, 67, 75, 58, 89, 99, 71, 120],
             fill: false,
           },
           {
@@ -53,7 +58,7 @@ export default {
             fill: false,
             backgroundColor: "#7C3AED",
             borderColor: "#7C3AED",
-            data: [40, 68, 86, 74, 56, 60, 87],
+            data: [40, 68, 86, 74, 56, 60, 87, 80, 60, 130, 140],
           },
         ],
       },

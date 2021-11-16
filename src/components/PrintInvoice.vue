@@ -2,7 +2,7 @@
   <div
     class="inset-0 h-screen w-full fixed bg-gray-700 bg-opacity-50 z-40 overflow-auto"
   >
-    <div class="md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
+    <div class="md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto my-5">
       <div class="relative">
         <div
           id="print-invoice"
@@ -142,7 +142,7 @@
 
         <div
           @click="handlePrint"
-          class="absolute top-0 left-7 text-gray-600 hover:text-gray-700 cursor-pointer"
+          class="absolute top-2 left-8 text-gray-600 hover:text-gray-700 cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +158,7 @@
           </svg>
         </div>
 
-        <div @click="handleCancel" class="absolute top-0 left-0 cursor-pointer">
+        <div @click="handleCancel" class="absolute top-2 left-2 cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 text-gray-500 cursor-pointer"

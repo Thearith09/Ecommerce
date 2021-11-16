@@ -1,9 +1,9 @@
 <template>
   <div class="px-10 max-w-md sm:max-w-none mx-auto">
     <div class="h-full border-b-2 border-purple-100">
-      <div class="relative flex justify-between my-5">
+      <div class="relative flex justify-between">
         <div v-if="search && products && products.length > 0">
-          <div class="text-gray-700 font-bold text-2xl">
+          <div class="text-gray-700 font-bold text-2xl my-5">
             {{ products?.length }} results for "{{ search }}"
             <span class="block text-purple-700 tracking-wide font-bold text-lg"
               >{{ name }} Products</span
@@ -36,7 +36,7 @@
       class="flex flex-col sm:flex-row sm:items-center py-5 h-auto border-b-2 border-purple-100"
     >
       <div
-        class="relative w-full sm:w-5/12 xl:w-full h-52 rounded border-2 border-purple-100 overflow-hidden"
+        class="relative w-full sm:w-5/12 xl:w-full h-auto rounded border-2 border-purple-100 overflow-hidden"
       >
         <router-link
           :to="{
@@ -54,7 +54,7 @@
         </router-link>
         <div
           v-if="product.promotionDescription"
-          class="absolute bottom-0 rounded-b py-3 w-full capitalize font-semibold bg-purple-700 bg-opacity-90 text-white flex justify-center items-center"
+          class="absolute bottom-0 rounded-b py-3 w-full capitalize font-semibold bg-purple-700 bg-opacity-90 text-white text-sm flex justify-center items-center"
         >
           {{ product.promotionDescription }} {{ product.discount }}% OFF
         </div>
@@ -69,7 +69,7 @@
               <p class="font-semibold text-purple-700 tracking-wide uppercase">
                 {{ product.name }}
               </p>
-              <p>Lorem ipsum dolor sit.</p>
+              <p>{{ product.description }}</p>
             </div>
 
             <div>
@@ -78,7 +78,9 @@
               </p>
             </div>
 
-            <div class="flex items-center space-x-3 py-3">
+            <div
+              class="flex items-center space-x-2 py-3 max-w-xs overflow-auto"
+            >
               <p v-for="size in product.sizes" :key="size">
                 <span
                   class="text-gray-500 font-semibold uppercase border rounded px-3 py-1"

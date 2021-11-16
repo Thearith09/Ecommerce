@@ -130,7 +130,7 @@
           <div class="text-xs uppercase py-5 px-3 font-bold flex space-x-4">
             <i class="fas fa-database text-sm"></i>
             <div>
-              Catalog
+              {{ $t("Catalog") }}
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -168,7 +168,7 @@
           >
             <div class="text-xs uppercase py-4 font-bold flex space-x-4">
               <i class="fas fa-arrow-right"></i>
-              <p>{{ $t("promotion list") }}</p>
+              <p>{{ $t("Promotion List") }}</p>
             </div></a
           >
           <a
@@ -179,7 +179,7 @@
           >
             <div class="text-xs uppercase py-4 font-bold flex space-x-4">
               <i class="fas fa-arrow-right"></i>
-              <p>{{ $t("Add a new promotion") }}</p>
+              <p>{{ $t("Add a new Promotion") }}</p>
             </div></a
           >
           <a
@@ -189,7 +189,7 @@
           >
             <div class="text-xs uppercase py-4 font-bold flex space-x-4">
               <i class="fas fa-arrow-right"></i>
-              <p>{{ $t("Category list") }}</p>
+              <p>{{ $t("Category List") }}</p>
             </div></a
           >
           <a
@@ -200,7 +200,7 @@
           >
             <div class="text-xs uppercase py-4 font-bold flex space-x-4">
               <i class="fas fa-arrow-right"></i>
-              <p>{{ $t("Add a New Category") }}</p>
+              <p>{{ $t("Add a new Category") }}</p>
             </div></a
           >
           <a

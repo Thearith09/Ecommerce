@@ -8,29 +8,29 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p
           @click="handleSwitchingComponent('CategoryList')"
           class="hover:underline cursor-pointer"
         >
-          Categories
+          {{ $t("Categories") }}
         </p>
         <p>/</p>
         <p
           @click="handleSwitchingComponent('ProductList')"
           class="hover:underline cursor-pointer"
         >
-          Products
+          {{ $t("Products") }}
         </p>
         <p>/</p>
         <p>
-          {{ product ? "Edit Product" : "Add a New Product" }}
+          {{ product ? $t("Edit Product") : $t("Add a new Product") }}
         </p>
       </div>
       <div class="font-bold text-xl font-serif text-gray-900">
-        {{ product ? "Edit Product" : "Add a New Product" }}
+        {{ product ? $t("Edit Product") : $t("Add a new Product") }}
       </div>
     </div>
     <div>

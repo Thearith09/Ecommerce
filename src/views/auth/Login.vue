@@ -43,12 +43,13 @@
         <h3
           class="text-purple-700 font-bold tracking-wide font-mono text-center mb-5"
         >
-          Signin Form
+          {{ $t("Signin Form") }}
         </h3>
         <form @submit.prevent="handleLogin" class="space-y-5 md:mr-2">
           <div class="space-y-8">
             <div class="group relative w-full z-0">
               <input
+                autofocus
                 v-model="email"
                 type="email"
                 name="email"
@@ -98,7 +99,7 @@
 
             <button
               v-else
-              class="relative flex justify-center items-center focus:outline-none rounded-full shadow p-2 tracking-wide bg-white text-purple-700 w-full"
+              class="relative flex justify-center items-center focus:outline-none cursor-wait rounded-full shadow p-2 tracking-wide bg-white text-purple-700 w-full"
             >
               <div>
                 signing in...

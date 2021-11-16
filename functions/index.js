@@ -5,6 +5,31 @@ admin.initializeApp();
 
 const stripe = require("stripe")(functions.config().stripe.secret);
 
+exports.refreshTokens = functions.https.onCall(async (data, context) => {
+  try {
+    await auth().revokeRefreshTokens(data.uid);
+
+    return { message: `${data.uid} has been revoked refresh tokens.` };
+  } catch (err) {
+    return err.message;
+  }
+});
+
+exports.verifyToken = functions.https.onCall(async (data, context) => {
+  let checkRevoked = true;
+
+  try {
+    const res = await auth().verifyIdToken(data.idToken, checkRevoked);
+    return res;
+  } catch (err) {
+    if (err.code == "auth/id-token-revoked") {
+      return "auth/id-token-revoked";
+    } else {
+      return `Your token (${data.idToken} is invalid!)`;
+    }
+  }
+});
+
 exports.getAllUsers = functions.https.onCall(async (data, context) => {
   const maxUsersPerQuery = 100;
 

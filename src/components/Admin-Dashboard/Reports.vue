@@ -8,16 +8,16 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p>
-          Reports
+          {{ $t("Reports") }}
         </p>
       </div>
       <div class="flex justify-between items-center font-bold text-gray-900 ">
         <div class="text-xl font-serif ">
-          Reports
+          {{ $t("Reports") }}
         </div>
 
         <div class="flex space-x-5">
@@ -25,13 +25,13 @@
             @click="handleExportToExcel"
             class="relative bg-yellow-400 opacity-80 py-2 px-6 rounded cursor-pointer hover:opacity-100"
           >
-            Export to Excel
+            {{ $t("Export to Excel") }}
           </div>
           <div
             @click="handleExportToPDF"
             class="relative bg-yellow-400 opacity-80 py-2 px-6 rounded cursor-pointer hover:opacity-100"
           >
-            Export to PDF
+            {{ $t("Export to PDF") }}
           </div>
         </div>
       </div>
@@ -290,9 +290,30 @@ export default {
     });
 
     watch(reports, () => {
-      reports.value?.forEach((report) => {
-        dates.value.push(date(report.createdAt.toDate()).format("MMM d, YYYY"));
-        employees.value.push(report.admin);
+      reports.value?.forEach((report, i) => {
+        if (dates.value.length > 0) {
+          const dateExists = dates.value.some(
+            (doc) =>
+              doc == date(report.createdAt.toDate()).format("MMM d, YYYY")
+          );
+          if (!dateExists) {
+            dates.value.push(
+              date(report.createdAt.toDate()).format("MMM d, YYYY")
+            );
+          }
+          const staffExists = employees.value.some(
+            (doc) => doc == report.admin
+          );
+
+          if (!staffExists) {
+            employees.value.push(report.admin);
+          }
+        } else {
+          dates.value.push(
+            date(report.createdAt.toDate()).format("MMM d, YYYY")
+          );
+          employees.value.push(report.admin);
+        }
 
         report.items.forEach((doc) => {
           if (items.value.length <= 0) {
@@ -339,8 +360,26 @@ export default {
                 report.amount - (report.amount * doc.discount) / 100;
               itemsPrint.value[index].qtys += doc.qty;
             } else {
-              itemCodes.value.push(doc.code);
-              categories.value.push(doc.categoryName);
+              if (categories.value.length > 0) {
+                const codeExist = itemCodes.value.some(
+                  (cod) => cod == doc.code
+                );
+
+                if (!codeExist) {
+                  itemCodes.value.push(doc.code);
+                }
+
+                const categoryExist = categories.value.some(
+                  (cate) => cate == doc.categoryName
+                );
+
+                if (!categoryExist) {
+                  categories.value.push(doc.categoryName);
+                }
+              } else {
+                itemCodes.value.push(doc.code);
+                categories.value.push(doc.categoryName);
+              }
 
               items.value.push({
                 categoryName: doc.categoryName,

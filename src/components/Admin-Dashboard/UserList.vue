@@ -9,15 +9,13 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
-        <p>
-          Users
-        </p>
+        <p>{{ $t("Users") }}</p>
       </div>
       <div class="font-bold text-lg text-gray-900">
-        Users
+        {{ $t("Users") }}
       </div>
     </div>
 

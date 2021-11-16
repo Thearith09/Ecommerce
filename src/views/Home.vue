@@ -3,7 +3,15 @@
     <div>
       <Navbar />
     </div>
-    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto bg-white">
+    <div class="mb-auto 2xl:w-3/4 2xl:mx-auto bg-white m-5">
+      <!-- <div>
+        <button
+          @click="hanldeRefreshTokens"
+          class="p-5 bg-blue-400 text-purple-700"
+        >
+          Refresh
+        </button>
+      </div> -->
       <div>
         <Slideshow />
       </div>
@@ -36,6 +44,7 @@ import getCollection from "@/composables/getCollection";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
+import { functions } from "@/firebase/config";
 
 export default {
   name: "Home",
@@ -62,7 +71,12 @@ export default {
       console.log("Store: ", store.state.items);
     });
 
-    return { user, categories, header };
+    const hanldeRefreshTokens = async () => {
+      const refreshTokens = functions.httpsCallable("refreshTokens");
+      await refreshTokens({ uid: user.value?.uid });
+    };
+
+    return { user, categories, header, hanldeRefreshTokens };
   },
 };
 </script>

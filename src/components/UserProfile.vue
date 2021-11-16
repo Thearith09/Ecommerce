@@ -1,5 +1,8 @@
 <template>
-  <div class="mb-auto h-auto py-10 px-10 lg:px-0 w-full lg:w-9/12 mx-auto">
+  <div
+    class="mb-auto h-auto lg:px-0 w-full lg:w-9/12 mx-auto"
+    :class="{ 'p-10': !isCustomer }"
+  >
     <div v-if="!isCustomer" class="pb-3">
       <div
         class="relative flex space-x-1 text-gray-500 font-medium text-sm pb-2"
@@ -8,33 +11,30 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
-        <p v-if="showProfile">My Profile</p>
+        <p v-if="showProfile">{{ $t("My Profile") }}</p>
         <p
           v-if="!showProfile"
           @click="showProfile = true"
           class="hover:underline cursor-pointer"
         >
-          My Profile
+          {{ $t("My Profile") }}
         </p>
         <div v-if="!showProfile" class="flex space-x-1">
           <p>/</p>
-          <p>Account Settings</p>
+          <p>{{ $t("Account Settings") }}</p>
         </div>
       </div>
       <div class="font-bold text-xl font-serif text-gray-900">
-        {{ showProfile ? "My Profile" : "Account Settings" }}
+        {{ showProfile ? $t("My Profile") : $t("Account Settings") }}
       </div>
     </div>
-    <div
-      v-else
-      class="bg-yellow-300 p-5 mb-10 text-3xl font-serif font-bold text-gray-900"
-    >
-      My Profile
+    <div v-else class="py-5 text-2xl font-serif font-bold text-gray-900">
+      {{ $t("My Profile") }}
     </div>
-    <div v-if="showProfile" class="text-gray-500 flex">
+    <div v-if="showProfile" class="text-gray-500 flex mb-5">
       <div
         class="relative bg-white shadow border w-full p-10 rounded flex flex-col items-center space-y-3"
       >
@@ -66,7 +66,7 @@
         <div>
           <img
             class="rounded-full border-4 border-purple-600 w-28 h-28 object-cover object-center block overflow-hidden"
-            :src="user.photoURL"
+            :src="user?.photoURL"
             alt=""
           />
         </div>
@@ -201,7 +201,7 @@
 
     <div
       v-else
-      class="relative p-5 lg:p-10 text-gray-500 bg-white shadow rounded border"
+      class="relative p-5 lg:p-10 text-gray-500 bg-white shadow rounded border mb-5"
     >
       <div
         @click="showProfile = true"
@@ -389,31 +389,6 @@
               </svg>
             </button>
           </div>
-          <!-- 
-          <div
-            v-if="errorChangePassword"
-            class="animate_animated animate__zoomIn animate__delay-1s flex items-center justify-center w-96 pt-3 shadow-lg"
-          >
-            <div
-              class="flex w-full max-w-sm mx-auto overflow-hidden h-20 bg-white rounded"
-            >
-              <div class="flex items-center justify-center w-16 bg-red-600">
-                <svg
-                  class="animate_animated animate__bounceIn w-6 h-6 text-white fill-current"
-                  viewBox="0 0 40 40"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z"
-                  />
-                </svg>
-              </div>
-
-              <div
-                class="flex justify-center items-center w-full leading-none px-2"
-              ></div>
-            </div>
-          </div> -->
         </div>
       </form>
     </div>
@@ -485,7 +460,7 @@ export default {
       //disabled button save for account setting
       if (
         file.value ||
-        username.value != user.value.displayName.split(" ")[0] ||
+        username.value != user.value?.displayName.split(" ")[0] ||
         currentPassword.value
       ) {
         nothingToUpdate.value = false;
@@ -501,7 +476,6 @@ export default {
         lastname: lastname.value || null,
         phone: phone.value || null,
       };
-      console.log(user.value.uid);
       await updateProfile(profile);
 
       pending.value = false;
@@ -565,7 +539,7 @@ export default {
         }
       }
 
-      if (username.value != user.value.displayName) {
+      if (username.value != user.value?.displayName) {
         try {
           await projectAuth.currentUser.updateProfile({
             displayName: username.value,

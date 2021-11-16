@@ -115,7 +115,7 @@
 
       <div class="w-full md:w-7/12 space-y-5">
         <div
-          v-if="user?.admin"
+          v-if="staff?.admin"
           class="relative shadow bg-white h-auto border p-5"
         >
           <div
@@ -343,10 +343,10 @@ export default {
     const totalPurchased = ref(0);
     const totalLengthPurchase = ref(0);
 
-    const { user } = getUser();
     const { documents: orders } = getCollection("orders");
     const { documents: reports } = getCollection("reports");
     const { documents: users } = getCollection("users");
+    const { user: staff } = getUser();
 
     watch(users, () => {
       users.value?.forEach((_user) => {
@@ -473,7 +473,7 @@ export default {
       averagePurchased,
       totalPurchased,
       totalLengthPurchase,
-      user,
+      staff
     };
   },
 };

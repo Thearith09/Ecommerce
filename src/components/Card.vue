@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative grid grid-cols-1 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full"
+    class="relative grid grid-cols-1 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 w-full"
   >
     <div
       :class="{ hideImage: end >= products?.length - 1 }"
@@ -50,7 +50,7 @@
         </router-link>
         <div
           v-if="product.promotionDescription"
-          class="absolute bottom-0 rounded-b py-3 w-full capitalize font-semibold bg-purple-700 bg-opacity-90 text-white flex justify-center items-center"
+          class="absolute bottom-0 rounded-b py-3 w-full capitalize font-semibold bg-purple-700 bg-opacity-90 text-white text-sm flex justify-center items-center"
         >
           {{ product.promotionDescription }} {{ product.discount }}% OFF
         </div>
@@ -89,7 +89,7 @@
               class="absolute top-5 right-1 hidden group-hover:block br"
             ></div>
             <div
-              class="absolute top-7 w-36 right-0 bg-purple-400 bg-opacity-90 p-3 h-auto hidden group-hover:grid grid-cols-5 gap-1 rounded rounded-tr-none rounded-bl-none"
+              class="absolute top-7 w-36 right-0 bg-purple-400 p-3 h-auto hidden group-hover:grid grid-cols-5 gap-1 rounded rounded-tr-none rounded-bl-none"
             >
               <img
                 v-for="(image, i) in product.images"
@@ -288,8 +288,10 @@ export default {
       } else if (windowWidth.value < 768) {
         end.value = 1;
       } else if (windowWidth.value < 1024) {
-        end.value = 2;
+        end.value = 1;
       } else if (windowWidth.value < 1280) {
+        end.value = 2;
+      } else if (windowWidth.value < 1536) {
         end.value = 3;
       } else {
         end.value = 4;
@@ -329,17 +331,17 @@ export default {
         start.value -= 1;
         end.value -= 1;
       } else if (windowWidth.value < 768) {
+        start.value -= 1;
+        end.value -= 1;
+      } else if (windowWidth.value < 1024) {
         start.value -= 2;
         end.value -= 2;
-      } else if (windowWidth.value < 1024) {
+      } else if (windowWidth.value < 1280) {
         start.value -= 3;
         end.value -= 3;
-      } else if (windowWidth.value < 1280) {
+      } else {
         start.value -= 4;
         end.value -= 4;
-      } else {
-        start.value -= 5;
-        end.value -= 5;
       }
     };
 
@@ -351,17 +353,17 @@ export default {
         start.value += 1;
         end.value += 1;
       } else if (windowWidth.value < 768) {
+        start.value += 1;
+        end.value += 1;
+      } else if (windowWidth.value < 1024) {
         start.value += 2;
         end.value += 2;
-      } else if (windowWidth.value < 1024) {
+      } else if (windowWidth.value < 1280) {
         start.value += 3;
         end.value += 3;
-      } else if (windowWidth.value < 1280) {
+      } else {
         start.value += 4;
         end.value += 4;
-      } else {
-        start.value += 5;
-        end.value += 5;
       }
     };
 

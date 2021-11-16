@@ -11,23 +11,23 @@
           @click="handleSwitchingComponent('Dashboard')"
           class="hover:underline cursor-pointer"
         >
-          Dashboard
+          {{ $t("Dashboard") }}
         </p>
         <p>/</p>
         <p>
-          Categories
+          {{ $t("Categories") }}
         </p>
       </div>
       <div class="flex justify-between font-bold text-gray-900">
         <div class="text-xl font-serif ">
-          Categories
+          {{ $t("Categories") }}
         </div>
         <div
           v-if="user?.admin || user?.packer"
           @click="handleSwitchingComponent('AddCategory')"
           class="relative bg-yellow-400 opacity-80 py-2 px-6 rounded  cursor-pointer hover:opacity-100"
         >
-          New Category
+          {{ $t("New Category") }}
         </div>
       </div>
     </div>
@@ -61,15 +61,15 @@
         class="grid grid-cols-4 gap-4 font-bold border-b border-t px-7 py-3 rounded-t border-gray-200"
       >
         <div class="w-full col-span-2">
-          Name
+          {{ $t("Name") }}
         </div>
 
         <div class="w-full">
-          Products
+          {{ $t("Products") }}
         </div>
 
         <div class="flex justify-center">
-          Actions
+          {{ $t("Actions") }}
         </div>
       </div>
 
