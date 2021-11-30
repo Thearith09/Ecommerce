@@ -29,5 +29,8 @@ service cloud.firestore {
     match /promotions/{document=**} {
       allow read: if true;
     }
+    match /trackingOrders/{orderId} {
+     	allow read, write: if request.auth != null;
+    }
   }
 }

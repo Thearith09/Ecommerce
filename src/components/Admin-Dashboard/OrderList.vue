@@ -275,11 +275,14 @@
 
         <div class="mt-5 w-2 relative">
           <button
-            :disabled="!user.admin || acceptedTime != null"
+            :disabled="failedToPaid || !user.admin || acceptedTime != null"
             @click="handleTrackingParcel('acceptedTime')"
             class="flex justify-center items-center bg-red-600 h-6 w-6 absolute top-0 -ml-3 -mt-1 z-10 shadow rounded-full cursor-pointer"
             :style="{
-              cursor: !user.admin || acceptedTime ? 'not-allowed' : 'pointer',
+              cursor:
+                failedToPaid || !user.admin || acceptedTime
+                  ? 'not-allowed'
+                  : 'pointer',
             }"
             style="left: 50%"
           >
@@ -325,12 +328,17 @@
 
         <div class="h-32 w-2 rounded-full relative">
           <button
-            :disabled="!user.packer || packedTime != null || !acceptedTime"
+            :disabled="
+              failedToPaid ||
+                !user.packer ||
+                packedTime != null ||
+                !acceptedTime
+            "
             @click.once="handleTrackingParcel('packedTime')"
             class="bg-yellow-400  h-6 w-6 absolute bottom-0 -ml-3 -mt-1 z-10 shadow rounded-full cursor-pointer"
             :style="{
               cursor:
-                !user.packer || packedTime || !acceptedTime
+                failedToPaid || !user.packer || packedTime || !acceptedTime
                   ? 'not-allowed'
                   : 'pointer',
             }"
@@ -376,12 +384,21 @@
 
         <div class="h-32 w-2 relative">
           <button
-            :disabled="!user.delivery || deliveredTime != null || !packedTime"
+            :disabled="
+              failedToPaid ||
+                !user.delivery ||
+                deliveredTime != null ||
+                !packedTime
+            "
             @click.once="handleTrackingParcel('deliveredTime')"
             class="bg-green-400 h-6 w-6 absolute bottom-0 -ml-3 -mt-1 z-10 shadow rounded-full cursor-pointer"
             :style="{
               cursor:
-                !user.delivery || deliveredTime || !acceptedTime || !packedTime
+                failedToPaid ||
+                !user.delivery ||
+                deliveredTime ||
+                !acceptedTime ||
+                !packedTime
                   ? 'not-allowed'
                   : 'pointer',
             }"
@@ -490,7 +507,6 @@ import getCollection from "@/composables/getCollection";
 import useCollection from "@/composables/useCollection";
 import getUser from "@/composables/getUser";
 import { timestamp } from "@/firebase/config";
-import { useStore } from "vuex";
 import { ref } from "@vue/reactivity";
 import { onMounted, watch } from "@vue/runtime-core";
 
@@ -507,6 +523,7 @@ export default {
     const windowWidth = ref(window.innerWidth);
     const showModal = ref(false);
     const liveTimeStamp = ref(null);
+    const failedToPaid = ref(false);
 
     const limitedPerPage = ref(5);
     const start = ref(0);
@@ -516,12 +533,17 @@ export default {
     const previous = ref(1);
     const next = ref(5);
 
-    const store = useStore();
     const { user } = getUser();
     const { documents: orders } = getCollection("orders");
 
     const { deleteDoc } = useCollection("orders");
     const { addDoc, isPending } = useCollection("reports");
+    const { documents: trackingOrders } = getCollection("trackingOrders");
+    const {
+      addDoc: addTracking,
+      updateDoc: updateTracking,
+      deleteDoc: deleteTracking,
+    } = useCollection("trackingOrders");
 
     watch(limitedPerPage, () => {
       end.value = parseInt(limitedPerPage.value);
@@ -588,6 +610,13 @@ export default {
     };
 
     const handleTrackingOrder = (order) => {
+      if (!order.paymentStatus) {
+        // if payment failed no need to accept anything
+        failedToPaid.value = true;
+      } else {
+        failedToPaid.value = false;
+      }
+
       showModal.value = true;
       last5digitOrderId.value = order.id.substring(
         order.id.length - 5,
@@ -603,7 +632,7 @@ export default {
       acceptedTime.value = null;
 
       let parcel;
-      store.state.trackingDate?.forEach((box) => {
+      trackingOrders.value?.forEach((box) => {
         if (box.id == last5digitOrderId.value) parcel = box;
       });
 
@@ -617,21 +646,40 @@ export default {
       showModal.value = false;
     };
 
-    const handleTrackingParcel = (name) => {
-      store.commit("addTrackingDate", {
-        parcelID: last5digitOrderId.value,
-        name: name,
-        value: date().format("ddd MM YYYY, h:mm"),
-      });
+    const handleTrackingParcel = async (name) => {
+      if (trackingOrders.value?.length > 0) {
+        let exist = false;
+        trackingOrders.value.forEach(async (parcel) => {
+          if (parcel.id == last5digitOrderId.value) {
+            exist = true;
+            parcel[name] = date().format("ddd MM YYYY, h:mm A");
+            await updateTracking(parcel);
+          }
+        });
+
+        if (!exist) {
+          await addTracking({
+            id: last5digitOrderId.value,
+            name: last5digitOrderId.value,
+            [name]: date().format("ddd MM YYYY, h:mm A"),
+            createdAt: timestamp(),
+          });
+        }
+      } else {
+        await addTracking({
+          id: last5digitOrderId.value,
+          name: last5digitOrderId.value,
+          [name]: date().format("ddd MM YYYY, h:mm A"),
+          createdAt: timestamp(),
+        });
+      }
       setTimeforTrackingParcel();
-      console.log(store.state.trackingDate);
-      // store.commit("removeTrackingDate", { parcelID: last5digitOrderId.value });
     };
 
     const handleRemoveFailedPayment = async () => {
       pending.value = true;
       await deleteDoc(ordered.value.id);
-      store.commit("removeTrackingDate", { parcelID: last5digitOrderId.value });
+
       pending.value = false;
       showModal.value = false;
     };
@@ -654,11 +702,13 @@ export default {
       };
       await addDoc(checkoutOrder);
       await deleteDoc(order.id);
-      store.commit("removeTrackingDate", { parcelID: last5digitOrderId.value });
+
+      await deleteTracking(last5digitOrderId.value);
       showModal.value = false;
     };
 
     return {
+      failedToPaid,
       orders,
       user,
       showModal,

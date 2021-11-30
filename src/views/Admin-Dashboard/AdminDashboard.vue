@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col h-auto bg-gray-50">
+  <div class="flex flex-col h-screen bg-gray-50">
     <Sidebar
       :class="{ hidden: toggleSidebar }"
       @onSwitching="handleSwitchingComponent"
     />
-    <div :class="marginLeft" class="relative mb-auto">
+    <div class="relative mb-auto h-auto">
       <!-- <Navbar
         v-if="windowWidth >= 1024"
         @onToggleSidebar="handleToggleSidebar"
@@ -23,7 +23,7 @@
       />
     </div>
 
-    <div :class="marginLeft">
+    <div>
       <Footer />
     </div>
   </div>

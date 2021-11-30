@@ -1,5 +1,5 @@
-import { createStore } from "vuex";
 //https://github.com/robinvdvleuten/vuex-persistedstate
+import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import * as Cookies from "js-cookie";
 
@@ -7,7 +7,6 @@ const store = createStore({
   state: {
     cart: [],
     whistlist: [],
-    trackingDate: [],
     sessionID: null,
   },
   plugins: [
@@ -27,44 +26,6 @@ const store = createStore({
     },
     removeSessionId(state) {
       state.sessionID = null;
-    },
-    getTrackingDate(state, tracking) {
-      if (state.trackingDate?.length > 0) {
-        state.trackingDate.forEach((parcel) => {
-          if (parcel.id == tracking.parcelID) box = console.log(parcel);
-        });
-      }
-    },
-    removeTrackingDate(state, tracking) {
-      if (state.trackingDate?.length > 0) {
-        const index = state.trackingDate.findIndex(
-          (parcel) => parcel.id == tracking.parcelID
-        );
-        state.trackingDate.splice(index, 1);
-      }
-    },
-    addTrackingDate(state, tracking) {
-      if (state.trackingDate?.length > 0) {
-        let exist = false;
-        state.trackingDate.forEach((parcel) => {
-          if (parcel.id == tracking.parcelID) {
-            exist = true;
-            parcel[tracking.name] = tracking.value;
-          }
-        });
-
-        if (!exist) {
-          const parcel = {};
-          parcel.id = tracking.parcelID;
-          parcel[tracking.name] = tracking.value;
-          state.trackingDate.push(parcel);
-        }
-      } else {
-        const parcel = {};
-        parcel.id = tracking.parcelID;
-        parcel[tracking.name] = tracking.value;
-        state.trackingDate.push(parcel);
-      }
     },
     addToCart(state, item) {
       let exist = false;
